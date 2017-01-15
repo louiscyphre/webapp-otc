@@ -65,6 +65,16 @@ public class DatabaseCreator implements ServletContextListener {
     				cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
     		Connection conn = ds.getConnection();
     		
+    		//Connection conn1 = ds.getConnection();
+			//Statement stmt1 = conn1.createStatement();
+			//stmt1.executeUpdate("DROP TABLE USERS");
+    		//conn1.commit();
+			//stmt1.executeUpdate("DROP TABLE USER");
+    		//conn1.commit();
+			//stmt1.executeUpdate("DROP TABLE CUSTOMER");
+    		//conn1.commit();
+    		//stmt1.close();
+    		
     		boolean created = false;
     		try{
 
@@ -88,6 +98,9 @@ public class DatabaseCreator implements ServletContextListener {
                         AppConstants.USERS_FILE));
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
                 for (User user : users) {
+                	
+                	System.out.println(user.stringify());
+                	
                     pstmt2.setString(1, user.getIdHash());
                     pstmt2.setString(2, user.getUsername());
                     pstmt2.setString(3, user.getPasswordHash());

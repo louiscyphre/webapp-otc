@@ -12,10 +12,10 @@ import server.model.Customer;
  */
 public interface AppConstants {
 
-	public final String CUSTOMERS = "customers";
-	public final String CUSTOMERS_FILE = CUSTOMERS + ".json";
-	public final String NAME = "name";
-	public final Type CUSTOMER_COLLECTION = new TypeToken<Collection<Customer>>() {}.getType();
+	//public final String CUSTOMERS = "customers";
+	//public final String CUSTOMERS_FILE = CUSTOMERS + ".json";
+	//public final String NAME = "name";
+	//public final Type CUSTOMER_COLLECTION = new TypeToken<Collection<Customer>>() {}.getType();
 	//derby constants
 	public final String DB_NAME = "DB_NAME";
 	public final String DB_DATASOURCE = "DB_DATASOURCE";
@@ -24,25 +24,26 @@ public interface AppConstants {
 	public final String SHUTDOWN = "Shutdown";
 	
 	//sql statements
-	public final String CREATE_CUSTOMERS_TABLE = "CREATE TABLE CUSTOMER(Name varchar(100),"
-			+ "City varchar(100),"
-			+ "Country varchar(100))";
-	public final String INSERT_CUSTOMER_STMT = "INSERT INTO CUSTOMER VALUES(?,?,?)";
-	public final String SELECT_ALL_CUSTOMERS_STMT = "SELECT * FROM CUSTOMER";
-	public final String SELECT_CUSTOMER_BY_NAME_STMT = "SELECT * FROM CUSTOMER "
-			+ "WHERE Name=?";
+	//public final String CREATE_CUSTOMERS_TABLE = "CREATE TABLE CUSTOMER(Name varchar(100),"
+	//		+ "City varchar(100),"
+	//		+ "Country varchar(100))";
+	//public final String INSERT_CUSTOMER_STMT = "INSERT INTO CUSTOMER VALUES(?,?,?)";
+	//public final String SELECT_ALL_CUSTOMERS_STMT = "SELECT * FROM CUSTOMER";
+	//public final String SELECT_CUSTOMER_BY_NAME_STMT = "SELECT * FROM CUSTOMER "
+	//		+ "WHERE Name=?";
 
 	public final String USERS = "users";
 	public final String USERS_FILE = USERS + ".json";
 	// newsql statements
-	public final String CREATE_USER_TABLE = "CREATE TABLE USERS(id varchar(32) NOT NULL,"
+	public final String CREATE_USER_TABLE = "CREATE TABLE USERS(id varchar(10),"
 			+ "Username varchar(10),"
 			+ "PasswordHash varchar(32),"
 			+ "Nickname varchar(20),"
 			+ "Description varchar(50),"
-			+ "AvatarUrl varchar(500), PRIMARY KEY (id))";
+			+ "AvatarUrl varchar(500), PRIMARY KEY(id), UNIQUE(id, Username))";
 	public final String INSERT_USER_STMT = "INSERT INTO USERS VALUES(?,?,?,?,?,?)";
 	public final String SELECT_USER_BY_USERNAME_STMT = "SELECT * FROM USERS "
 			+ "WHERE Username=?";
-	public final String SELECT_USER_BY_CREDENTIALS_STMT = "SELECT * FROM USERS WHERE Username = ? AND PasswordHash = ?";
+	public final String SELECT_USER_BY_CREDENTIALS_STMT = "SELECT * FROM USERS WHERE Username=? AND PasswordHash=?";
+	public final String SELECT_USERS = "SELECT * FROM USERS";
 }

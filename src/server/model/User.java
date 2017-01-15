@@ -9,13 +9,13 @@ import java.security.NoSuchAlgorithmException;
  */
 public class User {
 
-	private String idHash, username, passwordHash, Nickname, Description, AvatarUrl;
+	private String id, Username, PasswordHash, Nickname, Description, AvatarUrl;
 
 	public User(String userId, String userName, String hashPassword, String nickname, String description, String avatarUrl) throws NoSuchAlgorithmException {
 		//idHash = Hash.getSha256Hex(userName);
-		idHash = userId;
-		username = userName;
-		passwordHash = hashPassword;
+		id = userId;
+		Username = userName;
+		PasswordHash = hashPassword;
 		setNickname(nickname);
 		Description = description;
 		AvatarUrl = avatarUrl;
@@ -25,12 +25,12 @@ public class User {
 	 * @return
 	 */
 	public String getIdHash() {
-    	return idHash;
+    	return id;
     }
-	public String getUsername() {  return username; }
+	public String getUsername() {  return Username; }
 	
 	public String getPasswordHash() {
-		return passwordHash;
+		return PasswordHash;
 	}
 
 	/**
@@ -48,19 +48,19 @@ public class User {
 	}
 
 	public void setId(String hash) {
-		idHash = hash;
+		id = hash;
 	}
 
 	public void setUsername(String userName) {
-		username = userName;
+		Username = userName;
 	}
 	public void setPasswordHash(String hash) {
-		passwordHash = hash;
+		PasswordHash = hash;
 	}
 
 	public void setNickname(String nickname) {
 		if (nickname == null || nickname.equals("")) {
-			Nickname = username;
+			Nickname = Username;
 		} else {
 			Nickname = nickname;
 		}
@@ -72,5 +72,9 @@ public class User {
 
 	public void setAvatarUrl(String avatarUrl) {
 		AvatarUrl = avatarUrl;
+	}
+	
+	public String stringify() {
+	  return Username + " " + PasswordHash;
 	}
 }
