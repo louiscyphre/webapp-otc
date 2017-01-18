@@ -97,14 +97,6 @@ body {
   margin: 0;
 }
 
-.chat-text-area {
-  background-color: #ffffff;
-  overflow-y: auto;
-  margin-left: 20%;
-  padding: 10px 16px;
-  height: 100%;
-}
-
 
 /*.side-nav ul {
   list-style-type: none;
@@ -175,7 +167,6 @@ body {
   color: #000000;
   padding: 8px 16px;
   border-radius: 5px;
-  text-decoration: none;
 }
 
 .side li a.active {
@@ -197,4 +188,35 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
+}
+
+.chat-text-area {
+  background-color: #ffffff;
+  overflow-y: auto;
+  margin-left: 20%;
+  margin-right: 0%;
+  padding: 2% 2%;
+  height: 100%;
+}
+
+.chat-text-area p {
+  margin-left: 0%;
+  margin-right: 0%;
+  padding: 2% 2%;
+  height: 100%;
+  border: 2px solid #B3B3B3;
+  border-radius: 8px;
+}
+
+.chat-text-area footer {
+  position: fixed;
+  bottom: 0;
+  width: 76%;
+  border-radius: 5px;
+}
+
+.chat-text-area .footer .btn-chat-send {
+  width: 100px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
