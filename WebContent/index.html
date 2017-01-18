@@ -3,44 +3,185 @@
 
 <head>
 
-<meta charset="utf-8" />
-<title>Web chat</title>
+  <meta charset="utf-8" />
+  <title>Web chat</title>
 
+  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main.css">
 
-<link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/main.css">
-
+  <script src="lib/angular.min.js "></script>
+  <script src="lib/jquery-1.11.3.min.js "></script>
+  <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js "></script>
+  <script src="js/index.js "></script>
+  <script src="js/helperService.js "></script>
 
 </head>
 
-<body>
-<div class="container">
-	<div ng-app="inTableSearchApp" ng-controller="inTableSearchController">
-		
-		
-    <div class="row">
+<body ng-app="webChat">
+
+  <div class="container">
+    <div ng-controller="LoginCtrl" class="row" ng-hide="loginScreenHidden=true">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
         <h1 class="text-center login-title">Sign in to enter Webchat</h1>
         <div class="account-wall">
           <img class="avatar" src="img/person.png" alt="avatar image">
           <form class="form-login" ng-submit="login()">
-            <input id="username" type="username" class="form-control" placeholder="Username" required autofocus ng-model="uname">
-            <input id="password" type="password" class="form-control" placeholder="Password" required ng-model="passwd">
+            <input id="username" type="username" class="form-control" placeholder="Username" required ng-model="user.Username">
+            <input id="password" type="password" class="form-control" placeholder="Password" required ng-model="user.Password">
             <button class="btn btn-lg btn-primary btn-block sign-in-btn" type="submit"> Sign in</button>
-            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="register()"> Register</button>
+            <button class="btn btn-lg btn-secondary btn-block " ng-click="doregister() "> Register</button>
           </form>
         </div>
       </div>
-    </div>	
     </div>
-</div>
-	
 
-  <script src="lib/angular.min.js"></script>
-  <script src="lib/jquery-1.11.3.min.js"></script>
-  <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-  <script src="js/index.js"></script>
-  <script src="js/helperService.js"></script>
+    <div ng-controller="RegisterCtrl" class="row" ng-hide="registerScreenHidden=true">
+      <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <h1 class="text-center login-title ">Would you like to register?</h1>
+        <div class="account-wall">
+          <img class="avatar" src="img/person.png" alt="avatar image">
+          <form class="form-login" ng-submit="register() ">
+            <input id="newusername" type="username" class="form-control" placeholder="Username" required ng-model="user.Username">
+            <input id="newpassword" type="password" class="form-control" placeholder="Password" required ng-model="user.Password">
+            <input class="form-control" placeholder="Nickname" ng-model="user.Nickname">
+            <textarea class="form-control" rows="3" placeholder="Description" ng-model="user.Description"></textarea>
+            <input class="form-control" placeholder="Avatar Url" ng-model="user.AvatarUrl">
+            <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
+  </div>
+  <div class="chat-container">
+    <div ng-controller="ChatRoomsCtrl" ng-hide="chatRoomsScreenHidden=false">
+
+      <div class="side">
+        <div>
+          <ul class="all-channels">
+            <li><a href="#">Channel stub 1</a></li>
+            <li><a href="#">Channel stub 2</a></li>
+
+            <li><a href="#">Channel stub 4</a></li>
+            <li><a href="#">Channel stub 4 </a></li>
+          </ul>
+          <ul class="subscribed-channels">
+            <li><a href="#">Subscribed channel 1 <span class="badge">7</span> <span class="badge badge-mentioned">3</span></a></li>
+            <li><a href="#" class="active">Subscribed channel 2 </a></li>
+
+            <li><a href="#">Subscribed channel 4 <span class="badge">3</span> <span class="badge badge-mentioned">1</span></a></li>
+            <li><a href="#">Subscribed channel 4 <span class="badge">1344</span></a></li>
+          </ul>
+          <ul class="users-online">
+            <li><a href="#">user 1 </a></li>
+            <li><a href="#">user 2 </a></li>
+
+            <li><a href="#">user 4 </a></li>
+            <li><a href="#">user 4</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="chat-text-area">
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+      </div>
+      <!--div class="side-nav">
+        /* need to show data from json here*/
+        <ul class="all-channels">
+          <li class="active"><a href="#">Channel stub 1</a></li>
+          <li><a href="#">Channel stub 2</a></li>
+
+          <li><a href="#">Channel stub 4</a></li>
+          <li><a href="#">Channel stub 4 </a></li>
+        </ul>
+
+        <ul class="subscribed-channels">
+          <li class="active"><a href="#">Subscribed channel 1 <span class="badge">7</span> <span class="badge badge-mentioned">3</span></a></li>
+          <li><a href="#">Subscribed channel 2 </a></li>
+
+          <li><a href="#">Subscribed channel 4 <span class="badge">3</span> <span class="badge badge-mentioned">1</span></a></li>
+          <li><a href="#">Subscribed channel 4 <span class="badge">1344</span></a></li>
+        </ul>
+      </div>
+
+      <div class="chat-text-area">
+        <h2>Fixed Full-height Side Nav</h2>
+        <h3>Try to scroll this area, and see how the sidenav sticks to the page</h3>
+        <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+        <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+        <p>Some text..</p>
+        <p>Some text..</p>
+        <p>Some text..</p>
+        <p>Some text..</p>
+        <p>Some text..</p>
+        <p>Some text..</p>
+        <p>Some text..</p>
+        <div class="input-group  chatinput">
+          <form>
+            <div class="input-group ">
+              <input type="text " class="form-control " placeholder="Type your message here " ng-model="message">
+              <div class="input-group-btn ">
+                <button class="btn btn-primary " type="submit ">Send
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div-->
+    </div>
+
+  </div>
 </body>
+
 </html>
