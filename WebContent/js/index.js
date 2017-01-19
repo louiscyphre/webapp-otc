@@ -2,7 +2,7 @@
 
   'use strict';
   /*global angular, console*/
-  var WebChat = angular.module('webChat', ['services'])
+  var WebChat = angular.module('webChat', ['services', 'directives'])
     .controller('LoginCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', function ($rootScope, $scope, $http, MessageBus) {
 
       $scope.user = {
@@ -75,61 +75,98 @@
         $scope.chatRoomsScreenHidden = false;
       });
 
-      $scope.$on('loginSuccess', function (event) {
+      $scope.$on('registerSuccess', function (event) {
         console.log('ChatRoomsCtrl: got event registerSuccess');
         $scope.chatRoomsScreenHidden = false;
       });
 
       $scope.enterChannel = function (channelname) {
-        console.log('in enterchat(): Sending: ' + JSON.stringify(channelname));
+        console.log('in enterChannel(): Sending: ' + JSON.stringify(channelname));
         $http.post("/webChat/login", JSON.stringify($scope.user)).success(function (response) {
-          console.log('enterchat() success' + response);
+          console.log('enterChannel() success' + response);
         });
       };
-      // TEST
-      $scope.myTree = {
-        "post": {
-          "data": "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it)."
+
+      $scope.exitChannel = function () {
+        console.log('in exitChannel()');
+        $http.post("/webChat/login", JSON.stringify($scope.user)).success(function (response) {
+          console.log('exitChannel() success' + response);
+        });
+      };
+
+      $scope.channelThread = [{
+        Message: {
+          ChannelID: "",
+          UserID: "AAA",
+          MessageTime: "2.01.2017, 10:52",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it)."
         },
-        "replies": [{
-          "post": {
-            "data": "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        Replies: [{
+          Message: {
+            ChannelID: "",
+            UserID: "WWWWWOOOAA",
+            MessageTime: "2.01.2017, 10:05",
+            ReplyToID: "",
+            Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
           },
-          "replies": [{
-            "post": {
-              "data": "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+          Replies: [{
+            Message: {
+              ChannelID: "",
+              UserID: "AAA",
+              MessageTime: "2.01.2017, 10:52",
+              ReplyToID: "",
+              Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
             },
-            "replies": []
-        }, {
-            "post": {
-              "data": "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+            Replies: []
+          }, {
+            Message: {
+              ChannelID: "",
+              UserID: "AAA",
+              MessageTime: "2.01.2017, 10:52",
+              ReplyToID: "",
+              Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
             },
-            "replies": []
-        }]
+            Replies: []
+          }]
         }, {
-          "post": {
-            "data": "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+          Message: {
+            ChannelID: "",
+            UserID: "WWWWWOOOAA",
+            MessageTime: "2.01.2017, 10:05",
+            ReplyToID: "",
+            Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
           },
-          "replies": []
+          Replies: []
         }]
-      };
-
-      console.log('in enterchat(): Sending: ' + JSON.stringify($scope.myTree));
-
-      $scope.showThread = function (jsonTree) {
-        console.log('in showthread(): Sending: ' + JSON.stringify($scope.myTree));
-        var retStr = '<li>' + '<p>' + jsonTree.post.data + '</p>';
-        var childIndex = 0;
-        if ((jsonTree.replies) && (jsonTree.replies.length > 0)) {
-          retStr += '<ul>';
-          for (childIndex = 0; childIndex <= jsonTree.replies.length - 1; childIndex += 1) {
-            retStr += $scope.showThread(jsonTree.replies[childIndex]);
-          }
-          retStr += '</ul>';
-        }
-        retStr += '</li>';
-        return $sce.trustAsHtml(retStr);
-      };
+      }, {
+        Message: {
+          ChannelID: "",
+          UserID: "WWWWWOOOAA",
+          MessageTime: "2.01.2017, 10:05",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        },
+        Replies: []
+      }, {
+        Message: {
+          ChannelID: "",
+          UserID: "WWWWWOOOAA",
+          MessageTime: "2.01.2017, 10:05",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        },
+        Replies: []
+      }, {
+        Message: {
+          ChannelID: "",
+          UserID: "WWWWWOOOAA",
+          MessageTime: "2.01.2017, 10:05",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        },
+        Replies: []
+      }];
     }]);
 }(this.window));
 //this method will be called upon change in the text typed by the user in the searchbox
@@ -155,4 +192,21 @@
 //delegate the text highlighting task to an external helper service 
 $scope.hlight = function (text, qstr) {
   return highlightText.highlight(text, qstr);
+};*/
+
+//console.log('in enterchat(): Sending: ' + JSON.stringify($scope.myTree));
+
+/*$scope.showThread = function (jsonTree) {
+  //console.log('in showthread(): Sending: ' + JSON.stringify($scope.myTree));
+  var retStr = '<li>' + '<p>' + jsonTree.post.data + '</p>',
+    childIndex = 0;
+  if ((jsonTree.replies) && (jsonTree.replies.length > 0)) {
+    retStr += '<ul>';
+    for (childIndex = 0; childIndex <= jsonTree.replies.length - 1; childIndex += 1) {
+      retStr += $scope.showThread(jsonTree.replies[childIndex]);
+    }
+    retStr += '</ul>';
+  }
+  retStr += '</li>';
+  return $sce.trustAsHtml(retStr);
 };*/
