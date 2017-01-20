@@ -31,8 +31,8 @@
           $scope.response = response;
           $scope.loginScreenHidden = true;
 
-          console.log('LoginCtrl: emitting event loginSuccess');
-          MessageBus.send('loginSuccess', response);
+          console.log('LoginCtrl: emitting event AuthSuccess');
+          MessageBus.send('AuthSuccess', response);
 
         }).error(function (response) {
           console.log('in login(): Error response:' + JSON.stringify(response));
@@ -60,23 +60,18 @@
         console.log('in register(): Sending: ' + JSON.stringify($scope.user));
 
         $http.post("/webChat/login", JSON.stringify($scope.user)).success(function (response) {
-          console.log('Register success' + response);
+          console.log('RegisterCtrl: emitting event AuthSuccess');
           $scope.registerScreenHidden = true;
-          MessageBus.send('registerSuccess');
+          MessageBus.send('AuthSuccess');
         });
 
       };
-    }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$sce', 'MessageBus', function ($rootScope, $scope, $http, $sce, MessageBus) {
+    }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', function ($rootScope, $scope, $http, $window, MessageBus) {
 
       $scope.chatRoomsScreenHidden = true;
 
-      $scope.$on('loginSuccess', function (event) {
-        console.log('ChatRoomsCtrl: got event loginSuccess');
-        $scope.chatRoomsScreenHidden = false;
-      });
-
-      $scope.$on('registerSuccess', function (event) {
-        console.log('ChatRoomsCtrl: got event registerSuccess');
+      $scope.$on('AuthSuccess', function (event) {
+        console.log('ChatRoomsCtrl: got event AuthSuccess');
         $scope.chatRoomsScreenHidden = false;
       });
 
@@ -93,6 +88,54 @@
           console.log('exitChannel() success' + response);
         });
       };
+
+      function connect() {
+
+        var wsUri = "ws://" + $window.location.host + "/WebSocketExample/chat/" + userInput.value;
+        var websocket = new $window.WebSocket(wsUri);
+        websocket.onopen = function (evt) {
+          notify("Connected to Chat Server...");
+        };
+        websocket.onmessage = function (evt) {
+          notify(evt.data);
+        };
+        websocket.onerror = function (evt) {
+          notify('ERROR: ' + evt.data);
+        };
+
+        websocket.onclose = function (evt) {
+          websocket = null;
+        };
+
+        connectBtn.hidden = true;
+        sendBtn.hidden = false;
+        logoutBtn.hidden = false;
+        userInput.value = '';
+      }
+
+      function sendMessage() {
+        if (websocket != null) {
+          websocket.send(userInput.value);
+        }
+        userInput.value = '';
+      }
+
+      function notify(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        chatConsole.appendChild(pre);
+      }
+
+      function logout() {
+        websocket.close();
+        connectBtn.hidden = false;
+        sendBtn.hidden = true;
+        logoutBtn.hidden = true;
+        userInput.value = '';
+        notify("Logged out...");
+      }
+
 
       $scope.channelThread = [{
         Message: {
@@ -169,30 +212,6 @@
       }];
     }]);
 }(this.window));
-//this method will be called upon change in the text typed by the user in the searchbox
-/*$scope.search =
-  function () {
-    if (!$scope.query || $scope.query.length == 0) {
-      //initially we show all table data
-      $scope.result = $scope.records;
-    } else {
-      var qstr = $scope.query.toLowerCase();
-      $scope.result = [];
-      for (x in $scope.records) {
-        //check for a match (up to a lowercasing difference)
-        if ($scope.records[x].Name.toLowerCase().match(qstr) ||
-          $scope.records[x].City.toLowerCase().match(qstr) ||
-          $scope.records[x].Country.toLowerCase().match(qstr)) {
-          $scope.result.push($scope.records[x]); //add record to search result
-        }
-      }
-    }
-  };
-
-//delegate the text highlighting task to an external helper service 
-$scope.hlight = function (text, qstr) {
-  return highlightText.highlight(text, qstr);
-};*/
 
 //console.log('in enterchat(): Sending: ' + JSON.stringify($scope.myTree));
 

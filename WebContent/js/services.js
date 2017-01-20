@@ -11,6 +11,55 @@
         $rootScope.$broadcast(msg, data);
       }
     };
+  }]).factory('Socket', ['$window', function ($window) {
+
+    var wsUri = "ws://" + $window.location.host + "/webChat/",
+      websocket = new $window.WebSocket(wsUri);
+    return {
+      connect: function connect() {
+        websocket.onopen = function (evt) {
+          //notify("Connected to Chat Server...");
+        };
+        websocket.onmessage = function (evt) {
+          //notify(evt.data);
+        };
+        websocket.onerror = function (evt) {
+          // notify('ERROR: ' + evt.data);
+        };
+
+        websocket.onclose = function (evt) {
+          websocket = null;
+        };
+
+        //connectBtn.hidden = true;
+        //sendBtn.hidden = false;
+        //logoutBtn.hidden = false;
+        //userInput.value = '';
+      },
+
+      sendMessage: function sendMessage(jSon) {
+        if (websocket !== null) {
+          websocket.send(jSon);
+        }
+        jSon = {};
+      },
+
+      /*function notify(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        chatConsole.appendChild(pre);
+      }*/
+
+      logout: function logout() {
+        websocket.close();
+        //connectBtn.hidden = false;
+        //sendBtn.hidden = true;
+        //logoutBtn.hidden = true;
+        //userInput.value = '';
+        //notify("Logged out...");
+      }
+    };
   }]).factory('highlightText', ['$sce', function ($sce) {
 
     //service method to be called upon text highlighting
@@ -66,4 +115,28 @@
       };
     }]);
   */
+  //this method will be called upon change in the text typed by the user in the searchbox
+  /*$scope.search =
+    function () {
+      if (!$scope.query || $scope.query.length == 0) {
+        //initially we show all table data
+        $scope.result = $scope.records;
+      } else {
+        var qstr = $scope.query.toLowerCase();
+        $scope.result = [];
+        for (x in $scope.records) {
+          //check for a match (up to a lowercasing difference)
+          if ($scope.records[x].Name.toLowerCase().match(qstr) ||
+            $scope.records[x].City.toLowerCase().match(qstr) ||
+            $scope.records[x].Country.toLowerCase().match(qstr)) {
+            $scope.result.push($scope.records[x]); //add record to search result
+          }
+        }
+      }
+    };
+
+  //delegate the text highlighting task to an external helper service 
+  $scope.hlight = function (text, qstr) {
+    return highlightText.highlight(text, qstr);
+  };*/
 }(this.window));
