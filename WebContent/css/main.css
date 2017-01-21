@@ -67,86 +67,12 @@
   background-color: #B3B3B3;
 }
 
-
-/*.chatwindow .sidebar {
-  float: left;
-  padding: 10px;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: -1;
-  width: 225px;
-  position: absolute;
-  background-color: #555753;
-  box-shadow: 6px 0px 6px rgba(0, 0, 0, 0.3);
-}
-
-.chatwindow.sidebar-nav .navbar ul {
-  float: none;
-}
-
-.chatwindow .sidebar-nav .navbar ul:not {
-  display: block;
-}
-
-.sidebar-nav .navbar li {
-  float: none;
-  display: block;
-}
-
-.sidebar-nav .navbar li a {
-  padding-top: 12px;
-  padding-bottom: 12px;
-}*/
-
 html,
 body {
   max-width: 100%;
   overflow-x: hidden;
   margin: 0;
   background-color: #E6DDD4;
-}
-
-
-/*.side-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.side-nav li a {
-  display: block;
-  color: #000;
-  padding: 8px 16px;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.side-nav {
-  list-style-type: none;
-  margin: 0;
-  padding-left: 2%;
-  padding-top: 2%;
-  width: 20%;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  height: 100%;
-  position: fixed;
-  overflow: auto;
-  background-color: #888A85;
-  box-shadow: 6px 0px 6px rgba(0, 0, 0, 0.3);
-}
-
-
-
-.side-nav li a:hover {
-  background-color: #555;
-  color: white;
-}*/
-
-.badge-mentioned {
-  background-color: #F0AD4E;
 }
 
 @media all and (max-width: 30em) {
@@ -161,7 +87,6 @@ body {
   background-color: #D9D9D9;
   position: fixed;
   height: 100%;
-  overflow: auto;
   box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
@@ -170,9 +95,14 @@ body {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  height: auto;
+  max-height: 33.333%;
+  overflow: hidden;
   border-radius: 8px;
   font-family: monospace;
+}
+
+.side div ul:hover {
+  overflow: auto;
 }
 
 .side li a {
@@ -266,4 +196,21 @@ body {
   width: 100px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+}
+
+.channel-icon {
+  width: 20px;
+}
+
+.envelope-icon {
+  width: 18px;
+  background-color: #F0AD4E;
+}
+
+.bell-icon {
+  width: 15px;
+}
+
+.badge-mentioned {
+  background-color: #F0AD4E;
 }

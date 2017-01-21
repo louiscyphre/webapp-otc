@@ -11,53 +11,39 @@
         $rootScope.$broadcast(msg, data);
       }
     };
-  }]).factory('Socket', ['$window', function ($window) {
+  }]).factory('Socket', ['$window', 'MessageBus', function ($window, MessageBus) {
 
-    var wsUri = "ws://" + $window.location.host + "/webChat/",
-      websocket = new $window.WebSocket(wsUri);
+    var websocket = {};
     return {
       connect: function connect() {
-        websocket.onopen = function (evt) {
-          //notify("Connected to Chat Server...");
-        };
+        if (websocket) {
+          return;
+        }
+        var wsUri = "ws://" + $window.location.host + "/webChat/";
+        websocket = new $window.WebSocket(wsUri);
+
+        websocket.onopen = function (evt) {};
         websocket.onmessage = function (evt) {
-          //notify(evt.data);
+          // Send event using first property name of jSon object, and attach
+          // data, so listener can catch it
+          MessageBus.send("'" + evt.data.keys(evt.data)[0] + "'", evt.data);
         };
-        websocket.onerror = function (evt) {
-          // notify('ERROR: ' + evt.data);
-        };
+        websocket.onerror = function (evt) {};
 
         websocket.onclose = function (evt) {
           websocket = null;
         };
-
-        //connectBtn.hidden = true;
-        //sendBtn.hidden = false;
-        //logoutBtn.hidden = false;
-        //userInput.value = '';
       },
 
-      sendMessage: function sendMessage(jSon) {
+      send: function send(jSon) {
         if (websocket !== null) {
           websocket.send(jSon);
         }
         jSon = {};
       },
 
-      /*function notify(message) {
-        var pre = document.createElement("p");
-        pre.style.wordWrap = "break-word";
-        pre.innerHTML = message;
-        chatConsole.appendChild(pre);
-      }*/
-
       logout: function logout() {
         websocket.close();
-        //connectBtn.hidden = false;
-        //sendBtn.hidden = true;
-        //logoutBtn.hidden = true;
-        //userInput.value = '';
-        //notify("Logged out...");
       }
     };
   }]).factory('highlightText', ['$sce', function ($sce) {

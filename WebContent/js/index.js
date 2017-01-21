@@ -59,7 +59,7 @@
       $scope.register = function () {
         console.log('in register(): Sending: ' + JSON.stringify($scope.user));
 
-        $http.post("/webChat/login", JSON.stringify($scope.user)).success(function (response) {
+        $http.post("/webChat/register", JSON.stringify($scope.user)).success(function (response) {
           console.log('RegisterCtrl: emitting event AuthSuccess');
           $scope.registerScreenHidden = true;
           MessageBus.send('AuthSuccess');
@@ -69,75 +69,11 @@
     }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', function ($rootScope, $scope, $http, $window, MessageBus) {
 
       $scope.chatRoomsScreenHidden = true;
+      $scope.currentChannel = {};
+      $scope.channelThread = {};
 
-      $scope.$on('AuthSuccess', function (event) {
-        console.log('ChatRoomsCtrl: got event AuthSuccess');
-        $scope.chatRoomsScreenHidden = false;
-      });
-
-      $scope.enterChannel = function (channelname) {
-        console.log('in enterChannel(): Sending: ' + JSON.stringify(channelname));
-        $http.post("/webChat/login", JSON.stringify($scope.user)).success(function (response) {
-          console.log('enterChannel() success' + response);
-        });
-      };
-
-      $scope.exitChannel = function () {
-        console.log('in exitChannel()');
-        $http.post("/webChat/login", JSON.stringify($scope.user)).success(function (response) {
-          console.log('exitChannel() success' + response);
-        });
-      };
-
-      function connect() {
-
-        var wsUri = "ws://" + $window.location.host + "/WebSocketExample/chat/" + userInput.value;
-        var websocket = new $window.WebSocket(wsUri);
-        websocket.onopen = function (evt) {
-          notify("Connected to Chat Server...");
-        };
-        websocket.onmessage = function (evt) {
-          notify(evt.data);
-        };
-        websocket.onerror = function (evt) {
-          notify('ERROR: ' + evt.data);
-        };
-
-        websocket.onclose = function (evt) {
-          websocket = null;
-        };
-
-        connectBtn.hidden = true;
-        sendBtn.hidden = false;
-        logoutBtn.hidden = false;
-        userInput.value = '';
-      }
-
-      function sendMessage() {
-        if (websocket != null) {
-          websocket.send(userInput.value);
-        }
-        userInput.value = '';
-      }
-
-      function notify(message) {
-        var pre = document.createElement("p");
-        pre.style.wordWrap = "break-word";
-        pre.innerHTML = message;
-        chatConsole.appendChild(pre);
-      }
-
-      function logout() {
-        websocket.close();
-        connectBtn.hidden = false;
-        sendBtn.hidden = true;
-        logoutBtn.hidden = true;
-        userInput.value = '';
-        notify("Logged out...");
-      }
-
-
-      $scope.channelThread = [{
+      // TEST 
+      $scope.thread = [{
         Message: {
           ChannelID: "",
           UserID: "AAA",
@@ -210,7 +146,181 @@
         },
         Replies: []
       }];
-    }]);
+      $scope.thread1 = [{
+        Message: {
+          ChannelID: "",
+          UserID: "sdfsdfs",
+          MessageTime: "2.01.2017, 10:52",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on t"
+        },
+        Replies: [{
+          Message: {
+            ChannelID: "",
+            UserID: "sdfsdf",
+            MessageTime: "2.01.2017, 10:05",
+            ReplyToID: "",
+            Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit ."
+          },
+          Replies: [{
+            Message: {
+              ChannelID: "",
+              UserID: "fghfh",
+              MessageTime: "2.01.2017, 10:52",
+              ReplyToID: "",
+              Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+            },
+            Replies: []
+          }, {
+            Message: {
+              ChannelID: "",
+              UserID: "fhfghgfhfh",
+              MessageTime: "2.01.2017, 10:52",
+              ReplyToID: "",
+              Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+            },
+            Replies: []
+          }]
+        }, {
+          Message: {
+            ChannelID: "",
+            UserID: "WWWWWOOOAA",
+            MessageTime: "2.01.2017, 10:05",
+            ReplyToID: "",
+            Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+          },
+          Replies: []
+        }]
+      }, {
+        Message: {
+          ChannelID: "",
+          UserID: "WWWWWOOOAA",
+          MessageTime: "2.01.2017, 10:05",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        },
+        Replies: []
+      }, {
+        Message: {
+          ChannelID: "",
+          UserID: "WWWWWOOOAA",
+          MessageTime: "2.01.2017, 10:05",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        },
+        Replies: []
+      }, {
+        Message: {
+          ChannelID: "",
+          UserID: "WWWWWOOOAA",
+          MessageTime: "2.01.2017, 10:05",
+          ReplyToID: "",
+          Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+        },
+        Replies: []
+      }];
+      $scope.subscribedChannels = [];
+      /*[{
+              ChannelID: "channel1",
+              ChannelThread: $scope.thread,
+              SubscribersCount: "10"
+            }, {
+              Name: "channel2",
+              ChannelThread: $scope.thread,
+              Description: "fasdkjfhajfh",
+              SubscribersCount: "19"
+            }, {
+              ChannelID: "channel3",
+              ChannelThread: $scope.thread1,
+              SubscribersCount: "1"
+            }, {
+              ChannelID: "channel4",
+              ChannelThread: $scope.thread1,
+              SubscribersCount: "100"
+            }, {
+              ChannelID: "channel5",
+              ChannelThread: $scope.thread1,
+              SubscribersCount: "15"
+            }];*/
+      $scope.publicChannels = [{
+          Name: "auto",
+          ChannelThread: {},
+          Description: "fasdkjfhajfh",
+          SubscribersCount: "20"
+        },
+        {
+          Name: "ooollolo",
+          ChannelThread: {},
+          Description: "fasXfzFZFajfh",
+          SubscribersCount: "234"
+        },
+        {
+          Name: "oqwqwlolo",
+          ChannelThread: {},
+          Description: "fasqwqwqFZFajfh",
+          SubscribersCount: "4344"
+        },
+        {
+          Name: "213412312",
+          ChannelThread: {},
+          Description: "WEWjfh",
+          SubscribersCount: "344"
+        }];
+      //TEST
+
+      $scope.$on('AuthSuccess', function (event) {
+        console.log('ChatRoomsCtrl: got event AuthSuccess');
+        $scope.chatRoomsScreenHidden = false;
+        // connect websocket
+        //get all channels and subscribed channels json
+      });
+
+      var getCurrentThread = function (channelName) {
+        //console.log('getCurrentThread: entering');
+        if (!findChannelByName(channelName, $scope.subscribedChannels)) {
+          //console.log('getCurrentThread: no subscribed channels!');
+          $scope.subscribedChannels.push(findChannelByName(channelName, $scope.publicChannels));
+          findChannelByName(channelName, $scope.subscribedChannels).ChannelThread = $scope.thread;
+          // FIXME code to ask server for channel thread
+        }
+        return findChannelByName(channelName, $scope.subscribedChannels).ChannelThread;
+      };
+
+
+      var findChannelByName = function (channelName, channels) {
+        //console.log('findChannelByName: entering ' + channelName);
+        if (!channels) {
+          return null;
+        }
+        for (var key in channels) {
+          if (channels.hasOwnProperty(key)) {
+            if (channels[key].Name !== channelName) {
+              continue;
+            }
+          }
+          return channels[key];
+        }
+        return null;
+      };
+
+      $scope.enterChannel = function (channelname) {
+        //console.log('in enterChannel(): Sending: ' + JSON.stringify(channelname));
+        //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        $scope.channelThread = getCurrentThread(channelname);
+        $scope.currentChannel = channelname;
+        //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.channelThread));
+      };
+
+      $scope.exitChannel = function () {
+        console.log('in exitChannel()');
+        $scope.currentChannel = {};
+        $scope.channelThread = {};
+      };
+
+      $scope.isActive = function (channelname) {
+        return $scope.currentChannel === channelname;
+      };
+      }]);
 }(this.window));
 
 //console.log('in enterchat(): Sending: ' + JSON.stringify($scope.myTree));
