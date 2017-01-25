@@ -48,7 +48,7 @@
             <input id="newpassword" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
             <input class="form-control" placeholder="Nickname" data-ng-model="user.Nickname">
             <textarea class="form-control" rows="3" placeholder="Description" data-ng-model="user.Description"></textarea>
-            <input class="form-control" placeholder="Avatar Url" data-ng-model="user.Avatar">
+            <input class="form-control" placeholder="Avatar Url" data-ng-model="user.AvatarURL">
             <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button>
           </form>
         </div>
@@ -78,6 +78,19 @@
 
             </li>
           </ul>
+          <ul class="users-online">
+            <li data-ng-repeat="user in currentChannel.Users">
+              <a href="javascript:void(0);">
+                <img class="user-avatar-side" data-ng-src="{{user.AvatarURL}}" alt="userpic" ng-model="user.AvatarURL" />{{user.Nickname}}
+
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="description" />
+                  <div class="description-content"> {{user.Description}} </div>
+                </button>
+
+              </a>
+            </li>
+          </ul>
+
           <ul class="all-channels">
             <li data-ng-repeat="channel in publicChannels">
               <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)"> {{channel.Name}} 
@@ -89,18 +102,7 @@
               </a>
             </li>
           </ul>
-          <ul class="users-online">
-            <li data-ng-repeat="user in currentChannel.Users">
-              <a href="javascript:void(0);">
-                <img class="user-avatar-side" data-ng-src="{{user.Avatar}}" alt="userpic" ng-model="user.Avatar" />{{user.Nickname}}
-
-                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="description" />
-                  <div class="description-content"> {{user.Description}} </div>
-                </button>
-
-              </a>
-            </li>
-          </ul>
+          <input class="search" type="text" name="search" placeholder="Search channel...">
         </div>
       </div>
 

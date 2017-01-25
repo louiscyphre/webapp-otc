@@ -10,7 +10,7 @@
         Password: "",
         Nickname: "",
         Description: "",
-        Avatar: ""
+        AvatarURL: ""
       };
 
       $scope.loginScreenHidden = false;
@@ -75,7 +75,11 @@
       $scope.thread = [{
         Message: {
           ChannelID: "",
-          UserID: "AAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:52",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it)."
@@ -83,15 +87,23 @@
         Replies: [{
           Message: {
             ChannelID: "",
-            UserID: "WWWWWOOOAA",
+            User: {
+              Nickname: "user1",
+              Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+              AvatarURL: "img/default_avatar.png"
+            },
             MessageTime: "2.01.2017, 10:05",
             ReplyToID: "",
-            Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+            Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
           },
           Replies: [{
             Message: {
               ChannelID: "",
-              UserID: "AAA",
+              User: {
+                Nickname: "user1",
+                Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+                AvatarURL: "img/default_avatar.png"
+              },
               MessageTime: "2.01.2017, 10:52",
               ReplyToID: "",
               Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -100,7 +112,11 @@
           }, {
             Message: {
               ChannelID: "",
-              UserID: "AAA",
+              User: {
+                Nickname: "user1",
+                Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+                AvatarURL: "img/default_avatar.png"
+              },
               MessageTime: "2.01.2017, 10:52",
               ReplyToID: "",
               Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -110,7 +126,11 @@
         }, {
           Message: {
             ChannelID: "",
-            UserID: "WWWWWOOOAA",
+            User: {
+              Nickname: "user1",
+              Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+              AvatarURL: "img/default_avatar.png"
+            },
             MessageTime: "2.01.2017, 10:05",
             ReplyToID: "",
             Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -120,7 +140,11 @@
       }, {
         Message: {
           ChannelID: "",
-          UserID: "WWWWWOOOAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:05",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -129,7 +153,11 @@
       }, {
         Message: {
           ChannelID: "",
-          UserID: "WWWWWOOOAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:05",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -138,7 +166,11 @@
       }, {
         Message: {
           ChannelID: "",
-          UserID: "WWWWWOOOAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:05",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -148,7 +180,11 @@
       $scope.thread1 = [{
         Message: {
           ChannelID: "",
-          UserID: "sdfsdfs",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:52",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on t"
@@ -156,7 +192,11 @@
         Replies: [{
           Message: {
             ChannelID: "",
-            UserID: "sdfsdf",
+            User: {
+              Nickname: "user1",
+              Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+              AvatarURL: "img/default_avatar.png"
+            },
             MessageTime: "2.01.2017, 10:05",
             ReplyToID: "",
             Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit ."
@@ -164,7 +204,11 @@
           Replies: [{
             Message: {
               ChannelID: "",
-              UserID: "fghfh",
+              User: {
+                Nickname: "user1",
+                Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+                AvatarURL: "img/default_avatar.png"
+              },
               MessageTime: "2.01.2017, 10:52",
               ReplyToID: "",
               Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -173,17 +217,25 @@
           }, {
             Message: {
               ChannelID: "",
-              UserID: "fhfghgfhfh",
+              User: {
+                Nickname: "user1",
+                Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+                AvatarURL: "img/default_avatar.png"
+              },
               MessageTime: "2.01.2017, 10:52",
               ReplyToID: "",
-              Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
+              Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
             },
             Replies: []
           }]
         }, {
           Message: {
             ChannelID: "",
-            UserID: "WWWWWOOOAA",
+            User: {
+              Nickname: "user1",
+              Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+              AvatarURL: "img/default_avatar.png"
+            },
             MessageTime: "2.01.2017, 10:05",
             ReplyToID: "",
             Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -193,7 +245,11 @@
       }, {
         Message: {
           ChannelID: "",
-          UserID: "WWWWWOOOAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:05",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -202,7 +258,11 @@
       }, {
         Message: {
           ChannelID: "",
-          UserID: "WWWWWOOOAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:05",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -211,7 +271,11 @@
       }, {
         Message: {
           ChannelID: "",
-          UserID: "WWWWWOOOAA",
+          User: {
+            Nickname: "user1",
+            Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+            AvatarURL: "img/default_avatar.png"
+          },
           MessageTime: "2.01.2017, 10:05",
           ReplyToID: "",
           Content: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long ."
@@ -225,12 +289,12 @@
           Users: [
             {
               Nickname: "user1",
-              Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
-              Avatar: "img/default_avatar.png"
+              Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top  .",
+              AvatarURL: "img/default_avatar.png"
            }, {
               Nickname: "fgsdffdf123",
               Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top o.",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }
          ],
           Description: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .",
@@ -243,11 +307,11 @@
             {
               Nickname: "blabutru1",
               Description: "234523452 2 324523v52345v23523",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }, {
               Nickname: "bltry4y4y45423",
               Description: "223523452345v23452v345v23",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }
          ],
           Description: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .",
@@ -260,11 +324,11 @@
             {
               Nickname: "blabla1",
               Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }, {
               Nickname: "blabla123",
               Description: "that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }
          ],
           Description: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .",
@@ -277,11 +341,11 @@
             {
               Nickname: "bla1212a1",
               Description: "SDFGSDGHSDGSDFGs",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }, {
               Nickname: "b1212123",
               Description: "SDFGSDFGSDFGSDG2345",
-              Avatar: "img/default_avatar.png"
+              AvatarURL: "img/default_avatar.png"
            }
          ],
           Description: "Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long .",
@@ -295,7 +359,7 @@
 
         //get all channels and subscribed channels from json (must be here or on auth with servlet??)
         $scope.user.Nickname = response.User.Nickname;
-        $scope.user.Avatar = response.User.Avatar;
+        $scope.user.AvatarURL = response.User.AvatarURL;
         $scope.user.Description = response.User.Description;
         $scope.publicChannels = response.PublicChannels;
         $scope.subscribedChannels = response.SubcribedChannels;

@@ -4,7 +4,7 @@
     "PasswordHash": "1234",
     "Nickname": "supuser",
     "Description": "שטו?",
-    "Avatar": "img/person.png"
+    "AvatarURL": "img/person.png"
   },
   {
     "id": "1",
@@ -12,6 +12,6 @@
     "PasswordHash": "12345",
     "Nickname": "supsupuser",
     "Description": "שטו?",
-    "Avatar": "img/person.png"
+    "AvatarURL": "img/person.png"
   }
 ]

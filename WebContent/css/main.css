@@ -161,13 +161,17 @@ body {
 .chat-text-area ul li table tr td div.message-info {
   background-color: #FCF8E3;
   word-break: keep-all;
-  margin-right: 7%;
-  padding-left: 5%;
-  padding-top: 5%;
-  padding-bottom: 5%;
-  padding-right: 5%;
+  margin-right: 2%;
+  padding-left: 1%;
+  padding-top: 1%;
+  padding-bottom: 2%;
+  padding-right: 3%;
   font-size: 85%;
-  width: 100%;
+  max-height: 150px;
+  max-width: 150px;
+  width: 15%;
+  height: 15%;
+  float: left;
 }
 
 .chat-text-area ul li table tr td div {
@@ -183,6 +187,7 @@ body {
 .chat-text-area ul li table tr td {
   padding: 1%;
   height: 100%;
+  overflow: hidden;
 }
 
 .chat-text-area ul {
@@ -256,6 +261,17 @@ body {
   background-color: #ffffff;
 }
 
+.user-avatar-chat {
+  width: 60%;
+  height: 60%;
+  margin: 0 0 10px;
+  margin-right: 10px;
+  border: 1px solid #B3B3B3;
+  border-radius: 50%;
+  background-color: #ffffff;
+  float: left;
+}
+
 .channel-control {
   border: 0;
   background: transparent;
@@ -275,10 +291,11 @@ body {
 
 .description-content {
   display: none;
+  visibility: hidden;
   overflow-y: hidden;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 260px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 12px 16px;
   z-index: 1;
@@ -287,12 +304,29 @@ body {
 .description:hover .description-content {
   max-height: 300px;
   display: block;
+  visibility: visible;
   background-color: #FCF8E3;
   color: #2E3436;
 }
 
 .description .description-content:hover {
   overflow-y: auto;
+}
+
+
+/* When the input field gets focus, change its width to 100% */
+
+.search:focus {
+  width: 100%;
+}
+
+.search[type=text] {
+  width: 50%;
+  background-color: white;
+  background-image: url('searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding-left: 10%;
 }
 
 
