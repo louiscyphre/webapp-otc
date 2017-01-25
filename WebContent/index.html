@@ -6,48 +6,49 @@
   <meta charset="utf-8" />
   <title>Web chat</title>
 
-  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon">
   <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
 
-  <script src="lib/angular.min.js "></script>
-  <script src="lib/jquery-1.11.3.min.js "></script>
-  <script src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js "></script>
-  <script src="js/index.js "></script>
-  <script src="js/services.js "></script>
-  <script src="js/directives.js "></script>
+  <script type="text/javascript" src="lib/angular.min.js "></script>
+  <script type="text/javascript" src="lib/jquery-1.11.3.min.js "></script>
+  <script type="text/javascript" src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js "></script>
+  <script type="text/javascript" src="js/constants.js"></script>
+  <script type="text/javascript" src="js/controllers.js"></script>
+  <script type="text/javascript" src="js/services.js "></script>
+  <script type="text/javascript" src="js/directives.js "></script>
 
 </head>
 
-<body ng-app="webChat">
+<body data-ng-app="webChat">
 
   <div class="container">
-    <div ng-controller="LoginCtrl" class="row" ng-hide="loginScreenHidden=true">
+    <div data-ng-controller="LoginCtrl" class="row" data-ng-hide="loginScreenHidden=true">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
         <h1 class="text-center login-title">Sign in to enter Webchat</h1>
         <div class="account-wall">
-          <img class="avatar" src="img/person.png" alt="avatar image">
-          <form class="form-login" ng-submit="login()">
-            <input id="username" type="username" class="form-control" placeholder="Username" required ng-model="user.Username">
-            <input id="password" type="password" class="form-control" placeholder="Password" required ng-model="user.Password">
+          <img class="avatar" src="img/default_avatar.png" alt="avatar image">
+          <form class="form-login" data-ng-submit="login()">
+            <input id="username" type="username" class="form-control" placeholder="Username" required data-ng-model="user.Username">
+            <input id="password" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
             <button class="btn btn-lg btn-primary btn-block sign-in-btn" type="submit"> Sign in</button>
-            <button class="btn btn-lg btn-secondary btn-block " ng-click="doregister() "> Register</button>
+            <button class="btn btn-lg btn-secondary btn-block " data-ng-click="doregister() "> Register</button>
           </form>
         </div>
       </div>
     </div>
 
-    <div ng-controller="RegisterCtrl" class="row" ng-hide="registerScreenHidden=true">
+    <div data-ng-controller="RegisterCtrl" class="row" data-ng-hide="registerScreenHidden=true">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
         <h1 class="text-center login-title ">Would you like to register?</h1>
         <div class="account-wall">
           <img class="avatar" src="img/person.png" alt="avatar image">
-          <form class="form-login" ng-submit="register() ">
-            <input id="newusername" type="username" class="form-control" placeholder="Username" required ng-model="user.Username">
-            <input id="newpassword" type="password" class="form-control" placeholder="Password" required ng-model="user.Password">
-            <input class="form-control" placeholder="Nickname" ng-model="user.Nickname">
-            <textarea class="form-control" rows="3" placeholder="Description" ng-model="user.Description"></textarea>
-            <input class="form-control" placeholder="Avatar Url" ng-model="user.AvatarUrl">
+          <form class="form-login" data-ng-submit="register() ">
+            <input id="newusername" type="username" class="form-control" placeholder="Username" required data-ng-model="user.Username">
+            <input id="newpassword" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
+            <input class="form-control" placeholder="Nickname" data-ng-model="user.Nickname">
+            <textarea class="form-control" rows="3" placeholder="Description" data-ng-model="user.Description"></textarea>
+            <input class="form-control" placeholder="Avatar Url" data-ng-model="user.Avatar">
             <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button>
           </form>
         </div>
@@ -56,37 +57,55 @@
 
   </div>
   <div class="chat-container">
-    <div ng-controller="ChatRoomsCtrl" ng-hide="chatRoomsScreenHidden=false">
+    <div data-ng-controller="ChatRoomsCtrl" data-ng-hide="chatRoomsScreenHidden=false">
 
       <div class="side">
         <div>
-          <ul class="all-channels">
-            <li ng-repeat="channel in publicChannels">
-              <a href="javascript:void(0);" ng-click="enterChannel(channel.Name)"> {{channel.Name}} 
-                <span class="badge" ng-model="channel.SubscribersCount"><img class="channel-icon" ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span></a>
+          <ul class="subscribed-channels" data-ng-model="subscribedChannels">
+            <li data-ng-repeat="channel in subscribedChannels">
+              <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)" data-ng-class="{active: isActive(channel.Name)}"> {{channel.Name}} <br/>
+                <span class="side-badges">
+                <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
+                <span class="badge"><img class="envelope-icon" data-ng-src="img/glyphicons-envelope.png" alt="msgs" />1</span>
+                <span class="badge badge-mentioned"><img class="bell-icon" data-ng-src="img/glyphicons-bell.png" alt="users" />2</span>
+                </span>
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="usubscribe" />
+                  <div class="description-content"> {{channel.Description}} </div>
+                </button>
+                <button class="channel-control" data-ng-click="unsubscribeChannel(channel.Name)"><img class="channel-control-icon" data-ng-src="img/glyphicons-remove-sign.png" alt="usubscribe" />
+                </button>
+              </a>
+
             </li>
           </ul>
-          <ul class="subscribed-channels">
-            <li ng-repeat="channel in subscribedChannels">
-              <a href="javascript:void(0);" ng-click="enterChannel(channel.Name)" ng-class="{active: isActive(channel.ChannelID)}"> {{channel.Name}} <br/> 
-                <span class="badge" ng-model="channel.SubscribersCount"><img class="channel-icon" ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
-                <span class="badge"><img class="envelope-icon" ng-src="img/glyphicons-envelope.png" alt="msgs" />1</span>
-                <span class="badge badge-mentioned"><img class="bell-icon" ng-src="img/glyphicons-bell.png" alt="users" />2</span></a>
+          <ul class="all-channels">
+            <li data-ng-repeat="channel in publicChannels">
+              <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)"> {{channel.Name}} 
+                <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
+                
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="usubscribe" />
+                  <div class="description-content"> {{channel.Description}} </div>
+                </button>
+              </a>
             </li>
           </ul>
           <ul class="users-online">
-            <li><a href="#">user 1 </a></li>
-            <li><a href="#">user 2 </a></li>
+            <li data-ng-repeat="user in currentChannel.Users">
+              <a href="javascript:void(0);">
+                <img class="user-avatar-side" data-ng-src="{{user.Avatar}}" alt="userpic" ng-model="user.Avatar" />{{user.Nickname}}
 
-            <li><a href="#">user 4 </a></li>
-            <li><a href="#">user 4</a></li>
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="description" />
+                  <div class="description-content"> {{user.Description}} </div>
+                </button>
+
+              </a>
+            </li>
           </ul>
         </div>
       </div>
 
       <div class="chat-text-area">
-
-        <discussion discussion="channelThread" ng-model="channelThread" ng-view="channelThread"></discussion>
+        <discussion discussion="channelThread" data-ng-model="channelThread" data-ng-view="channelThread"></discussion>
         <footer class="footer">
           <div class="input-group">
             <input type="text " class="form-control " placeholder="Type your message here ">
@@ -96,53 +115,7 @@
           </div>
         </footer>
       </div>
-      <!--div class="side-nav">
-        /* need to show data from json here*/
-        <ul class="all-channels">
-          <li class="active"><a href="#">Channel stub 1</a></li>
-          <li><a href="#">Channel stub 2</a></li>
-
-          <li><a href="#">Channel stub 4</a></li>
-          <li><a href="#">Channel stub 4 </a></li>
-        </ul>
-
-        <ul class="subscribed-channels">
-          <li class="active"><a href="#">Subscribed channel 1 <span class="badge">7</span> <span class="badge badge-mentioned">3</span></a>
-          </li>
-          <li><a href="#">Subscribed channel 2 </a></li>
-
-          <li><a href="#">Subscribed channel 4 <span class="badge">3</span> <span class="badge badge-mentioned">1</span></a></li>
-          <li><a href="#">Subscribed channel 4 <span class="badge">1344</span></a></li>
-          </ul>
-        </div>
-
-        <div class="chat-text-area">
-          <h2>Fixed Full-height Side Nav</h2>
-          <h3>Try to scroll this area, and see how the sidenav sticks to the page</h3>
-          <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
-          <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
-          <p>Some text..</p>
-          <p>Some text..</p>
-          <p>Some text..</p>
-          <p>Some text..</p>
-          <p>Some text..</p>
-          <p>Some text..</p>
-          <p>Some text..</p>
-          <div class="input-group  chatinput">
-            <form>
-              <div class="input-group ">
-                <input type="text " class="form-control " placeholder="Type your message here " ng-model="message">
-                <div class="input-group-btn ">
-                  <button class="btn btn-primary " type="submit ">Send
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          </div-->
     </div>
-
   </div>
 </body>
 

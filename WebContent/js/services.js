@@ -2,7 +2,7 @@
 
   'use strict';
   /*global angular, console*/
-  var services = angular.module('services', []);
+  var services = angular.module('services', ['constants']);
 
   services.factory('MessageBus', ['$rootScope', function ($rootScope) {
 
@@ -26,7 +26,7 @@
         websocket.onmessage = function (evt) {
           // Send event using first property name of jSon object, and attach
           // data, so listener can catch it
-          MessageBus.send("'" + evt.data.keys(evt.data)[0] + "'", evt.data);
+          MessageBus.send("'" + Object.keys(evt.data) + "'", JSON.parse(evt.data));
         };
         websocket.onerror = function (evt) {};
 
@@ -36,6 +36,7 @@
       },
 
       send: function send(jSon) {
+        MessageBus.send('unsubscribedChannel');
         if (websocket !== null) {
           websocket.send(jSon);
         }
@@ -46,7 +47,7 @@
         websocket.close();
       }
     };
-  }]).factory('highlightText', ['$sce', function ($sce) {
+        }]).factory('highlightText', ['$sce', function ($sce) {
 
     //service method to be called upon text highlighting
     var highlight = function (text, qstr) {

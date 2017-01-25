@@ -2,7 +2,7 @@
 
   'use strict';
   /*global angular, console*/
-  var directives = angular.module('directives', []);
+  var directives = angular.module('directives', ['constants']);
   directives.directive('thread', function ($compile) {
     return {
       restrict: "E",
@@ -10,7 +10,7 @@
       scope: {
         thread: '='
       },
-      template: "<li><p>{{thread.Message.UserID}} on {{thread.Message.MessageTime}}: {{ thread.Message.Content}}</p></li>",
+      template: "<li><table><tr><td><div class=\"message-info\">{{thread.Message.UserID}} {{thread.Message.MessageTime}} </div></td><td><div class=\"message\">{{ thread.Message.Content}}</div></td></tr></table></li>",
       link: function (scope, element, attrs) {
         //check if this member has children
         if (angular.isArray(scope.thread.Replies)) {

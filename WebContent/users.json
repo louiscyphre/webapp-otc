@@ -1,4 +1,17 @@
-[ { "id": "0" , "Username" : "Odmin", "PasswordHash" : "1234", "Nickname" : "supuser",  "Description" : "שטו?", "AvatarUrl" : "img/person.png" },
-  { "id": "1" , "Username" : "Goblin", "PasswordHash" : "12345", "Nickname" : "supsupuser",  "Description" : "שטו?", "AvatarUrl" : "img/person.png" } 
+[{
+    "id": "0",
+    "Username": "Odmin",
+    "PasswordHash": "1234",
+    "Nickname": "supuser",
+    "Description": "שטו?",
+    "Avatar": "img/person.png"
+  },
+  {
+    "id": "1",
+    "Username": "Goblin",
+    "PasswordHash": "12345",
+    "Nickname": "supsupuser",
+    "Description": "שטו?",
+    "Avatar": "img/person.png"
+  }
 ]
-

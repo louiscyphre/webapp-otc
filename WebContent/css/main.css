@@ -56,6 +56,7 @@
   margin: 0 auto 10px;
   display: block;
   border-radius: 50%;
+  background-color: #ffffff;
 }
 
 .btn-secondary:hover:not(.active) {
@@ -75,14 +76,12 @@ body {
   background-color: #E6DDD4;
 }
 
-@media all and (max-width: 30em) {
-  /* Alternative narrow styles */
-}
-
 .side div {
   list-style-type: none;
   margin: 0;
-  padding: 2%;
+  padding-left: 1%;
+  padding-top: 1%;
+  padding-right: 1%;
   width: 20%;
   background-color: #D9D9D9;
   position: fixed;
@@ -113,6 +112,11 @@ body {
   text-decoration: none;
 }
 
+.side li a span {
+  padding: 0px;
+  text-decoration: none
+}
+
 .side li a.active {
   background-color: #337AB7;
   color: white;
@@ -125,11 +129,12 @@ body {
 
 .side {
   overflow: auto;
+  display: table;
 }
 
 .chat-container {
   margin: 0;
-  padding: 2%;
+  padding: 1%;
   height: 100%;
   width: 100%;
 }
@@ -137,39 +142,47 @@ body {
 .chat-text-area {
   background-color: #E6DDD4;
   overflow-y: auto;
-  margin-left: 21%;
+  margin-left: 20%;
+  padding-left: 2%;
+  padding-right: 2%;
   margin-right: 0%;
-  padding: 0% 1%;
   height: 100%;
 }
 
-.chat-text-area ul li p {
-  margin-right: 0%;
-  padding-left: 2%;
-  padding-top: 2%;
-  padding-bottom: 2%;
-  padding-right: 2%;
-  height: 100%;
-  border: 2px solid #B3B3B3;
-  border-radius: 8px;
-  list-style-type: none;
+.chat-text-area ul li table tr td div.message {
   background-color: #DBF7C6;
-  box-shadow: 6px 0px 10px rgba(0, 0, 0, 0.3);
-}
-
-.chat-text-area p {
-  margin-left: 0%;
   margin-right: 0%;
   padding-left: 2%;
   padding-top: 2%;
   padding-bottom: 2%;
   padding-right: 2%;
-  height: 100%;
+}
+
+.chat-text-area ul li table tr td div.message-info {
+  background-color: #FCF8E3;
+  word-break: keep-all;
+  margin-right: 7%;
+  padding-left: 5%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  padding-right: 5%;
+  font-size: 85%;
+  width: 100%;
+}
+
+.chat-text-area ul li table tr td div {
   border: 2px solid #B3B3B3;
   border-radius: 8px;
-  list-style-type: none;
-  box-shadow: 6px 0px 10px rgba(0, 0, 0, 0.3);
   font-family: monospace;
+  width: 100%;
+  box-shadow: 6px 0px 10px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  display: inline-block;
+}
+
+.chat-text-area ul li table tr td {
+  padding: 1%;
+  height: 100%;
 }
 
 .chat-text-area ul {
@@ -199,18 +212,122 @@ body {
 }
 
 .channel-icon {
-  width: 20px;
+  width: 40%;
+  margin: -1px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .envelope-icon {
-  width: 18px;
-  background-color: #F0AD4E;
+  width: 40%;
+  margin: -1px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .bell-icon {
-  width: 15px;
+  width: 30%;
+  margin: -1px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.badge {
+  width: 17%;
+  margin: -1px;
+  background-color: transparent;
 }
 
 .badge-mentioned {
   background-color: #F0AD4E;
+  margin: -1px;
 }
+
+.side-badges {
+  align: left;
+}
+
+.user-avatar-side {
+  width: 36px;
+  height: 36px;
+  margin: 0 0 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+.channel-control {
+  border: 0;
+  background: transparent;
+  margin: -1px;
+  padding: 0px;
+}
+
+.channel-control-icon {
+  width: 60%;
+  padding: 1px;
+}
+
+.description {
+  position: relative;
+  display: inline-block;
+}
+
+.description-content {
+  display: none;
+  overflow-y: hidden;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.description:hover .description-content {
+  max-height: 300px;
+  display: block;
+  background-color: #FCF8E3;
+  color: #2E3436;
+}
+
+.description .description-content:hover {
+  overflow-y: auto;
+}
+
+
+/*
+
+.side table {
+  width: 100%
+}
+.side table tr a {
+  display: block;
+  color: #000000;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.side table td {
+  display: table-cell;
+  width: 100%;
+  padding: 0px;
+  border-radius: 8px;
+  text-decoration: none
+}
+
+.side table tr div {
+  padding: 0px;
+  text-decoration: none
+}
+
+.side table tr.active {
+  background-color: #337AB7;
+  color: white;
+}
+
+.side table tr:hover:not(.active) {
+  background-color: #B3B3B3;
+  color: white;
+}*/
