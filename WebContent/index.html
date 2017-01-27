@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+  <title>Web chat</title>
+
+  <link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon">
+  <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <script type="text/javascript" src="lib/angular.min.js "></script>
+  <script type="text/javascript" src="lib/jquery-1.11.3.min.js "></script>
+  <script type="text/javascript" src="lib/bootstrap-3.3.7-dist/js/bootstrap.min.js "></script>
+  <script type="text/javascript" src="js/constants.js"></script>
+  <script type="text/javascript" src="js/controllers.js"></script>
+  <script type="text/javascript" src="js/services.js "></script>
+  <script type="text/javascript" src="js/directives.js "></script>
+
+</head>
+
+<body data-ng-app="webChat">
+
+  <div class="container">
+    <div data-ng-controller="LoginCtrl" class="row" data-ng-hide="loginScreenHidden=false">
+      <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <h1 class="text-center login-title">Sign in to enter Webchat</h1>
+        <div class="account-wall">
+          <img class="avatar" src="img/default_avatar.png" alt="avatar image">
+          <form class="form-login" data-ng-submit="login()">
+            <input id="username" type="username" class="form-control" placeholder="Username" required data-ng-model="user.Username">
+            <input id="password" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
+            <button class="btn btn-lg btn-primary btn-block sign-in-btn" type="submit"> Sign in</button>
+            <button class="btn btn-lg btn-secondary btn-block " data-ng-click="doregister() "> Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div data-ng-controller="RegisterCtrl" class="row" data-ng-hide="registerScreenHidden=true">
+      <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <h1 class="text-center login-title ">Would you like to register?</h1>
+        <div class="account-wall">
+          <img class="avatar" src="img/person.png" alt="avatar image">
+          <form class="form-login" data-ng-submit="register() ">
+            <input id="newusername" type="username" class="form-control" placeholder="Username" required data-ng-model="user.Username">
+            <input id="newpassword" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
+            <input class="form-control" placeholder="Nickname" data-ng-model="user.Nickname">
+            <textarea class="form-control" rows="3" placeholder="Description" data-ng-model="user.Description"></textarea>
+            <input class="form-control" placeholder="Avatar Url" data-ng-model="user.AvatarURL">
+            <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="chat-container">
+    <div data-ng-controller="ChatRoomsCtrl" data-ng-hide="chatRoomsScreenHidden=true">
+
+      <div class="side">
+        <div>
+          <ul class="subscribed-channels" data-ng-model="subscribedChannels">
+            <li data-ng-repeat="channel in subscribedChannels">
+              <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)" data-ng-class="{active: isActive(channel.Name)}"> {{channel.Name}} <br/>
+                <span class="side-badges">
+                <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
+                <span class="badge"><img class="envelope-icon" data-ng-src="img/glyphicons-envelope.png" alt="msgs" />1</span>
+                <span class="badge badge-mentioned"><img class="bell-icon" data-ng-src="img/glyphicons-bell.png" alt="users" />2</span>
+                </span>
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="usubscribe" />
+                  <div class="description-content"> {{channel.Description}} </div>
+                </button>
+                <button class="channel-control" data-ng-click="unsubscribeChannel(channel.Name)"><img class="channel-control-icon" data-ng-src="img/glyphicons-remove-sign.png" alt="usubscribe" />
+                </button>
+              </a>
+
+            </li>
+          </ul>
+          <ul class="users-online">
+            <li data-ng-repeat="user in currentChannel.Users">
+              <a href="javascript:void(0);">
+                <img class="user-avatar-side" data-ng-src="{{user.AvatarURL}}" alt="userpic" ng-model="user.AvatarURL" />{{user.Nickname}}
+
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="description" />
+                  <div class="description-content"> {{user.Description}} </div>
+                </button>
+
+              </a>
+            </li>
+          </ul>
+
+          <ul class="all-channels">
+            <li data-ng-repeat="channel in publicChannels">
+              <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)"> {{channel.Name}} 
+                <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
+                
+                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="usubscribe" />
+                  <div class="description-content"> {{channel.Description}} </div>
+                </button>
+              </a>
+            </li>
+          </ul>
+          <input class="search" type="text" name="search" placeholder="Search channel...">
+        </div>
+      </div>
+
+      <div class="chat-text-area">
+        <discussion discussion="channelThread" data-ng-model="channelThread" data-ng-view="channelThread"></discussion>
+        <footer class="footer">
+          <div class="input-group">
+            <input type="text " class="form-control " placeholder="Type your message here ">
+            <div class="input-group-btn">
+              <button class="btn btn-primary btn-chat-send" type="submit "> Send </button>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
