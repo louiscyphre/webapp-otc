@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <title>Web chat</title>
 
-  <link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon">
+  <!--link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon"-->
   <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
 
@@ -27,9 +27,9 @@
       <div class="col-sm-6 col-md-4 col-md-offset-4">
         <h1 class="text-center login-title">Sign in to enter Webchat</h1>
         <div class="account-wall">
-          <img class="avatar" src="img/default_avatar.png" alt="avatar image">
+          <img class="avatar" src="css/img/default_avatar.png" alt="avatar image">
           <form class="form-login" data-ng-submit="login()">
-            <input id="username" type="username" class="form-control" placeholder="Username" required data-ng-model="user.Username">
+            <input id="username" type="text" class="form-control" placeholder="Username" required data-ng-model="user.Username">
             <input id="password" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
             <button class="btn btn-lg btn-primary btn-block sign-in-btn" type="submit"> Sign in</button>
             <button class="btn btn-lg btn-secondary btn-block " data-ng-click="doregister() "> Register</button>
@@ -42,9 +42,9 @@
       <div class="col-sm-6 col-md-4 col-md-offset-4">
         <h1 class="text-center login-title ">Would you like to register?</h1>
         <div class="account-wall">
-          <img class="avatar" src="img/person.png" alt="avatar image">
+          <img class="avatar" src="css/img/default_avatar.png" alt="avatar image">
           <form class="form-login" data-ng-submit="register() ">
-            <input id="newusername" type="username" class="form-control" placeholder="Username" required data-ng-model="user.Username">
+            <input id="newusername" type="text" class="form-control" placeholder="Username" required data-ng-model="user.Username">
             <input id="newpassword" type="password" class="form-control" placeholder="Password" required data-ng-model="user.Password">
             <input class="form-control" placeholder="Nickname" data-ng-model="user.Nickname">
             <textarea class="form-control" rows="3" placeholder="Description" data-ng-model="user.Description"></textarea>
@@ -61,58 +61,87 @@
 
       <div class="side">
         <div>
-          <ul class="subscribed-channels" data-ng-model="subscribedChannels">
-            <li data-ng-repeat="channel in subscribedChannels">
-              <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)" data-ng-class="{active: isActive(channel.Name)}"> {{channel.Name}} <br/>
-                <span class="side-badges">
-                <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
-                <span class="badge"><img class="envelope-icon" data-ng-src="img/glyphicons-envelope.png" alt="msgs" />1</span>
-                <span class="badge badge-mentioned"><img class="bell-icon" data-ng-src="img/glyphicons-bell.png" alt="users" />2</span>
-                </span>
-                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="usubscribe" />
-                  <div class="description-content"> {{channel.Description}} </div>
-                </button>
-                <button class="channel-control" data-ng-click="unsubscribeChannel(channel.Name)"><img class="channel-control-icon" data-ng-src="img/glyphicons-remove-sign.png" alt="usubscribe" />
-                </button>
-              </a>
+          <ul>
+            <li>
+              <table class="subscribed-channels" data-ng-model="subscribedChannels">
+                <tr data-ng-repeat="channel in subscribedChannels" data-ng-click="enterChannel(channel.Name)" data-ng-class="{active: isActive(channel.Name)}">
+                  <td>{{channel.Name}}</td>
 
+                  <td class="side-badges">
+                    <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />{{channel.SubscribersCount}}</span>
+                  </td>
+                  <td></td>
+                  <td class="side-badges">
+                    <span class="badge"><img class="envelope-icon" data-ng-src="css/img/glyphicons-envelope.png" alt="msgs" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="/>1</span>
+                  </td>
+                  <td></td>
+                  <td class="side-badges">
+                    <span class="badge badge-mentioned"><img class="bell-icon" data-ng-src="css/img/glyphicons-bell.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="/>2</span>
+                  </td>
+                  <td></td>
+                  <td>
+                    <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="usubscribe" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                      <div class="description-content"> {{channel.Description}} </div>
+                    </data-button>
+                  </td>
+                  <td>
+                    <button class="channel-control" data-ng-click="unsubscribeChannel(channel.Name)"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-remove-sign.png" alt="usubscribe" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                    </button>
+                  </td>
+                  <td></td>
+                </tr>
+              </table>
             </li>
           </ul>
-          <ul class="users-online">
-            <li data-ng-repeat="user in currentChannel.Users">
-              <a href="javascript:void(0);">
-                <img class="user-avatar-side" data-ng-src="{{user.AvatarURL}}" alt="userpic" ng-model="user.AvatarURL" />{{user.Nickname}}
+          <ul>
+            <li>
+              <table class="users-online">
+                <tr data-ng-repeat="user in currentChannel.Users" data-ng-click="enterPrivateChannel(user.Username)">
+                  <td>
+                    <img class="user-avatar-side" data-ng-src="{{user.AvatarURL}}" alt="userpic" data-ng-model="user.AvatarURL" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                  </td>
+                  <td>{{user.Nickname}}
 
-                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="description" />
-                  <div class="description-content"> {{user.Description}} </div>
-                </button>
+                  </td>
+                  <td>
+                    <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                      <div class="description-content"> {{user.Description}} </div>
+                    </data-button>
 
-              </a>
+                  </td>
+                </tr>
+              </table>
             </li>
           </ul>
-
-          <ul class="all-channels">
-            <li data-ng-repeat="channel in publicChannels">
-              <a href="javascript:void(0);" data-ng-click="enterChannel(channel.Name)"> {{channel.Name}} 
-                <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="img/glyphicons-group.png" alt="users" />{{channel.SubscribersCount}}</span>
-                
-                <button class="channel-control description"><img class="channel-control-icon" data-ng-src="img/glyphicons-info-sign.png" alt="usubscribe" />
-                  <div class="description-content"> {{channel.Description}} </div>
-                </button>
-              </a>
+          <ul>
+            <li>
+              <table class="all-channels">
+                <tr data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="enterChannel(channel.Name)">
+                  <td> {{channel.Name}}
+                  </td>
+                  <td>
+                    <span class="badge" data-ng-model="channel.SubscribersCount"><img class="channel-icon" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="/>{{channel.SubscribersCount}}</span>
+                  </td>
+                  <td>
+                    <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="usubscribe" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                      <div class="description-content"> {{channel.Description}} </div>
+                    </data-button>
+                  </td>
+                </tr>
+              </table>
             </li>
           </ul>
-          <input class="search" type="text" name="search" placeholder="Search channel...">
+          <input class="footer input-group form-control" type="text" name="search" placeholder="Search channel..." data-ng-model="query">
         </div>
       </div>
 
       <div class="chat-text-area">
-        <discussion discussion="channelThread" data-ng-model="channelThread" data-ng-view="channelThread"></discussion>
+        <data-discussion discussion="channelThread" data-ng-model="channelThread" data-ng-view="channelThread"></data-discussion>
         <footer class="footer">
           <div class="input-group">
-            <input type="text " class="form-control " placeholder="Type your message here ">
+            <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage">
             <div class="input-group-btn">
-              <button class="btn btn-primary btn-chat-send" type="submit "> Send </button>
+              <button class="btn btn-primary btn-chat-send" type="submit"> Send </button>
             </div>
           </div>
         </footer>

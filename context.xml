@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+>>>>>>> f92bc866e08bc993b363dd68b3993cf4dbecad60
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -28,6 +32,7 @@
          on session expiration as well as webapp lifecycle) -->
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
+<<<<<<< HEAD
     -->
     
     <!--  Used for opening connection to Derby DB -->
@@ -42,4 +47,20 @@
     
 	  
 </Context>
+=======
+    -->
+    
+    <!--  Used for opening connection to Derby DB -->
+	<Resource auth="Container" driverClassName="org.apache.derby.jdbc.EmbeddedDriver" 
+	maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/ExampleDatasourceOpen" 
+	username="username" password="password" type="javax.sql.DataSource" url="jdbc:derby:ExampleDB;create=true"/>
+	
+	<!--  Used for closing connection of Derby DB -->
+	<Resource auth="Container" driverClassName="org.apache.derby.jdbc.EmbeddedDriver" 
+	maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/ExampleDatasourceShutdown" 
+	username="username" password="password" type="javax.sql.DataSource" url="jdbc:derby:ExampleDB;shutdown=true"/>
+    
+	  
+</Context>
+>>>>>>> f92bc866e08bc993b363dd68b3993cf4dbecad60
 	 
