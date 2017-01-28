@@ -22,13 +22,11 @@ import com.google.gson.Gson;
 
 import server.AppConstants;
 import server.DataManager;
-import server.messages.AuthFailure;
-import server.messages.AuthSuccess;
-import server.model.ThreadUser;
-import server.model.User;
-import server.model.UserCredentials;
+import server.messages.SubscribeFailure;
+import server.messages.SubscribeSuccess;
+import server.model.Channel;
+import server.model.Subscription;
 import server.util.BuildSuccessMessages;
-
 
 /**
  * Servlet implementation class CustomersServlet1
@@ -36,32 +34,32 @@ import server.util.BuildSuccessMessages;
 @WebServlet(
 		description = "Servlet to provide details about customers", 
 		urlPatterns = { 
-				"/login"
+				"/subscribe"
 		})
-public class LoginServlet extends HttpServlet {
+public class SubscribeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public LoginServlet() {
-		super();
-	}
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public SubscribeServlet() {
+        super();
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		try {
-			response.sendError(401);
-		} catch (Exception  e) {
-			getServletContext().log("Error while closing connection", e);
-			response.sendError(500);//internal server error
-		}
+    	try {
+    		response.sendError(401);
+    	} catch (Exception  e) {
+    		getServletContext().log("Error while closing connection", e);
+    		response.sendError(500);//internal server error
+    	}
 
-
-	}
+    	
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -70,43 +68,48 @@ public class LoginServlet extends HttpServlet {
 		try {
 			// set encoding to UTF-8
 			response.setCharacterEncoding("UTF-8");
-			response.setContentType("application/json");
-
+		    response.setContentType("text/xml");
+        	
 			//obtain CustomerDB data source from Tomcat's context
 			Context context = new InitialContext();
 			BasicDataSource ds = (BasicDataSource)context.lookup(getServletContext().getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
 			Connection conn = ds.getConnection();
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-			PrintWriter writer = response.getWriter();
-
+		    PrintWriter writer = response.getWriter();
+			
 			// read the data sent from the client
 			String gsonData = "";
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-
+System.out.println("subscribe me pls: " + gsonData);
 			// parse the data
 			Gson gson = new Gson();
-			UserCredentials credentials = gson.fromJson(gsonData, UserCredentials.class);
-			System.out.println("log me in pls: " + gsonData);			
-			User user = null;
-			if ((user = DataManager.getUserByCredentials(conn, credentials.getUsername(), credentials.getPassword())) != null) { // user exists
-				// prepare response to client
-				AuthSuccess authSucces = BuildSuccessMessages.buildAuthSuccess(conn, credentials, ThreadUser.getThreadUserByUser(user));
-				if (authSucces != null) {
-					writer.write(gson.toJson(authSucces));
-					System.out.println(gson.toJson(authSucces));
+			Subscription credentials = gson.fromJson(gsonData, Subscription.class);
+			
+			Channel channel = null;
+			if ((channel = DataManager.getChannelByName(conn, credentials.getChannelName())) != null) { // check if channel exists
+				if (channel.isPublic()) {
+					if (DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getChannelName(), credentials.getUsername()) == null) { // if unsubscribed
+						DataManager.addSubscription(conn, credentials);
+						channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() + 1);
+						DataManager.updateChannel(conn, channel);
+						SubscribeSuccess subscribeSucces = BuildSuccessMessages.buidSubscribeSuccess(conn, channel);
+						if (subscribeSucces != null) {
+							 writer.write(gson.toJson(subscribeSucces));
+						} else {
+							writer.write(gson.toJson(new SubscribeFailure("General error")));
+						}
+					} else {
+						writer.write(gson.toJson(new SubscribeFailure("Already subscribed to channel")));
+					}
 				} else {
-					writer.write(gson.toJson(new AuthFailure("General error")));
+					writer.write(gson.toJson(new SubscribeFailure("Cannot subscribe to a private channel")));
 				}
-			} else { // user doesn't exist
-				if (DataManager.getUserByUsername(conn, credentials.getUsername()) == null) { // user with this name does not exist
-					writer.write(gson.toJson(new AuthFailure("Username does not exist")));
-				} else { // user with this name exists, but wrong password
-					writer.write(gson.toJson(new AuthFailure("Incorrect Password")));
-				}
+			} else { // channel doesn't exist
+				writer.write(gson.toJson(new SubscribeFailure("Channel does not exist")));
 			}
-			writer.close();
+        	writer.close();
 			conn.close();
 		} catch (SQLException | NamingException e ) {
 			getServletContext().log("Error while closing connection", e);

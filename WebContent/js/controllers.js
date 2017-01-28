@@ -28,9 +28,9 @@
           //console.log('in login(): Response:' + JSON.stringify(response));
           $scope.response = response;
           $scope.loginScreenHidden = true;
-          //console.log('LoginCtrl: emitting event AuthSuccess');
-          var jsonObjResponse = JSON.parse(response);
-          MessageBus.send('AuthSuccess', jsonObjResponse.AuthSuccess);
+          console.log('LoginCtrl: emitting event'+ JSON.stringify(response.MessageType));
+          //var jsonObjResponse = JSON.parse(response);
+          MessageBus.send(response.MessageType, response);
 
         }).error(function (response) {
           console.log('in login(): Error response:' + JSON.stringify(response));
@@ -61,7 +61,7 @@
           //console.log('RegisterCtrl: emitting event AuthSuccess');
           $scope.registerScreenHidden = true;
           var jsonObjResponse = JSON.parse(response);
-          MessageBus.send('AuthSuccess', jsonObjResponse.AuthSuccess);
+          MessageBus.send(response.MessageType, response);
         });
 
       };
@@ -410,7 +410,7 @@
       //TEST
 
       $scope.$on('AuthSuccess', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event AuthSuccess');
+        console.log('ChatRoomsCtrl: got event AuthSuccess');
         $scope.chatRoomsScreenHidden = false;
 
         //get all channels and subscribed channels from json (must be here or on auth with servlet??)

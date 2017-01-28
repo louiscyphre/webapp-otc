@@ -26,6 +26,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import server.AppConstants;
+import server.model.Channel;
+import server.model.Message;
+import server.model.Subscription;
 import server.model.User;
 
 
@@ -61,29 +64,16 @@ public class DatabaseCreator implements ServletContextListener {
     	try {
     		//obtain CustomerDB data source from Tomcat's context
     		Context context = new InitialContext();
-    		BasicDataSource ds = (BasicDataSource)context.lookup(
-    				cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
+    		BasicDataSource ds = (BasicDataSource)context.lookup(cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
     		Connection conn = ds.getConnection();
-    		
-    		//Connection conn1 = ds.getConnection();
-			//Statement stmt1 = conn1.createStatement();
-			//stmt1.executeUpdate("DROP TABLE USERS");
-    		//conn1.commit();
-			//stmt1.executeUpdate("DROP TABLE USER");
-    		//conn1.commit();
-			//stmt1.executeUpdate("DROP TABLE CUSTOMER");
-    		//conn1.commit();
-    		//stmt1.close();
     		
     		boolean created = false;
     		try{
-
     			Statement stmt = conn.createStatement();
     			stmt.executeUpdate(AppConstants.CREATE_USER_TABLE);
 
         		conn.commit();
         		stmt.close();
-        		
     		} catch (SQLException e){
     			created = tableAlreadyExists(e);
     			if (!created){
@@ -94,24 +84,109 @@ public class DatabaseCreator implements ServletContextListener {
     		//if no database exist in the past - further populate its records in the table
     		if (!created){
                 // Create users table with user data from json file
-                Collection<User> users = loadUsers(cntx.getResourceAsStream(File.separator +
-                        AppConstants.USERS_FILE));
+                Collection<User> users = loadUsers(cntx.getResourceAsStream(File.separator + AppConstants.USERS_FILE));
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
                 for (User user : users) {
-                	
-                	System.out.println(user.stringify());
-                	
-                    pstmt2.setString(1, user.getIdHash());
-                    pstmt2.setString(2, user.getUsername());
-                    pstmt2.setString(3, user.getPasswordHash());
-                    pstmt2.setString(4, user.getNickname());
-                    pstmt2.setString(5, user.getDescription());
-                    pstmt2.setString(6, user.getAvatarUrl());
+                    pstmt2.setString(1, user.getUsername());
+                    pstmt2.setString(2, user.getPasswordHash());
+                    pstmt2.setString(3, user.getNickname());
+                    pstmt2.setString(4, user.getDescription());
+                    pstmt2.setString(5, user.getAvatarUrl());
                     pstmt2.executeUpdate();
                 }
                 conn.commit();
                 pstmt2.close();
     		}
+    		
+    		created = false;
+    		try{
+    			Statement stmt = conn.createStatement();
+    			stmt.executeUpdate(AppConstants.CREATE_CHANNELS_TABLE);
+
+        		conn.commit();
+        		stmt.close();
+    		} catch (SQLException e){
+    			created = tableAlreadyExists(e);
+    			if (!created){
+    				throw e;
+    			}
+    		}
+    		
+    		//if no database exist in the past - further populate its records in the table
+    		if (!created){
+                // Create channels table with channel data from json file
+                Collection<Channel> channels = loadChannels(cntx.getResourceAsStream(File.separator + AppConstants.CHANNELS_FILE));
+                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_CHANNEL_STMT);
+                for (Channel channel : channels) {
+                    pstmt2.setString (1, channel.getChannelName());
+                    pstmt2.setString (2, channel.getDescription());
+                    pstmt2.setInt    (3, channel.getNumberOfSubscribers());
+                    pstmt2.setBoolean(4, channel.isPublic());
+                    pstmt2.executeUpdate();
+                }
+                conn.commit();
+                pstmt2.close();
+    		}
+    		
+    		created = false;
+    		try{
+    			Statement stmt = conn.createStatement();
+    			stmt.executeUpdate(AppConstants.CREATE_SUBSCRIPTION_TABLE);
+
+        		conn.commit();
+        		stmt.close();
+    		} catch (SQLException e){
+    			created = tableAlreadyExists(e);
+    			if (!created){
+    				throw e;
+    			}
+    		}
+    		
+    		//if no database exist in the past - further populate its records in the table
+    		if (!created){
+                // Create subscriptions table with subscription data from json file
+                Collection<Subscription> subscriptions = loadSubscriptions(cntx.getResourceAsStream(File.separator + AppConstants.SUBSCRIPTIONS_FILE));
+                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_SUBSCRIPTION_STMT);
+                for (Subscription subscription : subscriptions) {
+                    pstmt2.setString (1, subscription.getChannelName());
+                    pstmt2.setString (2, subscription.getUsername());
+                    pstmt2.executeUpdate();
+                }
+                conn.commit();
+                pstmt2.close();
+    		}
+    		
+    		created = false;
+    		try{
+    			Statement stmt = conn.createStatement();
+    			stmt.executeUpdate(AppConstants.CREATE_MESSAGES_TABLE);
+
+        		conn.commit();
+        		stmt.close();
+    		} catch (SQLException e){
+    			created = tableAlreadyExists(e);
+    			if (!created){
+    				throw e;
+    			}
+    		}
+
+    		//if no database exist in the past - further populate its records in the table
+    		if (!created){
+                // Create messages table with message data from json file
+                Collection<Message> messages = loadMessages(cntx.getResourceAsStream(File.separator + AppConstants.MESSAGES_FILE));
+                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT);
+                for (Message message : messages) {
+                    pstmt2.setString   (1, message.getChannelId());
+                    pstmt2.setString   (2, message.getUser().getUsername());
+                    pstmt2.setTimestamp(3, message.getMessageTime());
+                    pstmt2.setInt      (4, message.getRepliedToId());
+                    pstmt2.setString   (5, message.getContent());
+                    pstmt2.executeUpdate();
+                }
+                conn.commit();
+                pstmt2.close();
+    		}
+    		
     		//close connection
     		conn.close();
 
@@ -162,5 +237,80 @@ public class DatabaseCreator implements ServletContextListener {
         Collection<User> users = gson.fromJson(jsonFileContent.toString(), type);
         reader.close();
         return users;
+    }
+ 
+    /**
+     * Loads Channels data from json file that is read from the input stream into
+     * a collection of Channel objects
+     *
+     * @param is input stream to json file
+     * @return collection of Channels
+     * @throws IOException
+     */
+    private Collection<Channel> loadChannels(InputStream is) throws IOException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder jsonFileContent = new StringBuilder();
+
+        String nextLine = null;
+        while ((nextLine = reader.readLine()) != null) {
+            jsonFileContent.append(nextLine);
+        }
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Collection<Channel>>() { }.getType();
+        Collection<Channel> channels = gson.fromJson(jsonFileContent.toString(), type);
+        reader.close();
+        return channels;
+    }
+ 
+    /**
+     * Loads Subscriptions data from json file that is read from the input stream into
+     * a collection of Subscription objects
+     *
+     * @param is input stream to json file
+     * @return collection of Subscriptions
+     * @throws IOException
+     */
+    private Collection<Subscription> loadSubscriptions(InputStream is) throws IOException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder jsonFileContent = new StringBuilder();
+
+        String nextLine = null;
+        while ((nextLine = reader.readLine()) != null) {
+            jsonFileContent.append(nextLine);
+        }
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Collection<Subscription>>() { }.getType();
+        Collection<Subscription> subscriptions = gson.fromJson(jsonFileContent.toString(), type);
+        reader.close();
+        return subscriptions;
+    }
+ 
+    /**
+     * Loads Messages data from json file that is read from the input stream into
+     * a collection of Message objects
+     *
+     * @param is input stream to json file
+     * @return collection of Messages
+     * @throws IOException
+     */
+    private Collection<Message> loadMessages(InputStream is) throws IOException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder jsonFileContent = new StringBuilder();
+
+        String nextLine = null;
+        while ((nextLine = reader.readLine()) != null) {
+            jsonFileContent.append(nextLine);
+        }
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Collection<Message>>() { }.getType();
+        Collection<Message> messages = gson.fromJson(jsonFileContent.toString(), type);
+        reader.close();
+        return messages;
     }
 }

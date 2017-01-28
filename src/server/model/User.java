@@ -1,19 +1,18 @@
 package server.model;
 
-import server.util.Hash;
-
-import java.security.NoSuchAlgorithmException;
-
 /**
  * A simple bean to hold data
  */
 public class User {
 
-	private String id, Username, PasswordHash, Nickname, Description, AvatarUrl;
+	private String Username;
+	private String PasswordHash;
+	private String Nickname;
+	private String Description;
+	private String AvatarUrl;
 
-	public User(String userId, String userName, String hashPassword, String nickname, String description, String avatarUrl) throws NoSuchAlgorithmException {
+	public User(String userName, String hashPassword, String nickname, String description, String avatarUrl) {
 		//idHash = Hash.getSha256Hex(userName);
-		id = userId;
 		Username = userName;
 		PasswordHash = hashPassword;
 		setNickname(nickname);
@@ -21,12 +20,6 @@ public class User {
 		AvatarUrl = avatarUrl;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getIdHash() {
-    	return id;
-    }
 	public String getUsername() {  return Username; }
 	
 	public String getPasswordHash() {
@@ -45,10 +38,6 @@ public class User {
 	}
 	public String getAvatarUrl() {
 		return AvatarUrl;
-	}
-
-	public void setId(String hash) {
-		id = hash;
 	}
 
 	public void setUsername(String userName) {

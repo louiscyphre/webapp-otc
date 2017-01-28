@@ -1,0 +1,30 @@
+[
+	{
+		"CHANNELID" : "Web Programming",
+		"USERID" : "Odmin"
+	},
+	{
+		"CHANNELID" : "Web Programming",
+		"USERID" : "Goblin"
+	},
+	{
+		"CHANNELID" : "Software Engineering",
+		"USERID" : "Odmin"
+	},
+	{
+		"CHANNELID" : "Web Programming",
+		"USERID" : "Ilia"
+	},
+	{
+		"CHANNELID" : "Algotrading",
+		"USERID" : "Ilia"
+	},
+	{
+		"CHANNELID" : "IliaOdmin",
+		"USERID" : "Ilia"
+	},
+	{
+		"CHANNELID" : "IliaOdmin",
+		"USERID" : "Odmin"
+	}
+]

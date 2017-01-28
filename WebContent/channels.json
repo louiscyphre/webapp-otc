@@ -1,0 +1,32 @@
+[
+	{
+		"CHANNELNAME" : "Web Programming",
+		"DESCRIPTION" : "Channel for discussing the project",
+		"NUMBEROFSUBSCRIBERS" : 3,
+		"ISPUBLIC" : true
+	},
+	{
+		"CHANNELNAME" : "Software Engineering",
+		"DESCRIPTION" : "Channel for discussing homework and the test",
+		"NUMBEROFSUBSCRIBERS" : 1,
+		"ISPUBLIC" : true
+	},
+	{
+		"CHANNELNAME" : "Image Processing",
+		"DESCRIPTION" : "should not have taken",
+		"NUMBEROFSUBSCRIBERS" : 0,
+		"ISPUBLIC" : true
+	},
+	{
+		"CHANNELNAME" : "Algotrading",
+		"DESCRIPTION" : "seems good",
+		"NUMBEROFSUBSCRIBERS" : 1,
+		"ISPUBLIC" : true
+	},
+	{
+		"CHANNELNAME" : "IliaOdmin",
+		"DESCRIPTION" : "seems good",
+		"NUMBEROFSUBSCRIBERS" : 2,
+		"ISPUBLIC" : false
+	}
+]

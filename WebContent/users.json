@@ -1,17 +1,37 @@
-[{
-    "id": "0",
-    "Username": "Odmin",
-    "PasswordHash": "1234",
-    "Nickname": "supuser",
-    "Description": "שטו?",
-    "AvatarURL": "css/img/person.png"
-  },
-  {
-    "id": "1",
-    "Username": "Goblin",
-    "PasswordHash": "12345",
-    "Nickname": "supsupuser",
-    "Description": "שטו?",
-    "AvatarURL": "css/img/person.png"
-  }
+[
+	{
+		"USERNAME" : "Odmin",
+		"PASSWORDHASH" : "1234",
+		"NICKNAME" : "supuser",
+		"DESCRIPTION" : "שטו?",
+		"AVATARURL" : "img/person.png"
+	},
+	{
+		"USERNAME" : "Goblin",
+		"PASSWORDHASH" : "12345",
+		"NICKNAME" : "supsupuser",
+		"DESCRIPTION" : "שטו?",
+		"AVATARURL" : "img/person.png"
+	},
+	{
+		"USERNAME" : "Ilia",
+		"PASSWORDHASH" : "1123",
+		"NICKNAME" : "Student",
+		"DESCRIPTION" : "בדיקת עברית",
+		"AVATARURL" : "img/person.png"
+	},
+	{
+		"USERNAME" : "HobGoblin",
+		"PASSWORDHASH" : "1q2w",
+		"NICKNAME" : "Someone",
+		"DESCRIPTION" : "secret stuff",
+		"AVATARURL" : "img/person.png"
+	},
+	{
+		"USERNAME" : "Reaper",
+		"PASSWORDHASH" : "1324",
+		"NICKNAME" : "Reaper",
+		"DESCRIPTION" : "let's reap",
+		"AVATARURL" : "img/person.png"
+	}
 ]
