@@ -57,13 +57,11 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     	try {
-    		response.sendError(401);
+    		//doPost(request, response);
     	} catch (Exception  e) {
     		getServletContext().log("Error while closing connection", e);
     		response.sendError(500);//internal server error
     	}
-
-    	
     }
 
 	/**
@@ -90,11 +88,11 @@ public class LoginServlet extends HttpServlet {
 			
 			PreparedStatement stmt;
 			try {
-				//stmt = conn.prepareStatement(AppConstants.SELECT_USER_BY_CREDENTIALS_STMT);
-				//stmt.setString(1, credentials.getUsername());
+				stmt = conn.prepareStatement(AppConstants.SELECT_USER_BY_CREDENTIALS_STMT);
+				stmt.setString(1, credentials.getUsername());
 				//stmt.setString(2, Hash.getSha256Hex(credentials.getPassword()));
-				//stmt.setString(2, credentials.getPassword());
-				stmt = conn.prepareStatement(AppConstants.SELECT_USERS);
+				stmt.setString(2, credentials.getPassword());
+				//stmt = conn.prepareStatement(AppConstants.SELECT_USERS);
 				ResultSet resultSet = stmt.executeQuery();
 	        	PrintWriter writer = response.getWriter();
 	        	
@@ -103,6 +101,7 @@ public class LoginServlet extends HttpServlet {
 					String userid = resultSet.getString(1);
 					
 					// FIXME
+		            System.out.println(userid + " OK");
 		        	writer.println(userid + " OK");
 
 				} else {
