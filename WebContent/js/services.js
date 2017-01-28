@@ -47,7 +47,7 @@
         websocket.close();
       }
     };
-        }]).factory('highlightText', ['$sce', function ($sce) {
+   }]).factory('highlightText', ['$sce', function ($sce) {
 
     //service method to be called upon text highlighting
     var highlight = function (text, qstr) {
