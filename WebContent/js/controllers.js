@@ -3,7 +3,7 @@
   'use strict';
   /*global angular, console*/
   var WebChat = angular.module('webChat', ['constants', 'services', 'directives'])
-    .controller('LoginCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', function ($rootScope, $scope, $http, MessageBus) {
+    .controller('LoginCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', 'Servlets', function ($rootScope, $scope, $http, MessageBus, Servlets) {
 
       $scope.user = {
         Username: "",
@@ -14,6 +14,7 @@
       };
 
       $scope.loginScreenHidden = false;
+      $scope.authFailureWarningHidden = true;
 
       $scope.login = function () {
 
@@ -21,16 +22,18 @@
           Username: $scope.user.Username,
           Password: $scope.user.Password
         };
-        //console.log('in login(): Sending: ' + JSON.stringify(credentials));
+        console.log('in login(): Sending: ' + JSON.stringify(credentials));
+        Servlets.send("login", credentials);
+      };
 
-        $http.post("/webChat/login", JSON.stringify(credentials)).success(function (response) {
+      /*$http.post("/webChat/login", JSON.stringify(credentials)).success(function (response) {
 
           //console.log('in login(): Response:' + JSON.stringify(response));
           $scope.response = response;
           $scope.loginScreenHidden = true;
-          console.log('LoginCtrl: emitting event'+ JSON.stringify(response.MessageType));
+          console.log('LoginCtrl: emitting event ' + JSON.stringify(response) + response);
           //var jsonObjResponse = JSON.parse(response);
-          MessageBus.send(response.MessageType, response);
+          MessageBus.send(response.MessageType, JSON.parse(response));
 
         }).error(function (response) {
           console.log('in login(): Error response:' + JSON.stringify(response));
@@ -38,14 +41,24 @@
           MessageBus.send('register');
         });
 
-      };
+      };*/
       $scope.doregister = function () {
         console.log('in doregister(): Sending event register');
         $scope.loginScreenHidden = true;
+        $scope.authFailureWarningHidden = true;
         MessageBus.send('register');
       };
 
-    }]).controller('RegisterCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', function ($rootScope, $scope, $http, MessageBus) {
+
+
+      $scope.$on('AuthFailure', function (event, data) {
+        if (data.Error === "User doesn't exist") {
+          $scope.authFailureWarningHidden = false;
+          return;
+        }
+      });
+
+    }]).controller('RegisterCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', 'Servlets', function ($rootScope, $scope, $http, MessageBus, Servlets) {
 
       $scope.registerScreenHidden = true;
 
@@ -65,20 +78,13 @@
         });
 
       };
-    }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', 'Socket', function ($rootScope, $scope, $http, $window, MessageBus, Socket) {
+    }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', 'Socket', 'Servlets', function ($rootScope, $scope, $http, $window, MessageBus, Socket, Servlets) {
 
       $scope.chatRoomsScreenHidden = true;
       $scope.currentChannel = {};
-      $scope.channelThread = {};
+      $scope.currentChannelThread = {};
       $scope.expression = {};
 
-      /* $scope.findChannel = function(searchValue) {     
-    angular.forEach($scope.myData.SerialNumbers, function(value, key) {
-        if (key === enteredValue) {
-            $scope.results.push({serial: key, owner: value[0].Owner});
-        }
-    });
-};*/
       // TEST 
       $scope.thread = [{
         Message: {
@@ -414,6 +420,7 @@
         $scope.chatRoomsScreenHidden = false;
 
         //get all channels and subscribed channels from json (must be here or on auth with servlet??)
+        $scope.user.Username = response.User.Username;
         $scope.user.Nickname = response.User.Nickname;
         $scope.user.AvatarURL = response.User.AvatarURL;
         $scope.user.Description = response.User.Description;
@@ -421,6 +428,21 @@
         $scope.subscribedChannels = response.SubcribedChannels;
         Socket.connect();
       });
+
+      $scope.$on('SubscribeSuccess', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
+
+        $scope.subscribedChannels.push(response.Channel);
+      });
+
+      $scope.$on('ChannelDiscovery', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event ChannelDiscovery');
+
+        for (var i = 0; i < response.Channels.length; ++i) {
+          $scope.publicChannels.push(response.Channel);
+        }
+      });
+
 
       var findChannel = function (channelName, channels) {
         //console.log('findChannelByName: entering ' + channelName);
@@ -443,47 +465,84 @@
 
       var getCurrentThread = function (channelName) {
         //console.log('getCurrentThread: entering ');
-        if (!findChannel(channelName, $scope.subscribedChannels)) {
-          //console.log('getCurrentThread: no subscribed channels!');
-          $scope.subscribedChannels.push(findChannel(channelName, $scope.publicChannels).object);
-
-          findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread1;
-          //if (findChannel(channelName, $scope.subscribedChannels).object.Name === "auto") {
-          //  findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread;
-          //}
-
-          var subscribeJson = {
-            Subscribe: channelName
-          };
-          // FIXME code to ask server for channel thread
-          //Socket.send(JSON.stringify(subscribeJson));
-        }
         return findChannel(channelName, $scope.subscribedChannels).object.ChannelThread;
+      };
+
+      $scope.subscribeToChannel = function (channelName) {
+        // If channel already discovered, push to subscribed, if not, ask for subscription
+        if (findChannel(channelName, $scope.publicChannels)) {
+          $scope.subscribedChannels.push(findChannel(channelName, $scope.publicChannels).object);
+          return;
+        }
+
+        var subscribeJson = {
+          MessageType: {
+            Subscribe: channelName,
+            Username: $scope.user.Username
+          }
+        };
+        //console.log('in subscribeToChannel(): Sending: ' + JSON.stringify(subscribeJson));
+        Servlets.send("subscribe", subscribeJson);
       };
 
       $scope.enterChannel = function (channelName) {
         //console.log('in enterChannel(): Sending: ' + JSON.stringify(channelname));
         //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);
-        $scope.channelThread = getCurrentThread(channelName);
+        if (!findChannel(channelName, $scope.subscribedChannels)) {
+          //console.log('enterChannel: no subscribed channels!');
+          $scope.subscribeToChannel(channelName);
+
+          //FIXME temporary
+          findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread1;
+          //if (findChannel(channelName, $scope.subscribedChannels).object.Name === "auto") {
+          //  findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread;
+          //}
+        }
+        $scope.currentChannelThread = getCurrentThread(channelName);
         $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
-        //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.channelThread));
+        //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.currentChannelThread));
       };
 
-      $scope.unsubscribeChannel = function (channelname) {
+      $scope.discoverChannels = function (query) {
+
+        var queryJson = {
+          MessageType: {
+            ChannelDiscovery: query,
+            Username: $scope.user.Username
+          }
+        };
+        //console.log('in discoverChannels(): Sending: ' + JSON.stringify(subscribeJson));
+        Servlets.send("discovery", queryJson);
+      };
+
+      $scope.enterChannel = function (channelName) {
+        //console.log('in enterChannel(): Sending: ' + JSON.stringify(channelname));
+        //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        $scope.currentChannelThread = getCurrentThread(channelName);
+        $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
+        //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.currentChannelThread));
+      };
+
+      $scope.unsubscribeChannel = function (channelName) {
         //console.log('in unsubscribeChannel()');
         var unsubscribeJson = {
-          Unsubscribe: channelname
+          MessageType: {
+            Unsubscribe: channelName,
+            Username: $scope.user.Username
+          }
         };
         //Socket.send(JSON.stringify(unsubscribeJson));
         //console.log('Deleting: ' + findChannel(channelname, $scope.subscribedChannels).index);
-        $scope.subscribedChannels.splice(findChannel(channelname, $scope.subscribedChannels).index, 1);
+        $scope.subscribedChannels.splice(findChannel(channelName, $scope.subscribedChannels).index, 1);
 
-        $scope.currentChannel = {};
-        $scope.channelThread = {};
+        if ($scope.currentChannel === channelName) {
+          $scope.currentChannel = {};
+          $scope.currentChannelThread = {};
+        }
       };
 
-      $scope.isActive = function (channelname) {
-        return $scope.currentChannel.Name === channelname;
+      $scope.isActive = function (channelName) {
+        return $scope.currentChannel.Name === channelName;
       };
 
       $scope.searchChannel = function (channel) {
@@ -497,5 +556,6 @@
         }
         return false;
       };
+
       }]);
 }(this.window));

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <title>Web chat</title>
 
-  <!--link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon"-->
+  <link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon">
   <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
 
@@ -25,6 +25,8 @@
   <div class="container">
     <div data-ng-controller="LoginCtrl" class="row" data-ng-hide="loginScreenHidden">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="auth-fail alert alert-warning" role="alert" data-ng-hide="authFailureWarningHidden">Incorrect username or password.
+          <br/>Please try again or register.</div>
         <h1 class="text-center login-title">Sign in to enter Webchat</h1>
         <div class="account-wall">
           <img class="avatar" src="css/img/default_avatar.png" alt="avatar image">
@@ -35,9 +37,9 @@
             <button class="btn btn-lg btn-secondary btn-block " data-ng-click="doregister() "> Register</button>
           </form>
         </div>
+
       </div>
     </div>
-
     <div data-ng-controller="RegisterCtrl" class="row" data-ng-hide="registerScreenHidden">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
         <h1 class="text-center login-title ">Would you like to register?</h1>
@@ -135,7 +137,7 @@
       </div>
 
       <div class="chat-text-area">
-        <data-discussion discussion="channelThread" data-ng-model="channelThread" data-ng-view="channelThread"></data-discussion>
+        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" data-ng-view="currentChannelThread"></data-discussion>
         <footer class="footer">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage">

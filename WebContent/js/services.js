@@ -11,6 +11,20 @@
         $rootScope.$broadcast(msg, data);
       }
     };
+  }]).factory('Servlets', ['$rootScope', '$http', 'MessageBus', function ($rootScope, $http, MessageBus) {
+
+    return {
+      send: function (pathToServlet, jsonToSend) {
+        $http.post("/webChat/" + pathToServlet, JSON.stringify(jsonToSend)).success(function (response) {
+          console.log('Servlets.send(): emitting event ' + JSON.stringify(response));
+          MessageBus.send(response.MessageType, response);
+
+        }).error(function (response) {
+          console.log('in Servlets.send(): Error response:' + JSON.stringify(response));
+          MessageBus.send(response.MessageType, response);
+        });
+      }
+    };
   }]).factory('Socket', ['$window', 'MessageBus', function ($window, MessageBus) {
 
     var websocket = {};
@@ -36,7 +50,7 @@
       },
 
       send: function send(jSon) {
-        MessageBus.send('unsubscribedChannel');
+        //MessageBus.send('unsubscribedChannel');
         if (websocket !== null) {
           websocket.send(jSon);
         }
