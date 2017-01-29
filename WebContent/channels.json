@@ -1,32 +1,32 @@
 [
 	{
-		"CHANNELNAME" : "Web Programming",
-		"DESCRIPTION" : "Channel for discussing the project",
-		"NUMBEROFSUBSCRIBERS" : 3,
-		"ISPUBLIC" : true
+		"ChannelName" : "Web Programming",
+		"Description" : "Channel for discussing the project",
+		"NumberOfSubscribers" : 3,
+		"IsPublic" : true
 	},
 	{
-		"CHANNELNAME" : "Software Engineering",
-		"DESCRIPTION" : "Channel for discussing homework and the test",
-		"NUMBEROFSUBSCRIBERS" : 1,
-		"ISPUBLIC" : true
+		"ChannelName" : "Software Engineering",
+		"Description" : "Channel for discussing homework and the test",
+		"NumberOfSubscribers" : 1,
+		"IsPublic" : true
 	},
 	{
-		"CHANNELNAME" : "Image Processing",
-		"DESCRIPTION" : "should not have taken",
-		"NUMBEROFSUBSCRIBERS" : 0,
-		"ISPUBLIC" : true
+		"ChannelName" : "Image Processing",
+		"Description" : "should not have taken",
+		"NumberOfSubscribers" : 0,
+		"IsPublic" : true
 	},
 	{
-		"CHANNELNAME" : "Algotrading",
-		"DESCRIPTION" : "seems good",
-		"NUMBEROFSUBSCRIBERS" : 1,
-		"ISPUBLIC" : true
+		"ChannelName" : "Algotrading",
+		"Description" : "seems good",
+		"NumberOfSubscribers" : 1,
+		"IsPublic" : true
 	},
 	{
-		"CHANNELNAME" : "IliaOdmin",
-		"DESCRIPTION" : "seems good",
-		"NUMBEROFSUBSCRIBERS" : 2,
-		"ISPUBLIC" : false
+		"ChannelName" : "IliaOdmin",
+		"Description" : "seems good",
+		"NumberOfSubscribers" : 2,
+		"IsPublic" : false
 	}
 ]

@@ -1,42 +1,42 @@
 [
 	{
-		"ID" : 1,
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Odmin",
-		"MESSAGETIME" : "2017-01-02T06:49:24Z",
-		"REPLIEDTOID" : -1,
-		"CONTENT" : "Welcome to the chat!"
+		"Id" : 1,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-02T06:49:24Z",
+		"RepliedToId" : -1,
+		"Content" : "Welcome to the chat!"
 	},
 	{
-		"ID" : 2,
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Goblin",
-		"MESSAGETIME" : "2017-01-02T06:49:27Z",
-		"REPLIEDTOID" : -1,
-		"CONTENT" : "Thank you very much! I hope it will be usefule"
+		"Id" : 2,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Goblin",
+		"MessageTime" : "2017-01-02T06:49:27Z",
+		"RepliedToId" : -1,
+		"Content" : "Thank you very much! I hope it will be useful"
 	},
 	{
-		"ID" : 3,
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Odmin",
-		"MESSAGETIME" : "2017-01-02T06:50:02Z",
-		"REPLIEDTOID" : -1,
-		"CONTENT" : "Let's do our best!"
+		"Id" : 3,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-02T06:50:02Z",
+		"RepliedToId" : -1,
+		"Content" : "Let's do our best!"
 	},
 	{
-		"ID" : 101,
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Odmin",
-		"MESSAGETIME" : "2017-01-26T18:19:31Z",
-		"REPLIEDTOID" : -1,
-		"CONTENT" : "Testing new message"
+		"Id" : 101,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-26T18:19:31Z",
+		"RepliedToId" : -1,
+		"Content" : "Testing new message"
 	},
 	{
-		"ID" : 201,
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Odmin",
-		"MESSAGETIME" : "2017-01-26T18:23:39Z",
-		"REPLIEDTOID" : -1,
-		"CONTENT" : "Testing yet again a new message"
+		"Id" : 201,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-26T18:23:39Z",
+		"RepliedToId" : -1,
+		"Content" : "Testing yet again a new message"
 	}
 ]

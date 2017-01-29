@@ -1,30 +1,30 @@
 [
 	{
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Odmin"
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin"
 	},
 	{
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Goblin"
+		"ChannelId" : "Web Programming",
+		"UserId" : "Goblin"
 	},
 	{
-		"CHANNELID" : "Software Engineering",
-		"USERID" : "Odmin"
+		"ChannelId" : "Software Engineering",
+		"UserId" : "Odmin"
 	},
 	{
-		"CHANNELID" : "Web Programming",
-		"USERID" : "Ilia"
+		"ChannelId" : "Web Programming",
+		"UserId" : "Ilia"
 	},
 	{
-		"CHANNELID" : "Algotrading",
-		"USERID" : "Ilia"
+		"ChannelId" : "Algotrading",
+		"UserId" : "Ilia"
 	},
 	{
-		"CHANNELID" : "IliaOdmin",
-		"USERID" : "Ilia"
+		"ChannelId" : "IliaOdmin",
+		"UserId" : "Ilia"
 	},
 	{
-		"CHANNELID" : "IliaOdmin",
-		"USERID" : "Odmin"
+		"ChannelId" : "IliaOdmin",
+		"UserId" : "Odmin"
 	}
 ]
