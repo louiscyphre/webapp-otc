@@ -2,40 +2,44 @@ package server.model;
 
 public class Subscription {
 	
-	private String ChannelName;
-	private String Username;
+	private String ChannelId;
+	private String UserId;
+
+	public Subscription(String channelId) {
+		this.ChannelId = channelId;
+	}
 
 	public Subscription(String channelId, String userID) {
-		this.ChannelName = channelId;
-		this.Username = userID;
+		this.ChannelId = channelId;
+		this.UserId = userID;
 	}
 
 	/**
 	 * @return the channelId
 	 */
 	public String getChannelName() {
-		return ChannelName;
+		return ChannelId;
 	}
 
 	/**
 	 * @param channelId the channelId to set
 	 */
 	public void setChannelName(String channelId) {
-		this.ChannelName = channelId;
+		this.ChannelId = channelId;
 	}
 
 	/**
 	 * @return the userID
 	 */
 	public String getUsername() {
-		return Username;
+		return UserId;
 	}
 
 	/**
 	 * @param userID the userID to set
 	 */
 	public void setUsername(String userID) {
-		this.Username = userID;
+		this.UserId = userID;
 	}
 
 	/* (non-Javadoc)
@@ -43,6 +47,6 @@ public class Subscription {
 	 */
 	@Override
 	public String toString() {
-		return "Subscription [channelId=" + ChannelName + ", userID=" + Username + "]";
+		return "Subscription [channelId=" + ChannelId + ", userID=" + UserId + "]";
 	}
 }
