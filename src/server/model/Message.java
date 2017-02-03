@@ -4,18 +4,44 @@ import java.sql.Timestamp;
 
 public class Message {
 	private int Id;
-	private String Channel;
+	private String ChannelId;
+	private String UserId = null;
 	private ThreadUser User;
 	private Timestamp MessageTime;
-	private int ReplyToID;
+	private Timestamp LastModified;
+	private int RepliedToId;
 	private String Content;
+
+	public Message(int id, String channelId, String user, Timestamp messageTime, int repliedToId, String content) {
+		this.Id = id;
+		this.ChannelId = channelId;
+		this.UserId = user;
+		this.MessageTime = this.LastModified = messageTime;
+		this.RepliedToId = repliedToId;
+		this.Content = content;
+	}
+
+	/**
+	 * @return the lastModified
+	 */
+	public Timestamp getLastModified() {
+		return LastModified;
+	}
+
+	/**
+	 * @param lastModified the lastModified to set
+	 */
+	public void setLastModified(Timestamp lastModified) {
+		LastModified = lastModified;
+	}
 
 	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, int repliedToId, String content) {
 		this.Id = id;
-		this.Channel = channelId;
+		this.ChannelId = channelId;
 		this.User = user;
+		this.UserId = user.getUsername();
 		this.MessageTime = messageTime;
-		this.ReplyToID = repliedToId;
+		this.RepliedToId = repliedToId;
 		this.Content = content;
 	}
 
@@ -37,28 +63,42 @@ public class Message {
 	 * @return the channelId
 	 */
 	public String getChannelId() {
-		return Channel;
+		return ChannelId;
 	}
 
 	/**
 	 * @param channelId the channelId to set
 	 */
 	public void setChannelId(String channelId) {
-		this.Channel = channelId;
+		this.ChannelId = channelId;
 	}
 
 	/**
 	 * @return the repliedToId
 	 */
 	public int getRepliedToId() {
-		return ReplyToID;
+		return RepliedToId;
 	}
 
 	/**
 	 * @param repliedToId the repliedToId to set
 	 */
 	public void setRepliedToId(int repliedToId) {
-		this.ReplyToID = repliedToId;
+		this.RepliedToId = repliedToId;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public String getUserId() {
+		return UserId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(String user) {
+		this.UserId = user;
 	}
 
 	/**
@@ -108,7 +148,7 @@ public class Message {
 	 */
 	@Override
 	public String toString() {
-		return "Message [id=" + Id + ", channelId=" + Channel + ", repliedToId=" + ReplyToID + ", User=" + User
+		return "Message [id=" + Id + ", channelId=" + ChannelId + ", repliedToId=" + RepliedToId + ", User=" + UserId
 				+ ", content=" + Content + ", messageTime=" + MessageTime + "]";
 	}
 	

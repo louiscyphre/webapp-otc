@@ -59,8 +59,6 @@ public class LoginServlet extends HttpServlet {
 			getServletContext().log("Error while closing connection", e);
 			response.sendError(500);//internal server error
 		}
-
-
 	}
 
 	/**
@@ -88,14 +86,13 @@ public class LoginServlet extends HttpServlet {
 			// parse the data
 			Gson gson = new Gson();
 			UserCredentials credentials = gson.fromJson(gsonData, UserCredentials.class);
-			System.out.println("log me in pls: " + gsonData);			
+						
 			User user = null;
 			if ((user = DataManager.getUserByCredentials(conn, credentials.getUsername(), credentials.getPassword())) != null) { // user exists
 				// prepare response to client
 				AuthSuccess authSucces = BuildSuccessMessages.buildAuthSuccess(conn, credentials, ThreadUser.getThreadUserByUser(user));
 				if (authSucces != null) {
 					writer.write(gson.toJson(authSucces));
-					System.out.println(gson.toJson(authSucces));
 				} else {
 					writer.write(gson.toJson(new AuthFailure("General error")));
 				}

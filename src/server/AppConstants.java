@@ -5,16 +5,23 @@ package server;
  */
 public interface AppConstants {
 
-	//public final String CUSTOMERS = "customers";
-	//public final String CUSTOMERS_FILE = CUSTOMERS + ".json";
-	//public final String NAME = "name";
-	//public final Type CUSTOMER_COLLECTION = new TypeToken<Collection<Customer>>() {}.getType();
 	//derby constants
 	public final String DB_NAME = "DB_NAME";
 	public final String DB_DATASOURCE = "DB_DATASOURCE";
+	public final String DB_CONTEXT = "java:comp/env/jdbc/ExampleDatasource";
 	public final String PROTOCOL = "jdbc:derby:"; 
 	public final String OPEN = "Open";
 	public final String SHUTDOWN = "Shutdown";
+	// message properties
+	public final String MESSAGE_PROPERTY = "MessageType";
+	public final String MESSAGE_CONTENT = "MessageContent";
+	// message types
+	public final String MESSAGE_CREATE_CHANNEL = "CreateChannel";
+	public final String MESSAGE_SUBSCRIBE = "Subscribe";
+	public final String MESSAGE_UNSUBSCRIBE = "Unsubscribe";
+	public final String MESSAGE_CHANNEL_DISCOVERY = "ChannelDiscovery";
+	public final String MESSAGE_CHANNEL_VIEWING = "ChannelViewing";
+	public final String MESSAGE_RECEIVED_MESSAGE = "MessageReceived";
 	
 	public final String USERS = "users";
 	public final String USERS_FILE = USERS + ".json";
@@ -29,6 +36,7 @@ public interface AppConstants {
 	public final String INSERT_USER_STMT = "INSERT INTO " + USERS + " VALUES(?,?,?,?,?)";
 	public final String SELECT_USER_BY_USERNAME_STMT = "SELECT * FROM " + USERS + " WHERE Username=?";
 	public final String SELECT_USER_BY_CREDENTIALS_STMT = "SELECT * FROM USERS WHERE Username=? AND PasswordHash=?";
+	public final String SELECT_USER_BY_NICKNAME_LIKENESS_STMT = "SELECT * FROM " + USERS + " WHERE Nickname LIKE ?";
 	public final String SELECT_USERS = "SELECT * FROM USERS";
 	
 	public final String CHANNELS = "channels";
@@ -41,6 +49,7 @@ public interface AppConstants {
 			+ "PRIMARY KEY(ChannelName))";
 	public final String INSERT_CHANNEL_STMT = "INSERT INTO " + CHANNELS + " VALUES(?,?,?,?)";
 	public final String SELECT_CHANNEL_BY_CHANNELNAME_STMT = "SELECT * FROM " + CHANNELS + " WHERE ChannelName=?";
+	public final String SELECT_CHANNEL_BY_CHANNELNAME_LIKENESS_STMT = "SELECT * FROM " + CHANNELS + " WHERE ChannelName LIKE ?";
 	public final String SELECT_CHANNELS = "SELECT * FROM " + CHANNELS;
 	public final String UPDATE_CHANNEL_SUBSCRIBERS_COUNT_STMT = "UPDATE " + CHANNELS + " SET NumberOfSubscribers=? WHERE ChannelName=?";
 	
@@ -49,14 +58,19 @@ public interface AppConstants {
 	public final String CREATE_SUBSCRIPTION_TABLE = "CREATE TABLE " + SUBSCRIPTIONS + "("
 			+ "ChannelId varchar(30),"
 			+ "UserId varchar(10),"
+			+ "SubscriptionTime timestamp,"
+			+ "IsViewing boolean,"
+			+ "UnreadMessages integer,"
+			+ "UnreadMentionedMessages integer,"
 			+ "FOREIGN KEY(UserId) REFERENCES " + USERS + "(Username),"
 			+ "FOREIGN KEY(ChannelId) REFERENCES " + CHANNELS + "(ChannelName))";
-	public final String INSERT_SUBSCRIPTION_STMT = "INSERT INTO " + SUBSCRIPTIONS + " VALUES(?,?)";
+	public final String INSERT_SUBSCRIPTION_STMT = "INSERT INTO " + SUBSCRIPTIONS + " VALUES(?,?,?,?,?,?)";
 	public final String SELECT_SUBSCRIPTIONS_BY_CHANNEL_STMT = "SELECT * FROM " + SUBSCRIPTIONS + " WHERE ChannelID=?";
 	public final String SELECT_SUBSCRIPTIONS_BY_USERNAME_STMT = "SELECT * FROM " + SUBSCRIPTIONS + " WHERE UserID=?";
 	public final String SELECT_SUBSCRIPTIONS_BY_CHANNEL_AND_USER_STMT = "SELECT * FROM " + SUBSCRIPTIONS + " WHERE ChannelID=? AND UserId=?";
 	public final String SELECT_SUBSCRIPTIONS = "SELECT * FROM " + SUBSCRIPTIONS;
 	public final String REMOVE_SUBSCRIPTION_BY_CHANNEL_AND_USER_STMT = "DELETE FROM " + SUBSCRIPTIONS + " WHERE ChannelID=? AND UserId=?";
+	public final String UPDATE_SUBSCRIPTION_STMT = "UPDATE " + SUBSCRIPTIONS + " IsViewing=?, UnreadMessages=?, UnreadMentionedMessages=? WHERE ChannelId=? AND UserId=?";
 	
 	public final String MESSAGES = "messages";
 	public final String MESSAGES_FILE = MESSAGES + ".json";
@@ -65,13 +79,14 @@ public interface AppConstants {
 			+ "ChannelId varchar(30),"
 			+ "UserId varchar(10),"
 			+ "MessageTime timestamp,"
+			+ "LastModified timestamp,"
 			+ "RepliedToId integer,"
 			+ "Content varchar(500),"
-			+ "PRIMARY KEY(id),"
+			+ "PRIMARY KEY(ID),"
 			+ "FOREIGN KEY(UserId) REFERENCES " + USERS + "(Username),"
 			+ "FOREIGN KEY(ChannelId) REFERENCES " + CHANNELS + "(ChannelName))";
 	public final String INSERT_MESSAGE_STMT = "INSERT INTO " + MESSAGES
-			+ " (ChannelId, UserId, MessageTime, RepliedToId, Content) VALUES(?,?,?,?,?)";
-	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE ChannelId=? ORDER BY id";
+			+ " (ChannelId, UserId, MessageTime, LastModified, RepliedToId, Content) VALUES(?,?,?,?,?,?)";
+	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE ChannelId=? ORDER BY LastModified, MessageTime";
 	public final String SELECT_MESSAGES = "SELECT * FROM " + MESSAGES;
 }

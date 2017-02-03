@@ -21,7 +21,7 @@ public final class BuildSuccessMessages {
 		AuthSuccess authSuccess = new AuthSuccess(user);
 		Map<String, ThreadUser> mapUsernameToNickname = DataManager.getMapOfAllUsers(conn);
 		for (Channel channel : DataManager.getAllChannels(conn)) { // iterate over each channel
-			Channel publicChannel = null, subscribedChannel = null, privateChannel = null;
+			Channel subscribedChannel = null, privateChannel = null;
 			boolean isSubscribed = false;
 			for (Subscription subscription : DataManager.getSubscriptionsByChannelName(conn, channel.getChannelName())) { // iterate over the subscriptions
 				channel.addUser(mapUsernameToNickname.get(subscription.getUsername())); // add user to channel
@@ -30,23 +30,8 @@ public final class BuildSuccessMessages {
 				}
 			}
 
-			// if this user is subscribed to the channel, look for the thread's message history
+			// if this user is subscribed to the channel
 			if (isSubscribed) {
-				// iterate over all the messages in the thread
-				for (Message message : DataManager.getMessagesByChannelName(conn, mapUsernameToNickname, channel.getChannelName())) {
-					MessageThread messageThread = new MessageThread(message);
-					// if current message is a reply to a previous message, "concatenate" them
-					if (messageThread.getMessage().getRepliedToId() >= 0) {
-						for (MessageThread addedMessage : channel.getChannelThread()) {
-							if (addedMessage.getMessage().getId() == messageThread.getMessage().getRepliedToId()) {
-								addedMessage.addReply(messageThread);
-							}
-						}
-					} else { // current message is a message by itself (not a reply)
-						channel.addMessage(messageThread);
-					}
-				}
-
 				Channel copy;
 				if (channel.isPublic()) {
 					copy = subscribedChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), true);
@@ -61,17 +46,6 @@ public final class BuildSuccessMessages {
 				for (MessageThread thMessage : channel.getChannelThread()) {
 					copy.addMessage(thMessage);
 				}
-			}
-
-			if (channel.isPublic()) {
-				publicChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), true);
-				for (ThreadUser thUser : channel.getUsers()) {
-					publicChannel.addUser(thUser);
-				}
-			}
-
-			if (publicChannel != null) {
-				authSuccess.addPublicChannel(publicChannel);
 			}
 
 			if (subscribedChannel != null) {
@@ -89,10 +63,8 @@ public final class BuildSuccessMessages {
 	public static SubscribeSuccess buidSubscribeSuccess(Connection conn, Channel channel) {
 		SubscribeSuccess subscribeSuccess = new SubscribeSuccess(channel);
 		Map<String, ThreadUser> mapUsernameToNickname = DataManager.getMapOfAllUsers(conn);
-		for (Subscription subscription : DataManager.getSubscriptionsByChannelName(conn, channel.getChannelName())) { // iterate over the subscriptions
-			channel.addUser(mapUsernameToNickname.get(subscription.getUsername())); // add user to channel
-		}
-
+		DataManager.updateChannelUsers(conn, channel); // update channel's users list
+		
 		// iterate over all the messages in the thread
 		for (Message message : DataManager.getMessagesByChannelName(conn, mapUsernameToNickname, channel.getChannelName())) {
 			MessageThread messageThread = new MessageThread(message);

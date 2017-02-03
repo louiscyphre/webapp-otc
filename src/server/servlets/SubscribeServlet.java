@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -82,7 +83,7 @@ public class SubscribeServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-System.out.println("subscribe me pls: " + gsonData);
+
 			// parse the data
 			Gson gson = new Gson();
 			Subscription credentials = gson.fromJson(gsonData, Subscription.class);
@@ -91,7 +92,7 @@ System.out.println("subscribe me pls: " + gsonData);
 			if ((channel = DataManager.getChannelByName(conn, credentials.getChannelName())) != null) { // check if channel exists
 				if (channel.isPublic()) {
 					if (DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getChannelName(), credentials.getUsername()) == null) { // if unsubscribed
-						DataManager.addSubscription(conn, credentials);
+						DataManager.addSubscription(conn, credentials, new Timestamp(System.currentTimeMillis()));
 						channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() + 1);
 						DataManager.updateChannel(conn, channel);
 						SubscribeSuccess subscribeSucces = BuildSuccessMessages.buidSubscribeSuccess(conn, channel);

@@ -10,14 +10,12 @@ public class AuthSuccess {
 	
 	private String MessageType;
 	private ThreadUser User;
-	private Collection<Channel> PublicChannels;
 	private Collection<Channel> SubscribedChannels;
 	private Collection<Channel> PrivateChannels;
 	
 	public AuthSuccess(ThreadUser user) {
 		this.MessageType = "AuthSuccess";
 		this.User = user;
-		this.PublicChannels = new ArrayList<>();
 		this.SubscribedChannels = new ArrayList<>();
 		this.PrivateChannels = new ArrayList<>();
 	}
@@ -43,11 +41,6 @@ public class AuthSuccess {
 		User = user;
 	}
 
-	public void addPublicChannel(Channel channel) {
-		if (channel != null)
-			PublicChannels.add(channel);
-	}
-	
 	public void addSubscribedChannel(Channel channel) {
 		if (channel != null)
 			SubscribedChannels.add(channel);

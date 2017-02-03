@@ -67,6 +67,18 @@ public class DatabaseCreator implements ServletContextListener {
     		BasicDataSource ds = (BasicDataSource)context.lookup(cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
     		Connection conn = ds.getConnection();
     		
+    		if (true) {
+    			System.out.println("deleting database");
+    			Statement stmt = conn.createStatement();
+    			stmt.execute("DROP TABLE " + AppConstants.MESSAGES);
+    			stmt.execute("DROP TABLE " + AppConstants.SUBSCRIPTIONS);
+    			stmt.execute("DROP TABLE " + AppConstants.CHANNELS);
+    			stmt.execute("DROP TABLE " + AppConstants.USERS);
+    			conn.commit();
+    			stmt.close();
+    			
+    		}
+    		
     		boolean created = false;
     		try{
     			Statement stmt = conn.createStatement();
@@ -150,6 +162,10 @@ public class DatabaseCreator implements ServletContextListener {
                 for (Subscription subscription : subscriptions) {
                     pstmt2.setString (1, subscription.getChannelName());
                     pstmt2.setString (2, subscription.getUsername());
+                    pstmt2.setTimestamp(3, subscription.getSubscriptionTime());
+                    pstmt2.setBoolean(4, subscription.isViewing());
+                    pstmt2.setInt(5, subscription.getUnreadMessages());
+                    pstmt2.setInt(6, subscription.getUnreadMentionedMessages());
                     pstmt2.executeUpdate();
                 }
                 conn.commit();
@@ -177,10 +193,11 @@ public class DatabaseCreator implements ServletContextListener {
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT);
                 for (Message message : messages) {
                     pstmt2.setString   (1, message.getChannelId());
-                    pstmt2.setString   (2, message.getUser().getUsername());
+                    pstmt2.setString   (2, message.getUserId());
                     pstmt2.setTimestamp(3, message.getMessageTime());
-                    pstmt2.setInt      (4, message.getRepliedToId());
-                    pstmt2.setString   (5, message.getContent());
+                    pstmt2.setTimestamp(4, message.getLastModified());
+                    pstmt2.setInt      (5, message.getRepliedToId());
+                    pstmt2.setString   (6, message.getContent());
                     pstmt2.executeUpdate();
                 }
                 conn.commit();
