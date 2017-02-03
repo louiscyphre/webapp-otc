@@ -5,46 +5,46 @@ import java.util.Collection;
 
 public class Channel {
 	
-	private String ChannelName;
+	private String Name;
 	private Collection<MessageThread> ChannelThread = new ArrayList<>();
 	private Collection<ThreadUser> Users = new ArrayList<>();
 	private String Description;
-	private int NumberOfSubscribers;
-	private boolean IsPublic;
+	private int SubscribersCount;
+	private transient boolean isPublic;
 	
 	public Channel(String channelName, String description, int numberOfSubscribers, boolean isPublic) {
-		this.ChannelName = channelName;
+		this.Name = channelName;
 		this.Description = description;
-		this.NumberOfSubscribers = numberOfSubscribers;
-		this.IsPublic = isPublic;
+		this.SubscribersCount = numberOfSubscribers;
+		this.isPublic = isPublic;
 	}
 
 	/**
 	 * @return the numberOfSubscribers
 	 */
 	public int getNumberOfSubscribers() {
-		return NumberOfSubscribers;
+		return SubscribersCount;
 	}
 
 	/**
 	 * @param numberOfSubscribers the numberOfSubscribers to set
 	 */
 	public void setNumberOfSubscribers(int numberOfSubscribers) {
-		this.NumberOfSubscribers = numberOfSubscribers;
+		this.SubscribersCount = numberOfSubscribers;
 	}
 
 	/**
 	 * @return the channelName
 	 */
 	public String getChannelName() {
-		return ChannelName;
+		return Name;
 	}
 
 	/**
 	 * @param channelName the channelName to set
 	 */
 	public void setChannelName(String channelName) {
-		this.ChannelName = channelName;
+		this.Name = channelName;
 	}
 
 	/**
@@ -65,14 +65,14 @@ public class Channel {
 	 * @return the isPublic
 	 */
 	public boolean isPublic() {
-		return IsPublic;
+		return isPublic;
 	}
 
 	/**
 	 * @param isPublic the isPublic to set
 	 */
 	public void setPublic(boolean isPublic) {
-		this.IsPublic = isPublic;
+		this.isPublic = isPublic;
 	}
 	
 	public void addUser(ThreadUser user) {
@@ -93,11 +93,11 @@ public class Channel {
 
 	@Override
 	public String toString() {
-		return "Channel [numberOfSubscribers=" + NumberOfSubscribers + ", channelName=" + ChannelName
-				+ ", description=" + Description + ", isPublic=" + IsPublic + "]";
+		return "Channel [numberOfSubscribers=" + SubscribersCount + ", channelName=" + Name
+				+ ", description=" + Description + ", isPublic=" + isPublic + "]";
 	}
 
 	public String stringify() {
-		return ChannelName + " " + Description;
+		return Name + " " + Description;
 	}
 }

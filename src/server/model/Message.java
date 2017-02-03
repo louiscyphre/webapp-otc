@@ -4,29 +4,18 @@ import java.sql.Timestamp;
 
 public class Message {
 	private int Id;
-	private String ChannelId;
-	private String UserId = null;
+	private String Channel;
 	private ThreadUser User;
 	private Timestamp MessageTime;
-	private int RepliedToId;
+	private int ReplyToID;
 	private String Content;
-
-	public Message(int id, String channelId, String user, Timestamp messageTime, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.UserId = user;
-		this.MessageTime = messageTime;
-		this.RepliedToId = repliedToId;
-		this.Content = content;
-	}
 
 	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, int repliedToId, String content) {
 		this.Id = id;
-		this.ChannelId = channelId;
+		this.Channel = channelId;
 		this.User = user;
-		this.UserId = user.getUsername();
 		this.MessageTime = messageTime;
-		this.RepliedToId = repliedToId;
+		this.ReplyToID = repliedToId;
 		this.Content = content;
 	}
 
@@ -48,42 +37,28 @@ public class Message {
 	 * @return the channelId
 	 */
 	public String getChannelId() {
-		return ChannelId;
+		return Channel;
 	}
 
 	/**
 	 * @param channelId the channelId to set
 	 */
 	public void setChannelId(String channelId) {
-		this.ChannelId = channelId;
+		this.Channel = channelId;
 	}
 
 	/**
 	 * @return the repliedToId
 	 */
 	public int getRepliedToId() {
-		return RepliedToId;
+		return ReplyToID;
 	}
 
 	/**
 	 * @param repliedToId the repliedToId to set
 	 */
 	public void setRepliedToId(int repliedToId) {
-		this.RepliedToId = repliedToId;
-	}
-
-	/**
-	 * @return the userId
-	 */
-	public String getUserId() {
-		return UserId;
-	}
-
-	/**
-	 * @param userId the userId to set
-	 */
-	public void setUserId(String user) {
-		this.UserId = user;
+		this.ReplyToID = repliedToId;
 	}
 
 	/**
@@ -133,7 +108,7 @@ public class Message {
 	 */
 	@Override
 	public String toString() {
-		return "Message [id=" + Id + ", channelId=" + ChannelId + ", repliedToId=" + RepliedToId + ", User=" + UserId
+		return "Message [id=" + Id + ", channelId=" + Channel + ", repliedToId=" + ReplyToID + ", User=" + User
 				+ ", content=" + Content + ", messageTime=" + MessageTime + "]";
 	}
 	

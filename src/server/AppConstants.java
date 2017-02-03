@@ -5,22 +5,16 @@ package server;
  */
 public interface AppConstants {
 
+	//public final String CUSTOMERS = "customers";
+	//public final String CUSTOMERS_FILE = CUSTOMERS + ".json";
+	//public final String NAME = "name";
+	//public final Type CUSTOMER_COLLECTION = new TypeToken<Collection<Customer>>() {}.getType();
 	//derby constants
 	public final String DB_NAME = "DB_NAME";
 	public final String DB_DATASOURCE = "DB_DATASOURCE";
-	public final String DB_CONTEXT = "java:comp/env/jdbc/ExampleDatasource";
 	public final String PROTOCOL = "jdbc:derby:"; 
 	public final String OPEN = "Open";
 	public final String SHUTDOWN = "Shutdown";
-	// message properties
-	public final String MESSAGE_PROPERTY = "MessageType";
-	public final String MESSAGE_CONTENT = "MessageContent";
-	// message types
-	public final String MESSAGE_CREATE_CHANNEL = "CreateChannel";
-	public final String MESSAGE_SUBSCRIBE = "Subscribe";
-	public final String MESSAGE_UNSUBSCRIBE = "Unsubscribe";
-	public final String MESSAGE_CHANNEL_DISCOVERY = "ChannelDiscovery";
-	public final String MESSAGE_RECEIVED_MESSAGE = "MessageReceived";
 	
 	public final String USERS = "users";
 	public final String USERS_FILE = USERS + ".json";

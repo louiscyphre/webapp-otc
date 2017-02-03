@@ -82,7 +82,7 @@ public class MessageServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-			
+System.out.println("read me pls: " + gsonData);
 			// parse the data
 			Gson gson = new Gson();
 			MessageCredentials credentials = gson.fromJson(gsonData, MessageCredentials.class);
