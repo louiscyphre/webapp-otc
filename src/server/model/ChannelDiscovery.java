@@ -7,7 +7,6 @@ package server.model;
  *
  */
 public class ChannelDiscovery {
-	public static final int MAX_RESULTS = 100;
 	private String Query;
 	
 	public ChannelDiscovery(String query) {

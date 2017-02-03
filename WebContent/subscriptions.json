@@ -1,30 +1,58 @@
 [
 	{
 		"ChannelId" : "Web Programming",
-		"UserId" : "Odmin"
+		"UserId" : "Odmin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "Web Programming",
-		"UserId" : "Goblin"
+		"UserId" : "Goblin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "Software Engineering",
-		"UserId" : "Odmin"
+		"UserId" : "Odmin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "Web Programming",
-		"UserId" : "Ilia"
+		"UserId" : "Ilia",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "Algotrading",
-		"UserId" : "Ilia"
+		"UserId" : "Ilia",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "IliaOdmin",
-		"UserId" : "Ilia"
+		"UserId" : "Ilia",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "IliaOdmin",
-		"UserId" : "Odmin"
+		"UserId" : "Odmin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
 	}
 ]

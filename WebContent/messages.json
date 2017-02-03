@@ -4,6 +4,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-02T06:49:24Z",
+		"LastModified" : "2017-01-02T06:49:24Z",
 		"RepliedToId" : -1,
 		"Content" : "Welcome to the chat!"
 	},
@@ -12,6 +13,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Goblin",
 		"MessageTime" : "2017-01-02T06:49:27Z",
+		"LastModified" : "2017-01-02T06:49:27Z",
 		"RepliedToId" : -1,
 		"Content" : "Thank you very much! I hope it will be useful"
 	},
@@ -20,6 +22,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-02T06:50:02Z",
+		"LastModified" : "2017-01-02T06:50:02Z",
 		"RepliedToId" : -1,
 		"Content" : "Let's do our best!"
 	},
@@ -28,6 +31,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-26T18:19:31Z",
+		"LastModified" : "2017-01-26T18:19:31Z",
 		"RepliedToId" : -1,
 		"Content" : "Testing new message"
 	},
@@ -36,6 +40,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-26T18:23:39Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : -1,
 		"Content" : "Testing yet again a new message"
 	}

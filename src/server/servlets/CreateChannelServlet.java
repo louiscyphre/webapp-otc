@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -89,9 +90,9 @@ public class CreateChannelServlet extends HttpServlet {
 			// query the database and prepare the response
 			if (DataManager.getChannelByName(conn, credentials.getName()) == null) { // channel does not exist
 				DataManager.addChannel(conn, credentials);
-				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getOwner()));
+				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getOwner()), new Timestamp(System.currentTimeMillis()));
 				if (credentials.getUsername() != null)
-					DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()));
+					DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis()));
 				writer.write(gson.toJson(new ChannelSuccess()));
 			} else { // channel exists
 				writer.write(gson.toJson(new ChannelFailure("Channel already exists")));

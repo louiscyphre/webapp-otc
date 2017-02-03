@@ -59,8 +59,6 @@ public class LoginServlet extends HttpServlet {
 			getServletContext().log("Error while closing connection", e);
 			response.sendError(500);//internal server error
 		}
-
-
 	}
 
 	/**

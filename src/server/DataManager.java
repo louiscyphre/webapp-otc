@@ -156,6 +156,25 @@ public final class DataManager {
 	}
 	
 	/**
+	 * Returns a channel by given channel name, including its subscribers
+	 * @param conn
+	 * @param channelName
+	 * @return
+	 */
+	public static Channel updateChannelUsers(Connection conn, Channel channel) {
+		Collection<Subscription> subscriptions = getSubscriptionsByChannelName(conn, channel.getChannelName());
+		for (Subscription subscription : subscriptions) {
+			if (subscriptions != null) {
+				User user = getUserByUsername(conn, subscription.getUsername());
+				if (user != null) {
+					channel.getUsers().add(ThreadUser.getThreadUserByUser(user));
+				}
+			}
+		}
+		return channel;
+	}
+	
+	/**
 	 * Adds a new channel to the database
 	 * @param conn the connection to the database
 	 * @param credentials the channel's details
@@ -206,6 +225,8 @@ public final class DataManager {
 			while (rs.next()) { // iterate over all found subscriptions
 				subscriptions.add(new Subscription(channelName, rs.getString(2)));
 			}
+			rs.close();
+			prepStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -238,11 +259,12 @@ public final class DataManager {
 		}
 	}
 	
-	public static void addSubscription(Connection conn, Subscription subscription) {
+	public static void addSubscription(Connection conn, Subscription subscription, Timestamp subscriptionTime) {
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.INSERT_SUBSCRIPTION_STMT);
 			prepStmt.setString(1, subscription.getChannelName());
 			prepStmt.setString(2, subscription.getUsername());
+			prepStmt.setTimestamp(3, subscriptionTime);
 			prepStmt.execute();
 			prepStmt.close();
 			Channel channel = DataManager.getChannelByName(conn, subscription.getChannelName());
@@ -264,6 +286,21 @@ public final class DataManager {
 			e.printStackTrace();
 		}
 	}
+    
+    public static void updateSubscription(Connection conn, Subscription subscription) {
+    	try {
+    		PreparedStatement prepStmt = conn.prepareStatement(AppConstants.UPDATE_SUBSCRIPTION_STMT);
+    		prepStmt.setBoolean(1, subscription.isViewing());
+    		prepStmt.setInt(2, subscription.getUnreadMessages());
+    		prepStmt.setInt(3, subscription.getUnreadMentionedMessages());
+    		prepStmt.setString(4, subscription.getChannelName());
+    		prepStmt.setString(5, subscription.getUsername());
+    		prepStmt.execute();
+    		prepStmt.close();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
 
 	/**
 	 * Returns all the message in a certain channel
@@ -299,8 +336,9 @@ public final class DataManager {
 			prepStmt.setString(1, credentials.getChannel());
 			prepStmt.setString(2, credentials.getUsername());
 			prepStmt.setTimestamp(3, (messageTime = new Timestamp(System.currentTimeMillis())));
-			prepStmt.setInt(4, credentials.getReplyToID());
-			prepStmt.setString(5, credentials.getContent());
+			prepStmt.setTimestamp(4, (messageTime));
+			prepStmt.setInt(5, credentials.getReplyToID());
+			prepStmt.setString(6, credentials.getContent());
 			prepStmt.execute();
 			ResultSet rs = prepStmt.getGeneratedKeys();
 			rs.next();
@@ -316,9 +354,9 @@ public final class DataManager {
 	
 	public static Collection<Channel> discoverChannels(Connection conn, ChannelDiscovery query) {
 		try {
-			Collection<Channel> channels = new ArrayList<>();
+			Collection<Channel> channels = new ArrayList<>(); // the list that will be returned
 			
-			PreparedStatement chanStmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_STMT);
+			PreparedStatement chanStmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_LIKENESS_STMT);
 			chanStmt.setString(1, query.getQuery());				
 			ResultSet chanRS = chanStmt.executeQuery();
 			if (chanRS.next()) {
@@ -327,21 +365,29 @@ public final class DataManager {
 			chanRS.close();
 			chanStmt.close();
 			
-			PreparedStatement subByUserStmt = conn.prepareStatement(AppConstants.SELECT_SUBSCRIPTIONS_BY_USERNAME_STMT);
-			subByUserStmt.setString(1, query.getQuery());
-			ResultSet subByUserRS = subByUserStmt.executeQuery();
-			while (subByUserRS.next() && ChannelDiscovery.MAX_RESULTS > channels.size()) {
-				PreparedStatement chan2Stmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_STMT);
-				chan2Stmt.setString(1, subByUserRS.getString(1));
-				ResultSet chan2RS = chan2Stmt.executeQuery();
-				if (chan2RS.next()) {
-					channels.add(new Channel(chan2RS.getString(1), chan2RS.getString(2), chan2RS.getInt(3), chan2RS.getBoolean(4)));
+			PreparedStatement nickStmt = conn.prepareStatement(AppConstants.SELECT_USER_BY_NICKNAME_LIKENESS_STMT);
+			chanStmt.setString(1, query.getQuery());
+			ResultSet nickRS = nickStmt.executeQuery();
+			while (nickRS.next()) { // iterate over all the users who's nickname is this
+				String username = nickRS.getString(1); // the username of the user
+				PreparedStatement subByUserStmt = conn.prepareStatement(AppConstants.SELECT_SUBSCRIPTIONS_BY_USERNAME_STMT);
+				subByUserStmt.setString(1, username);
+				ResultSet subByUserRS = subByUserStmt.executeQuery();
+				while (subByUserRS.next()) {
+					PreparedStatement chan2Stmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_STMT);
+					chan2Stmt.setString(1, subByUserRS.getString(1));
+					ResultSet chan2RS = chan2Stmt.executeQuery();
+					if (chan2RS.next()) {
+						channels.add(new Channel(chan2RS.getString(1), chan2RS.getString(2), chan2RS.getInt(3), chan2RS.getBoolean(4)));
+					}
+					chan2RS.close();
+					chan2Stmt.close();
 				}
-				chan2RS.close();
-				chan2Stmt.close();
+				subByUserRS.close();
+				subByUserStmt.close();
 			}
-			subByUserRS.close();
-			subByUserStmt.close();
+			nickRS.close();
+			nickStmt.close();
 			
 			return channels;
 		} catch (SQLException e) {
