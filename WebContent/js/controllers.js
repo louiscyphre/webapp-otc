@@ -10,7 +10,7 @@
         Password: "",
         Nickname: "",
         Description: "",
-        AvatarUrl: "img/default_avatar.png"
+        AvatarUrl: ""
       };
 
       $scope.loginScreenHidden = false;
@@ -49,53 +49,29 @@
 
       $scope.registerScreenHidden = true;
 
+      $scope.register = function () {
+        //console.log('in register(): Sending: ' + JSON.stringify($rootScope.user));
+        Servlets.send("register", $rootScope.user);
+      };
+
       $scope.$on('register', function (event, data) {
         //console.log('RegisterCtrl: got event register');
         $scope.registerScreenHidden = false;
       });
+      $scope.$on('AuthSuccess', function (event, data) {
+        //console.log('RegisterCtrl: got event AuthSuccess');
+        $scope.registerScreenHidden = true;
+      });
 
-      $scope.register = function () {
-        //console.log('in register(): Sending: ' + JSON.stringify($scope.user));
-        $http.post("/webChat/register", JSON.stringify($scope.user)).success(function (response) {
-          //console.log('RegisterCtrl: emitting event AuthSuccess');
-          $scope.registerScreenHidden = true;
-          MessageBus.send(response.MessageType, response);
-        });
-
-      };
-    }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', 'Socket', 'Servlets', function ($rootScope, $scope, $http, $window, MessageBus, Socket, Servlets) {
+     }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', 'Socket', 'Servlets', function ($rootScope, $scope, $http, $window, MessageBus, Socket, Servlets) {
 
       $scope.chatRoomsScreenHidden = true;
       $scope.currentChannel = {};
       $scope.currentChannelThread = {};
       $scope.subscribedChannels = [];
       $scope.publicChannels = [];
+      $scope.privateChannels = [];
       $scope.expression = {};
-
-      $scope.$on('AuthSuccess', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event AuthSuccess');
-        $scope.chatRoomsScreenHidden = false;
-
-        //get all channels and subscribed channels from json (must be here or on auth with servlet??)
-        $rootScope.user = response.User;
-        //console.log('in ChatRoomsCtrl:(): public channels:' + JSON.stringify(response.PublicChannels));
-        $scope.publicChannels = response.PublicChannels;
-        //console.log('in ChatRoomsCtrl:(): subscribed channels:' + JSON.stringify(response.SubscribedChannels));
-        $scope.subscribedChannels = response.SubscribedChannels;
-        Socket.connect();
-      });
-
-      $scope.$on('SubscribeSuccess', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
-        $scope.subscribedChannels.push(response.Channel);
-      });
-
-      $scope.$on('ChannelDiscovery', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event ChannelDiscovery');
-        for (var i = 0; i < response.Channels.length; ++i) {
-          $scope.publicChannels.push(response.Channel);
-        }
-      });
 
       var findChannel = function (channelName, channels) {
         //console.log('findChannelByName: entering ' + channelName);
@@ -129,13 +105,14 @@
         }
 
         var subscribeJson = {
-          MessageType: {
-            Subscribe: channelName,
-            Username: $scope.user.Username
+          MessageType: "Subscribe",
+          MessageContent: {
+            ChannelId: channelName,
           }
         };
         //console.log('in subscribeToChannel(): Sending: ' + JSON.stringify(subscribeJson));
-        Servlets.send("subscribe", subscribeJson);
+        //Servlets.send("subscribe", subscribeJson);
+        Socket.send(subscribeJson);
       };
 
       $scope.enterChannel = function (channelName) {
@@ -155,34 +132,54 @@
         //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.currentChannelThread));
       };
 
-      $scope.discoverChannels = function (query) {
+      $scope.enterPivateChannel = function (channelName, description, username) {
+        //console.log('in enterPivateChannel(): Sending: ' + JSON.stringify(channelname));
+        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        if (!findChannel(channelName, $scope.privateChannels)) {
+          //console.log('enterChannel: no subscribed channels!');
+          $scope.createChannel(channelName, description, username);
+        }
+        $scope.currentChannelThread = getCurrentThread(channelName);
+        $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
+      };
 
-        var queryJson = {
-          MessageType: {
-            ChannelDiscovery: query,
-            Username: $scope.user.Username
+      $scope.createChannel = function (channelName, description, username) {
+
+        var createChannelJson = {
+          MessageType: "CreateChannel",
+          MessageContent: {
+            Name: channelName,
+            Description: description,
+            Username: username
           }
         };
         //console.log('in discoverChannels(): Sending: ' + JSON.stringify(subscribeJson));
-        Servlets.send("discovery", queryJson);
+        //Servlets.send("discovery", queryJson);
+        Socket.send(createChannelJson);
+      };
+
+      $scope.discoverChannels = function (query) {
+
+        var queryJson = {
+          MessageType: "ChannelDiscovery",
+          MessageContent: {
+            Query: query,
+          }
+        };
+        //console.log('in discoverChannels(): Sending: ' + JSON.stringify(subscribeJson));
+        //Servlets.send("discovery", queryJson);
+        Socket.send(queryJson);
       };
 
       $scope.unsubscribeChannel = function (channelName) {
         //console.log('in unsubscribeChannel()');
         var unsubscribeJson = {
-          MessageType: {
-            Unsubscribe: channelName,
-            Username: $rootScope.user.Username
+          MessageType: "Unsubscribe",
+          MessageContent: {
+            ChannelId: channelName
           }
         };
-        //Socket.send(JSON.stringify(unsubscribeJson));
-        //console.log('Deleting: ' + findChannel(channelname, $scope.subscribedChannels).index);
-        $scope.subscribedChannels.splice(findChannel(channelName, $scope.subscribedChannels).index, 1);
-
-        if ($scope.currentChannel === channelName) {
-          $scope.currentChannel = {};
-          $scope.currentChannelThread = {};
-        }
+        Socket.send(unsubscribeJson);
       };
 
       $scope.isActive = function (channelName) {
@@ -201,7 +198,68 @@
         return false;
       };
 
-      }]);
+      $scope.$on('AuthSuccess', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event AuthSuccess');
+        $scope.chatRoomsScreenHidden = false;
+        //get all channels and subscribed channels from json (must be here or on auth with servlet??)
+        $rootScope.user = response.User;
+        //console.log('in ChatRoomsCtrl:(): public channels:' + JSON.stringify(response.PublicChannels));
+        $scope.publicChannels = response.PublicChannels;
+        //console.log('in ChatRoomsCtrl:(): subscribed channels:' + JSON.stringify(response.SubscribedChannels));
+        $scope.subscribedChannels = response.SubscribedChannels;
+        $scope.privateChannels = response.PrivateChannels;
+
+        Socket.connect($rootScope.user.Username);
+      });
+
+      $scope.$on('SubscribeSuccess', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
+        $scope.subscribedChannels.push(response.Channel);
+      });
+
+      $scope.$on('ChannelSuccess', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
+        $scope.subscribedChannels.push(response.Channel);
+      });
+
+      $scope.$on('UserSubscribed', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event UserSubscribed');
+        var channel = findChannel(response.Channel, $scope.subscribedChannels);
+        if (!channel) {
+          return;
+        }
+        channel.Users.push(response.User.Username);
+      });
+
+      $scope.$on('UserUnsubscribed', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event UserUnsubscribed');
+        var channel = findChannel(response.Channel, $scope.subscribedChannels);
+        if (!channel) {
+          return;
+        }
+        channel.Users.pop(response.Username);
+      });
+
+      $scope.$on('Unsubscribe', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event Unsubscribe');
+        //console.log('Deleting: ' + findChannel(channelname, $scope.subscribedChannels).index);
+        // FIXME Check protocol wether it Channel, ChannelId or else
+        $scope.subscribedChannels.splice(findChannel(response.Channel, $scope.subscribedChannels).index, 1);
+
+        if ($scope.currentChannel === response.Channel) {
+          $scope.currentChannel = {};
+          $scope.currentChannelThread = {};
+        }
+      });
+
+      $scope.$on('ChannelDiscovery', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event ChannelDiscovery');
+        for (var i = 0; i < response.Channels.length; ++i) {
+          $scope.publicChannels.push(response.Channel);
+        }
+      });
+
+  }]);
 }(this.window));
 
 /*[{

@@ -56,7 +56,6 @@
       },
 
       send: function send(jSon) {
-        //MessageBus.send('unsubscribedChannel');
         if (websocket !== null) {
           websocket.send(jSon);
         }

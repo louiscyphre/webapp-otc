@@ -116,6 +116,24 @@
           </ul>
           <ul>
             <li>
+              <table class="private-channels">
+                <tr data-ng-repeat="channel in privateChannels | filter:searchChannel" data-ng-click="enterPrivateChannel(channel.ChannelName)">
+                  <td> {{channel.ChannelName}}
+                  </td>
+                  <td>
+                    <span class="badge" data-ng-model="channel.NumberOfSubscribers"><img class="channel-icon" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="/>{{channel.NumberOfSubscribers}}</span>
+                  </td>
+                  <td>
+                    <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="usubscribe" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                      <div class="description-content"> {{channel.Description}} </div>
+                    </data-button>
+                  </td>
+                </tr>
+              </table>
+            </li>
+          </ul>
+          <ul>
+            <li>
               <table class="all-channels">
                 <tr data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="enterChannel(channel.ChannelName)">
                   <td> {{channel.ChannelName}}
