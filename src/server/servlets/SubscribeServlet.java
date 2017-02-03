@@ -82,7 +82,7 @@ public class SubscribeServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-System.out.println("subscribe me pls: " + gsonData);
+
 			// parse the data
 			Gson gson = new Gson();
 			Subscription credentials = gson.fromJson(gsonData, Subscription.class);

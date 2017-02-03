@@ -177,7 +177,7 @@ public class DatabaseCreator implements ServletContextListener {
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT);
                 for (Message message : messages) {
                     pstmt2.setString   (1, message.getChannelId());
-                    pstmt2.setString   (2, message.getUser().getUsername());
+                    pstmt2.setString   (2, message.getUserId());
                     pstmt2.setTimestamp(3, message.getMessageTime());
                     pstmt2.setInt      (4, message.getRepliedToId());
                     pstmt2.setString   (5, message.getContent());

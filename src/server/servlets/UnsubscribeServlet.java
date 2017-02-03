@@ -80,7 +80,7 @@ public class UnsubscribeServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-System.out.println("i'm out of here: " + gsonData);
+			
 			// parse the data
 			Gson gson = new Gson();
 			Subscription credentials = gson.fromJson(gsonData, Subscription.class);

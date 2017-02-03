@@ -81,7 +81,7 @@ public class CreateChannelServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-System.out.println("i'm a channel, create me pls: " + gsonData);
+
 			// parse the data
 			Gson gson = new Gson();
 			ChannelCredentials credentials = gson.fromJson(gsonData, ChannelCredentials.class);
