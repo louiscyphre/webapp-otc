@@ -3,9 +3,15 @@ package server.messages;
 public class ChannelSuccess {
 	
 	private String MessageType;
+	private String ChannelName = null;
 	
 	public ChannelSuccess() {
 		this.MessageType = "ChannelSuccess";
+	}
+	
+	public ChannelSuccess(String channelName) {
+		this.MessageType = "ChannelSuccess";
+		this.ChannelName = channelName;
 	}
 
 	/**
@@ -22,11 +28,25 @@ public class ChannelSuccess {
 		MessageType = messageType;
 	}
 
+	/**
+	 * @return the channelName
+	 */
+	public String getChannelName() {
+		return ChannelName;
+	}
+
+	/**
+	 * @param channelName the channelName to set
+	 */
+	public void setChannelName(String channelName) {
+		ChannelName = channelName;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "AuthFailure [MessageType=" + MessageType + "]";
+		return "ChannelSuccess [MessageType=" + MessageType + ", ChannelName=" + ChannelName + "]";
 	}
 }

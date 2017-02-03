@@ -101,6 +101,7 @@ body {
   height: 100%;
   box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
+  z-index: 1;
 }
 
 .side table {
@@ -114,6 +115,7 @@ body {
 .side div table {
   border-radius: 8px;
   font-family: monospace;
+  z-index: 995;
 }
 
 .side div table td {
@@ -142,7 +144,6 @@ body {
   display: table-row;
   color: #000000;
   border-radius: 8px;
-  text-decoration: none;
 }
 
 .side tr td span {
@@ -187,31 +188,6 @@ body {
   overflow: auto;
 }
 
-
-/*
-.side li a {
-  display: block;
-  color: #000000;
-  padding: 8px 16px;
-  border-radius: 8px;
-  text-decoration: none;
-}
-
-.side li a span {
-  padding: 0px;
-  text-decoration: none
-}
-
-.side li a.active {
-  background-color: #337AB7;
-  color: white;
-}
-
-.side li a:hover:not(.active) {
-  background-color: #B3B3B3;
-  color: white;
-}*/
-
 .side {
   overflow: auto;
 }
@@ -236,23 +212,25 @@ body {
 .chat-text-area ul li table tr td div.message {
   background-color: #DBF7C6;
   margin-right: 2%;
-  padding: 2%;
+  padding: 15px;
+  min-height: 120px;
+  min-width: 120px;
   text-align: justify;
 }
 
 .chat-text-area ul li table tr td div.message-info {
   background-color: #FCF8E3;
   word-break: keep-all;
-  margin-right: 2%;
-  padding-left: 1%;
-  padding-top: 1%;
-  padding-bottom: 2%;
-  padding-right: 3%;
+  margin-right: 20px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
   font-size: 85%;
   max-height: 150px;
   max-width: 150px;
-  width: 15%;
-  height: 15%;
+  height: 120px;
+  width: 120px;
   float: left;
 }
 
@@ -267,7 +245,7 @@ body {
 }
 
 .chat-text-area ul li table tr td {
-  padding: 2%;
+  padding: 15px;
   height: 100%;
   overflow: hidden;
 }
@@ -368,7 +346,6 @@ body {
   border: 1px solid #B3B3B3;
   border-radius: 50%;
   background-color: #ffffff;
-  float: left;
 }
 
 .description {
@@ -378,24 +355,23 @@ body {
 
 .description-content {
   display: none;
-  visibility: hidden;
   overflow-y: hidden;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 260px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 1%;
-  z-index: 999;
+  z-index: 1000;
 }
 
 .description:hover .description-content {
   max-height: 300px;
   max-width: 300px;
+  min-width: 260px;
+  min-height: 260px;
   display: block;
-  visibility: visible;
   background-color: #FCF8E3;
   color: #2E3436;
-  z-index: 999;
+  z-index: 1001;
 }
 
 .description .description-content:hover {
@@ -445,7 +421,7 @@ body {
   border-radius: 8px;
   border: 2px solid #B3B3B3;
   background-color: white;
-  background-image: url('img/searchicon.png');
+  background-image: url('../img/searchicon.png');
   background-size: contain;
   background-position: 4px 4px;
   background-repeat: no-repeat;

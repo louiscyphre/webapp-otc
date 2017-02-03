@@ -77,7 +77,7 @@ public class ChannelDiscoveryServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-			System.out.println("search for me pls: " + gsonData);
+			
 			// parse the data
 			Gson gson = new Gson();
 			ChannelDiscovery credentials = gson.fromJson(gsonData, ChannelDiscovery.class);
