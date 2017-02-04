@@ -35,7 +35,7 @@ public interface AppConstants {
 			+ "PRIMARY KEY(Username))";
 	public final String INSERT_USER_STMT = "INSERT INTO " + USERS + " VALUES(?,?,?,?,?)";
 	public final String SELECT_USER_BY_USERNAME_STMT = "SELECT * FROM " + USERS + " WHERE Username=?";
-	public final String SELECT_USER_BY_CREDENTIALS_STMT = "SELECT * FROM USERS WHERE Username=? AND PasswordHash=?";
+	public final String SELECT_USER_BY_CREDENTIALS_STMT = "SELECT * FROM USERS WHERE Username=? AND Password=?";
 	public final String SELECT_USER_BY_NICKNAME_LIKENESS_STMT = "SELECT * FROM " + USERS + " WHERE Nickname LIKE ?";
 	public final String SELECT_USERS = "SELECT * FROM USERS";
 	
