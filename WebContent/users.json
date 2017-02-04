@@ -1,35 +1,35 @@
 [
 	{
 		"Username" : "Odmin",
-		"PasswordHash" : "1234",
+		"Password" : "1234",
 		"Nickname" : "supuser",
 		"Description" : "שטו?",
 		"AvatarUrl" : "img/person.png"
 	},
 	{
 		"Username" : "Goblin",
-		"PasswordHash" : "12345",
+		"Password" : "12345",
 		"Nickname" : "supsupuser",
 		"Description" : "שטו?",
 		"AvatarUrl" : "img/person.png"
 	},
 	{
 		"Username" : "Ilia",
-		"PasswordHash" : "1123",
+		"Password" : "1123",
 		"Nickname" : "Student",
 		"Description" : "בדיקת עברית",
 		"AvatarUrl" : "img/person.png"
 	},
 	{
 		"Username" : "HobGoblin",
-		"PasswordHash" : "1q2w",
+		"Password" : "1q2w",
 		"Nickname" : "Someone",
 		"Description" : "secret stuff",
 		"AvatarUrl" : "img/person.png"
 	},
 	{
 		"Username" : "Reaper",
-		"PasswordHash" : "1324",
+		"Password" : "1324",
 		"Nickname" : "Reaper",
 		"Description" : "let's reap",
 		"AvatarUrl" : "img/person.png"
