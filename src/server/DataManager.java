@@ -82,7 +82,7 @@ public final class DataManager {
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
 			prepStmt.setString(1, user.getUsername());
-			prepStmt.setString(2, user.getPasswordHash());
+			prepStmt.setString(2, user.getPassword());
 			prepStmt.setString(3, user.getNickname());
 			prepStmt.setString(4, user.getDescription());
 			prepStmt.setString(5, user.getAvatarUrl());

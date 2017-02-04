@@ -282,7 +282,7 @@ public class WebChatEndPoint {
 					channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() - 1);
 					DataManager.updateChannel(conn, channel);
 					DataManager.updateChannelUsers(conn, channel);
-					session.getBasicRemote().sendText(gson.toJson(new Unsubscribe()));
+					session.getBasicRemote().sendText(gson.toJson(new Unsubscribe(credentials.getChannelName())));
 					// update the remaining users in the channel that the user has quit
 					doNotifyByChannel(
 							channel,

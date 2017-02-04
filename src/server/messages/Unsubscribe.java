@@ -3,15 +3,32 @@ package server.messages;
 public class Unsubscribe {
 	
 	private String MessageType;
+	private String Channel;
 	private String Error = null;
 	
-	public Unsubscribe() {
+	public Unsubscribe(String channel) {
 		this.MessageType = "Unsubscribe";
+		this.Channel = channel;
 	}
 	
-	public Unsubscribe(String error) {
+	public Unsubscribe(String channel, String error) {
 		this.MessageType = "Unsubscribe";
+		this.Channel = channel;
 		this.Error = error;
+	}
+
+	/**
+	 * @return the channel
+	 */
+	public String getChannel() {
+		return Channel;
+	}
+
+	/**
+	 * @param channel the channel to set
+	 */
+	public void setChannel(String channel) {
+		Channel = channel;
 	}
 
 	/**

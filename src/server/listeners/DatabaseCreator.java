@@ -100,7 +100,7 @@ public class DatabaseCreator implements ServletContextListener {
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
                 for (User user : users) {
                     pstmt2.setString(1, user.getUsername());
-                    pstmt2.setString(2, user.getPasswordHash());
+                    pstmt2.setString(2, user.getPassword());
                     pstmt2.setString(3, user.getNickname());
                     pstmt2.setString(4, user.getDescription());
                     pstmt2.setString(5, user.getAvatarUrl());

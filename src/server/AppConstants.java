@@ -28,7 +28,7 @@ public interface AppConstants {
 	// newsql statements
 	public final String CREATE_USER_TABLE = "CREATE TABLE USERS("
 			+ "Username varchar(10),"
-			+ "PasswordHash varchar(32),"
+			+ "Password varchar(32),"
 			+ "Nickname varchar(20),"
 			+ "Description varchar(50),"
 			+ "AvatarUrl varchar(500),"
