@@ -216,22 +216,23 @@ public class WebChatEndPoint {
 		Gson gson = new Gson();
 		ChannelCredentials credentials = gson.fromJson(msgContent, ChannelCredentials.class);
 		if (DataManager.getChannelByName(conn, credentials.getName()) == null) { // channel with this name does not exist yet
-			DataManager.addChannel(conn, credentials); // create channel
+			Channel channel = DataManager.addChannel(conn, credentials); // create channel
 			DataManager.addSubscription(conn, new Subscription(credentials.getName(), chatUsers.get(session).getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the creator to the channel
 			if (credentials.getUsername() != null) { // private channel
 				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis()));
 				User secondUser = DataManager.getUserByUsername(conn, credentials.getUsername());
-				session.getBasicRemote().sendText(gson.toJson(new ChannelSuccess(secondUser.getNickname())));
+				channel.setChannelName(secondUser.getNickname());
+				session.getBasicRemote().sendText(gson.toJson(channel));
 				doNotify(secondUser, gson.toJson(BuildSuccessMessages.buidSubscribeSuccess(conn, new Channel(
 						chatUsers.get(session).getUsername(), // the name of the channel is the creator's name
 						credentials.getDescription(), // the description of the channel
 						2, // the creator of the channel and this user => 2
 						false)))); // it's a private channel (i.e. *not* public)
 			} else { // public channel
-				session.getBasicRemote().sendText(gson.toJson(new ChannelSuccess(credentials.getName())));
+				session.getBasicRemote().sendText(gson.toJson(new ChannelSuccess(channel)));
 			}
 		} else { // channel exists
-			session.getBasicRemote().sendText(gson.toJson(new ChannelFailure("Channel already exists")));
+			session.getBasicRemote().sendText(gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists")));
 		}
 	}
 

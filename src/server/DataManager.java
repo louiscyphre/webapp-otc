@@ -179,7 +179,7 @@ public final class DataManager {
 	 * @param conn the connection to the database
 	 * @param credentials the channel's details
 	 */
-	public static void addChannel(Connection conn, ChannelCredentials credentials) {
+	public static Channel addChannel(Connection conn, ChannelCredentials credentials) {
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.INSERT_CHANNEL_STMT);
 			prepStmt.setString (1, credentials.getName());
@@ -188,8 +188,10 @@ public final class DataManager {
 			prepStmt.setBoolean(4, credentials.getUsername() == null);
 			prepStmt.execute();
 			prepStmt.close();
+			return new Channel(credentials.getName(), credentials.getDescription(), 0, credentials.getUsername() == null);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 	
