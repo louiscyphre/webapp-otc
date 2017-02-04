@@ -66,6 +66,8 @@
      }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus', 'Socket', 'Servlets', function ($rootScope, $scope, $http, $window, MessageBus, Socket, Servlets) {
 
       $scope.chatRoomsScreenHidden = true;
+      $scope.createChannelFormHidden = true;
+
       $scope.currentChannel = {};
       $scope.currentChannelThread = {};
       $scope.subscribedChannels = [];
@@ -132,12 +134,14 @@
         //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.currentChannelThread));
       };
 
-      $scope.enterPivateChannel = function (channelName, description, username) {
+      $scope.enterPrivateChannel = function (channelName) {
         //console.log('in enterPivateChannel(): Sending: ' + JSON.stringify(channelname));
         //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
         if (!findChannel(channelName, $scope.privateChannels)) {
-          //console.log('enterChannel: no subscribed channels!');
-          $scope.createChannel(channelName, description, username);
+          //console.log('enterChannel: no private channels!');
+          // FIXME need to add nice create channel form
+          $scope.createChannelFormHidden = false;
+          return;
         }
         $scope.currentChannelThread = getCurrentThread(channelName);
         $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
@@ -218,8 +222,11 @@
       });
 
       $scope.$on('ChannelSuccess', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
+        //console.log('ChatRoomsCtrl: got event ChannelSuccess');
         $scope.subscribedChannels.push(response.Channel);
+
+        $scope.currentChannelThread = getCurrentThread(response.Channel);
+        $scope.currentChannel = findChannel(response.Channel, $scope.subscribedChannels).object;
       });
 
       $scope.$on('UserSubscribed', function (event, response) {

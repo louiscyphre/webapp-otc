@@ -8,7 +8,7 @@
 
     return {
       send: function (evt, data) {
-        //console.log('in MessageBus.send(): response:' + JSON.stringify(data));
+        console.log('in MessageBus.send(): response:' + JSON.stringify(data));
         $rootScope.$broadcast(evt, data);
       }
     };
@@ -28,9 +28,11 @@
     };
    }]).factory('Socket', ['$window', 'MessageBus', function ($window, MessageBus) {
 
-    var websocket = {};
+    var websocket = null;
     return {
       connect: function connect(username) {
+
+        console.log('Socket.connect(): connecting a socket');
         if (websocket) {
           return;
         }
