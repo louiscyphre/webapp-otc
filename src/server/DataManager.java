@@ -267,6 +267,9 @@ public final class DataManager {
 			prepStmt.setString(1, subscription.getChannelName());
 			prepStmt.setString(2, subscription.getUsername());
 			prepStmt.setTimestamp(3, subscriptionTime);
+			prepStmt.setInt(4, subscription.getLastReadMessageId());
+			prepStmt.setInt(5, subscription.getUnreadMessages());
+			prepStmt.setInt(6, subscription.getUnreadMentionedMessages());
 			prepStmt.execute();
 			prepStmt.close();
 			Channel channel = DataManager.getChannelByName(conn, subscription.getChannelName());
@@ -292,7 +295,7 @@ public final class DataManager {
     public static void updateSubscription(Connection conn, Subscription subscription) {
     	try {
     		PreparedStatement prepStmt = conn.prepareStatement(AppConstants.UPDATE_SUBSCRIPTION_STMT);
-    		prepStmt.setBoolean(1, subscription.isViewing());
+    		prepStmt.setInt(1, subscription.getLastReadMessageId());
     		prepStmt.setInt(2, subscription.getUnreadMessages());
     		prepStmt.setInt(3, subscription.getUnreadMentionedMessages());
     		prepStmt.setString(4, subscription.getChannelName());
@@ -303,23 +306,51 @@ public final class DataManager {
     		e.printStackTrace();
     	}
     }
+    
+    /**
+     * Returns a message by an ID number
+     * @param conn the connection to the database
+     * @param id the id to search for
+     * @return the message with the given id. if not found: null.
+     */
+    public static Message getMessageByID(Connection conn, int id) {
+    	try {
+    		Message message = null;
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
+			prepStmt.setInt(1, id);
+			ResultSet rs = prepStmt.executeQuery();
+			if (rs.next()) {
+				message = new Message(id, rs.getString(2), rs.getString(3), rs.getTimestamp(4), rs.getTimestamp(5), rs.getInt(6), rs.getString(7)); 
+			}
+			rs.close();
+			prepStmt.close();
+			return message;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
 
 	/**
-	 * Returns all the message in a certain channel
+	 * Returns all the message in a certain channel from a date
 	 * @param conn the connection to the database
 	 * @param usersMap map of users' names to users
 	 * @param channelName the channel's name
+	 * @param startTime the time from which to return messages
 	 * @return all messages in channel
 	 */
-	public static Collection<Message> getMessagesByChannelName(Connection conn, Map<String, ThreadUser> usersMap, String channelName) {
-		Collection<Message> messages = new ArrayList<>();
+	public static ArrayList<Message> getMessagesByChannelNameAndTimetamp(Connection conn, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
+		ArrayList<Message> messages = new ArrayList<>();
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
 			prepStmt.setString(1, channelName);
+			prepStmt.setTimestamp(2, startTime);
 			ResultSet rs = prepStmt.executeQuery();
 			while (rs.next()) { // iterate over all found messages
 				messages.add(new Message(rs.getInt(1), rs.getString(2), usersMap.get(rs.getString(3)), rs.getTimestamp(4), rs.getInt(5), rs.getString(6)));
 			}
+			rs.close();
+			prepStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -351,6 +382,37 @@ public final class DataManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static void updateThread(Connection conn, Message rootMessage, Timestamp newTime) {
+		try {
+			rootMessage.setLastModified(newTime);
+			PreparedStatement stmt = conn.prepareStatement(AppConstants.UPDATE_MESSAGE_LASTMODIFIED_STMT);
+			stmt.setTimestamp(1, newTime);
+			stmt.setInt(2, rootMessage.getId());
+			stmt.execute();
+			stmt.close();
+			
+			PreparedStatement repliesStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGE_BY_REPLY_TO_ID_STMT);
+			repliesStmt.setInt(1, rootMessage.getId());
+			ResultSet repliesRs = repliesStmt.executeQuery();
+			
+			while (repliesRs.next()) {
+				updateThread(conn, new Message(
+						repliesRs.getInt(1),
+						repliesRs.getString(2),
+						repliesRs.getString(3),
+						repliesRs.getTimestamp(4),
+						repliesRs.getTimestamp(5),
+						repliesRs.getInt(6),
+						repliesRs.getString(7)), newTime);
+			}
+			
+			repliesRs.close();
+			repliesStmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	

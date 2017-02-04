@@ -7,7 +7,6 @@ import server.DataManager;
 import server.messages.AuthSuccess;
 import server.messages.SubscribeSuccess;
 import server.model.Channel;
-import server.model.Message;
 import server.model.MessageThread;
 import server.model.Subscription;
 import server.model.ThreadUser;
@@ -36,7 +35,7 @@ public final class BuildSuccessMessages {
 				if (channel.isPublic()) {
 					copy = subscribedChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), true);
 				} else {
-					copy = privateChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), false);
+					copy = privateChannel = new Channel(channel.getChannelName().replace(user.getNickname(), ""), channel.getDescription(), channel.getNumberOfSubscribers(), false);
 				}
 
 				for (ThreadUser thUser : channel.getUsers()) {
@@ -62,24 +61,7 @@ public final class BuildSuccessMessages {
 	
 	public static SubscribeSuccess buidSubscribeSuccess(Connection conn, Channel channel) {
 		SubscribeSuccess subscribeSuccess = new SubscribeSuccess(channel);
-		Map<String, ThreadUser> mapUsernameToNickname = DataManager.getMapOfAllUsers(conn);
 		DataManager.updateChannelUsers(conn, channel); // update channel's users list
-		
-		// iterate over all the messages in the thread
-		for (Message message : DataManager.getMessagesByChannelName(conn, mapUsernameToNickname, channel.getChannelName())) {
-			MessageThread messageThread = new MessageThread(message);
-			// if current message is a reply to a previous message, "concatenate" them
-			if (messageThread.getMessage().getRepliedToId() >= 0) {
-				for (MessageThread addedMessage : channel.getChannelThread()) {
-					if (addedMessage.getMessage().getId() == messageThread.getMessage().getRepliedToId()) {
-						addedMessage.addReply(messageThread);
-					}
-				}
-			} else { // current message is a message by itself (not a reply)
-				channel.addMessage(messageThread);
-			}
-		}
-		mapUsernameToNickname.clear();
 		return subscribeSuccess;
 	}
 }
