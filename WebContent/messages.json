@@ -43,5 +43,34 @@
 		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : -1,
 		"Content" : "Testing yet again a new message"
+	},
+	{
+		"Id" : 4,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-02T06:50:02Z",
+		"LastModified" : "2017-01-02T06:50:02Z",
+		"RepliedToId" : -1,
+		"Content" : "Let's do our best!"
+	},
+	{
+		"Id" : 102,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Shumadan",
+		"MessageTime" : "2017-01-26T18:19:31Z",
+		"LastModified" : "2017-01-26T18:19:31Z",
+		"RepliedToId" : 101,
+		"Content" : "Hello fellas! The amazing world of Qumi-Qumi in which the show is set bears a remote resemblance to Earth, however, its flora and fauna hold far more fanciful traits. The Qumi world consists of three tribes which live separately: those are scientists, magicians and the military tribe. Juga, Yusi and Shumadan come from different tribes but get on much better with each other than with their co-tribesmen (who consider them weirdos). In every episode one of the three friends runs into trouble all of them need to clear it up. The fact that both Juga and Shumadan are in love with Yusi doesn't make the situation any easier. The series lacks dialogue, the characters speak the imaginary Qumi language which can be understood by every kid and certain adults. The language is pretty simple, it's very easy to learn it. Dynamic plots, crazy adventures and beautiful animation make up for the terseness of the series.\
+\
+The series is set in an abstract reality. Qumi-Qumi world bears a slight resemblance to Earth reality; however it is notable for fanciful and colorful landscapes and fantastical creatures living in them."
+	},
+	{
+		"Id" : 103,
+		"ChannelId" : "Web Programming",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-26T18:23:39Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
+		"RepliedToId" : 102,
+		"Content" : "Testing yet again a new message"
 	}
 ]

@@ -25,6 +25,30 @@
 	},
 	{
 		"ChannelId" : "Web Programming",
+		"UserId" : "Juga",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "Yusi",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "Shumadan",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"isViewing" : false,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
 		"UserId" : "Ilia",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
 		"isViewing" : false,

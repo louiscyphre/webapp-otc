@@ -33,5 +33,33 @@
 		"Nickname" : "Reaper",
 		"Description" : "let's reap",
 		"AvatarUrl" : "img/person.png"
+	},
+	{
+		"Username" : "Juga",
+		"Password" : "1q2w",
+		"Nickname" : "Juga",
+		"Description" : "From Qumi land",
+		"AvatarUrl" : "img/person.png"
+	},
+	{
+		"Username" : "Yusi",
+		"Password" : "1324",
+		"Nickname" : "Yusi",
+		"Description" : "let's reap",
+		"AvatarUrl" : "img/person.png"
+	},
+	{
+		"Username" : "Shumadan",
+		"Password" : "1q2w",
+		"Nickname" : "Shumadan",
+		"Description" : "Juga's best friend",
+		"AvatarUrl" : "https://images-na.ssl-images-amazon.com/images/M/MV5BOTI5NjE0MTc3MF5BMl5BanBnXkFtZTgwMTUzNzYxODE@._V1_UY268_CR87,0,182,268_AL_.jpg"
+	},
+	{
+		"Username" : "Baybaba",
+		"Password" : "1324",
+		"Nickname" : "Bay-Baba",
+		"Description" : "Shaman",
+		"AvatarUrl" : "img/person.png"
 	}
 ]
