@@ -77,7 +77,7 @@
       $scope.expression = {};
 
       var findChannel = function (channelName, channelsList) {
-        console.log('findChannelByName: entering ' + channelName);
+        //console.log('findChannelByName: entering ' + channelName);
         if (!channelsList) {
           return null;
         }
@@ -95,6 +95,18 @@
         return null;
       };
 
+      var appendToThreadById = function (replyMessage, thread) {
+        for (var message in thread) {
+          if (replyMessage.ReplyToId === message.Id) {
+            message.Replies.push(replyMessage);
+            return;
+          }
+          if (message.Replies.length > 0) {
+            appendToThreadById(replyMessage, message.Replies);
+          }
+        }
+      };
+
       var getCurrentThread = function (channelName, channelsList) {
         //console.log('getCurrentThread: entering ');
         return findChannel(channelName, channelsList).object.ChannelThread;
@@ -106,7 +118,6 @@
           $scope.subscribedChannels.push(findChannel(channelName, $scope.publicChannels).object);
           return;
         }
-
         var subscribeJson = {
           MessageType: "Subscribe",
           MessageContent: {
@@ -114,25 +125,19 @@
           }
         };
         //console.log('in subscribeToChannel(): Sending: ' + JSON.stringify(subscribeJson));
-        //Servlets.send("subscribe", subscribeJson);
         Socket.send(subscribeJson);
       };
 
       $scope.enterChannel = function (channelName) {
-        //console.log('in enterChannel(): Sending: ' + JSON.stringify(channelname));
+        //console.log('in enterChannel(): channelName: ' + JSON.stringify(channelname));
         //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);
         if (!findChannel(channelName, $scope.subscribedChannels)) {
           //console.log('enterChannel: no subscribed channels!');
           $scope.subscribeToChannel(channelName);
-          //FIXME temporary
-          //findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread1;
-          //if (findChannel(channelName, $scope.subscribedChannels).object.ChannelName === "auto") {
-          //}
         }
-        //findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread1;
         $scope.currentChannelThread = getCurrentThread(channelName, $scope.subscribedChannels);
         $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
-        //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.currentChannelThread));
+        $scope.downloadMessages(channelName);
       };
 
       $scope.createChannel = function (channelName, description, username) {
@@ -145,17 +150,16 @@
             Username: username
           }
         };
-        //console.log('in discoverChannels(): Sending: ' + JSON.stringify(subscribeJson));
-        //Servlets.send("discovery", queryJson);
+        //console.log('in discoverChannels(): Sending: ' + JSON.stringify(createChannelJson));
         Socket.send(createChannelJson);
       };
 
       $scope.enterPrivateChannel = function (targetUsername, targetNickname) {
-        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
         if (targetUsername === $scope.user.Username) {
           return;
         }
-        var channelName = $scope.user.Username + " & " + targetUsername;
+        var channelName = $scope.user.Username + targetUsername;
         console.log('in enterPivateChannel(): entering: ' + JSON.stringify(channelName));
         if (!findChannel(channelName, $scope.privateChannels)) {
           console.log('enterPrivateChannel: no private channels!');
@@ -165,6 +169,19 @@
         }
         $scope.currentChannelThread = getCurrentThread(channelName, $scope.privateChannels);
         $scope.currentChannel = findChannel(channelName, $scope.privateChannels).object;
+        $scope.downloadMessages(channelName);
+      };
+
+      $scope.downloadMessages = function (channelName) {
+
+        var downloadMessagesJson = {
+          MessageType: "DownloadMessages",
+          MessageContent: {
+            Channel: channelName,
+          }
+        };
+        console.log('in downloadMessages(): Sending: ' + JSON.stringify(downloadMessagesJson));
+        Socket.send(downloadMessagesJson);
       };
 
       $scope.discoverChannels = function (query) {
@@ -175,8 +192,7 @@
             Query: query,
           }
         };
-        //console.log('in discoverChannels(): Sending: ' + JSON.stringify(subscribeJson));
-        //Servlets.send("discovery", queryJson);
+        //console.log('in discoverChannels(): Sending: ' + JSON.stringify(queryJson));
         Socket.send(queryJson);
       };
 
@@ -193,6 +209,18 @@
 
       $scope.isActive = function (channelName) {
         return $scope.currentChannel.ChannelName === channelName;
+      };
+
+      $scope.getPrivateChannelName = function (channelName) {
+        var privateChannelNameToShow = "";
+        var channel = findChannel(channelName, $scope.privateChannels).object;
+        for (var i = 0; i < channel.Users.length; ++i) {
+          if (channel.Users[i].Username.toLowerCase().indexOf($scope.user.Username) != -1) {
+            continue;
+          }
+          privateChannelNameToShow = channel.Users[i].Nickname;
+        }
+        return privateChannelNameToShow;
       };
 
       $scope.searchChannel = function (channel) {
@@ -261,13 +289,26 @@
       $scope.$on('Unsubscribe', function (event, response) {
         //console.log('ChatRoomsCtrl: got event Unsubscribe');
         //console.log('Deleting: ' + findChannel(channelname, $scope.subscribedChannels).index);
-        // FIXME Check protocol wether it Channel, ChannelId or else
         $scope.subscribedChannels.splice(findChannel(response.Channel, $scope.subscribedChannels).index, 1);
 
         if ($scope.currentChannel === response.Channel) {
           $scope.currentChannel = {};
           $scope.currentChannelThread = {};
         }
+      });
+
+      $scope.$on('DownloadMessage', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event DownloadMessage');
+        if (!findChannel(response.Channel, $scope.subscribedChannels) || !response.ChannelThread.lengh) {
+          return;
+        }
+        var thread = findChannel(response.Channel, $scope.subscribedChannels).object.ChannelThread;
+
+        if (response.ChannelThread[0].Message.ReplyToId !== -1) {
+          appendToThreadById(response.ChannelThread[0].Message, thread);
+          response.ChannelThread.splice(0, 1);
+        }
+        thread.concat(response.ChannelThread);
       });
 
       $scope.$on('ChannelDiscovery', function (event, response) {
@@ -277,7 +318,7 @@
         }
       });
 
-  }]);
+      }]);
 }(this.window));
 
 /*[{

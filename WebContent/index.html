@@ -98,7 +98,7 @@
             <li class="side-channel-row" data-ng-repeat="channel in privateChannels" data-ng-click="enterPrivateChannel(channel.ChannelName)" data-ng-class="{active: isActive(channel.ChannelName)}">
               <table>
                 <tr>
-                  <th colspan="5"> {{channel.ChannelName}} <span class="label label-success">private</span></th>
+                  <th colspan="5"> {{getPrivateChannelName(channel.ChannelName)}} <span class="label label-success">private</span></th>
                 </tr>
                 <tr>
                   <td class="side-badges">
@@ -162,7 +162,7 @@
         </div>
       </div>
 
-      <div class="chat-text-area">
+      <div class="chat-text-area" scrolled-down-callback="downloadMessages(currentChannel)">
         <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" data-ng-view="currentChannelThread"></data-discussion>
         <footer class="footer">
           <div class="input-group">

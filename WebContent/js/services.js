@@ -59,6 +59,7 @@
 
       send: function send(jSonObect) {
         if (websocket !== null) {
+          console.log('in websocket.send(): sending request:' + JSON.stringify(jSonObect));
           websocket.send(JSON.stringify(jSonObect));
         }
         jSonObect = {};
