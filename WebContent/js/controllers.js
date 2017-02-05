@@ -35,7 +35,7 @@
 
       $scope.$on('AuthFailure', function (event, data) {
         //console.log('AuthFailure!!!!!: ');
-        if (data.Error === "Username does not exist") {
+        if (data.Error === "Username does not exist" || data.Error === "Incorrect Password") {
           $scope.authFailureWarningHidden = false;
           return;
         }
@@ -48,6 +48,7 @@
     }]).controller('RegisterCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', 'Servlets', function ($rootScope, $scope, $http, MessageBus, Servlets) {
 
       $scope.registerScreenHidden = true;
+      $scope.userExistsWarningHidden = true;
 
       $scope.register = function () {
         //console.log('in register(): Sending: ' + JSON.stringify($rootScope.user));
@@ -75,28 +76,28 @@
       $scope.privateChannels = [];
       $scope.expression = {};
 
-      var findChannel = function (channelName, channels) {
-        //console.log('findChannelByName: entering ' + channelName);
-        if (!channels) {
+      var findChannel = function (channelName, channelsList) {
+        console.log('findChannelByName: entering ' + channelName);
+        if (!channelsList) {
           return null;
         }
-        for (var key = 0; key < channels.length; key++) {
-          if (channels.hasOwnProperty(key)) {
-            if (channels[key].ChannelName !== channelName) {
+        for (var key = 0; key < channelsList.length; key++) {
+          if (channelsList.hasOwnProperty(key)) {
+            if (channelsList[key].ChannelName !== channelName) {
               continue;
             }
           }
           return {
-            object: channels[key],
+            object: channelsList[key],
             index: key
           };
         }
         return null;
       };
 
-      var getCurrentThread = function (channelName) {
+      var getCurrentThread = function (channelName, channelsList) {
         //console.log('getCurrentThread: entering ');
-        return findChannel(channelName, $scope.subscribedChannels).object.ChannelThread;
+        return findChannel(channelName, channelsList).object.ChannelThread;
       };
 
       $scope.subscribeToChannel = function (channelName) {
@@ -129,22 +130,9 @@
           //}
         }
         //findChannel(channelName, $scope.subscribedChannels).object.ChannelThread = $scope.thread1;
-        $scope.currentChannelThread = getCurrentThread(channelName);
+        $scope.currentChannelThread = getCurrentThread(channelName, $scope.subscribedChannels);
         $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
         //console.log('in enterChannel(): Sending: ' + JSON.stringify($scope.currentChannelThread));
-      };
-
-      $scope.enterPrivateChannel = function (channelName) {
-        //console.log('in enterPivateChannel(): Sending: ' + JSON.stringify(channelname));
-        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
-        if (!findChannel(channelName, $scope.privateChannels)) {
-          //console.log('enterChannel: no private channels!');
-          // FIXME need to add nice create channel form
-          $scope.createChannelFormHidden = false;
-          return;
-        }
-        $scope.currentChannelThread = getCurrentThread(channelName);
-        $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
       };
 
       $scope.createChannel = function (channelName, description, username) {
@@ -160,6 +148,23 @@
         //console.log('in discoverChannels(): Sending: ' + JSON.stringify(subscribeJson));
         //Servlets.send("discovery", queryJson);
         Socket.send(createChannelJson);
+      };
+
+      $scope.enterPrivateChannel = function (targetUsername, targetNickname) {
+        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        if (targetUsername === $scope.user.Username) {
+          return;
+        }
+        var channelName = $scope.user.Username + " & " + targetUsername;
+        console.log('in enterPivateChannel(): entering: ' + JSON.stringify(channelName));
+        if (!findChannel(channelName, $scope.privateChannels)) {
+          console.log('enterPrivateChannel: no private channels!');
+          var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
+          $scope.createChannel(channelName, description, $scope.user.Username);
+          return;
+        }
+        $scope.currentChannelThread = getCurrentThread(channelName, $scope.privateChannels);
+        $scope.currentChannel = findChannel(channelName, $scope.privateChannels).object;
       };
 
       $scope.discoverChannels = function (query) {
@@ -223,10 +228,16 @@
 
       $scope.$on('ChannelSuccess', function (event, response) {
         //console.log('ChatRoomsCtrl: got event ChannelSuccess');
-        $scope.subscribedChannels.push(response.Channel);
+        var channels;
+        if (response.Channel.IsPublic) {
+          channels = $scope.subscribedChannels;
+        } else {
+          channels = $scope.privateChannels;
+        }
+        channels.push(response.Channel);
 
-        $scope.currentChannelThread = getCurrentThread(response.Channel);
-        $scope.currentChannel = findChannel(response.Channel, $scope.subscribedChannels).object;
+        $scope.currentChannelThread = getCurrentThread(response.Channel, channels);
+        $scope.currentChannel = findChannel(response.Channel, channels).object;
       });
 
       $scope.$on('UserSubscribed', function (event, response) {

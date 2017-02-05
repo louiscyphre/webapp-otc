@@ -57,11 +57,11 @@
         };
       },
 
-      send: function send(jSon) {
+      send: function send(jSonObect) {
         if (websocket !== null) {
-          websocket.send(jSon);
+          websocket.send(JSON.stringify(jSonObect));
         }
-        jSon = {};
+        jSonObect = {};
       },
 
       logout: function logout() {

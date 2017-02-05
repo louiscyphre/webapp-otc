@@ -42,6 +42,8 @@
     </div>
     <div data-ng-controller="RegisterCtrl" class="row" data-ng-hide="registerScreenHidden">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="reg-fail alert alert-warning" role="alert" data-ng-hide="userExistsWarningHidden">Username already exists.
+          <br/>Please choose different username.</div>
         <h1 class="text-center login-title ">Would you like to register?</h1>
         <div class="account-wall">
           <img class="avatar" src="css/img/default_avatar.png" alt="avatar image">
@@ -92,24 +94,6 @@
               </table>
             </li>
           </ul>
-          <ul class="users-online" data-ng-model="subscribedChannels">
-            <li data-ng-repeat="user in currentChannel.Users" data-ng-click="enterPrivateChannel(user.Username)" data-ng-class="{active: isActive(user.Username)}">
-              <table>
-                <tr>
-                  <td>
-                    <img class="user-avatar-side" data-ng-src="{{user.AvatarUrl}}" alt="userpic" data-ng-model="user.AvatarUrl" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
-                  </td>
-                  <td> {{user.Nickname}} </td>
-                  <td>
-                    <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
-                      <div class="description-content"> {{user.Description}} </div>
-                    </data-button>
-
-                  </td>
-                </tr>
-              </table>
-            </li>
-          </ul>
           <ul class="private-channels" data-ng-model="privateChannels">
             <li class="side-channel-row" data-ng-repeat="channel in privateChannels" data-ng-click="enterPrivateChannel(channel.ChannelName)" data-ng-class="{active: isActive(channel.ChannelName)}">
               <table>
@@ -139,12 +123,29 @@
               </table>
             </li>
           </ul>
+          <ul class="users-online">
+            <li data-ng-repeat="user in currentChannel.Users" data-ng-click="enterPrivateChannel(user.Username, user.Nickname)" data-ng-class="{active: isActive(user.Username)}">
+              <table>
+                <tr>
+                  <td>
+                    <img class="user-avatar-side" data-ng-src="{{user.AvatarUrl}}" alt="userpic" data-ng-model="user.AvatarUrl" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                  </td>
+                  <th> {{user.Nickname}} </th>
+                  <td>
+                    <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
+                      <div class="description-content"> {{user.Description}} </div>
+                    </data-button>
+
+                  </td>
+                </tr>
+              </table>
+            </li>
+          </ul>
           <ul data-ng-show="publicChannels.length">
             <li>
               <table class="all-channels">
                 <tr data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="enterChannel(channel.ChannelName)">
-                  <td> {{channel.ChannelName}}
-                  </td>
+                  <th> {{channel.ChannelName}} </th>
                   <td>
                     <span class="badge" data-ng-model="channel.NumberOfSubscribers"><img class="channel-icon" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="/>{{channel.NumberOfSubscribers}}</span>
                   </td>
