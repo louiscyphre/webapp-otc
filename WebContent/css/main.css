@@ -44,7 +44,8 @@
   border-radius: 8px;
 }
 
-.auth-fail {
+.auth-fail,
+.reg-fail {
   position: absolute;
   display: block;
   max-width: 320px;
@@ -138,6 +139,7 @@ ul.users-online li td {
 
 .side div ul li.active {
   background-color: #337AB7;
+  color: white;
 }
 
 .side div ul li:hover:not(.active) {
@@ -146,8 +148,7 @@ ul.users-online li td {
 }
 
 .side div ul li:hover {
-  color: #B3B3B3;
-  color: white;
+  color: black;
 }
 
 .side tr td span {
