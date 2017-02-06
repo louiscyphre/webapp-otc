@@ -96,6 +96,20 @@ public class Channel {
 		return "Channel [numberOfSubscribers=" + NumberOfSubscribers + ", channelName=" + ChannelName
 				+ ", description=" + Description + ", isPublic=" + IsPublic + "]";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+	        return false;
+	    }
+	    
+	    if (!Channel.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    
+	    final Channel other = (Channel)obj;
+	    return this.ChannelName.equals(other.ChannelName);
+	}
 
 	public String stringify() {
 		return ChannelName + " " + Description;

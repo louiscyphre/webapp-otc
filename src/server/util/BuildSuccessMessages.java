@@ -7,7 +7,6 @@ import server.DataManager;
 import server.messages.AuthSuccess;
 import server.messages.SubscribeSuccess;
 import server.model.Channel;
-import server.model.MessageThread;
 import server.model.Subscription;
 import server.model.ThreadUser;
 import server.model.UserCredentials;
@@ -35,15 +34,11 @@ public final class BuildSuccessMessages {
 				if (channel.isPublic()) {
 					copy = subscribedChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), true);
 				} else {
-					copy = privateChannel = new Channel(channel.getChannelName().replace(user.getNickname(), ""), channel.getDescription(), channel.getNumberOfSubscribers(), false);
+					copy = privateChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), false);
 				}
 
 				for (ThreadUser thUser : channel.getUsers()) {
 					copy.addUser(thUser);
-				}
-
-				for (MessageThread thMessage : channel.getChannelThread()) {
-					copy.addMessage(thMessage);
 				}
 			}
 

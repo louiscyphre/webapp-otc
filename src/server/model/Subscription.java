@@ -7,14 +7,15 @@ public class Subscription {
 	private String ChannelId;
 	private String UserId;
 	private Timestamp SubscriptionTime;
-	private int LastReadMessageId;
+	private int lastReadMessageId;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 
-	public Subscription(String channelId, Timestamp subscriptionTime, int lastReadMessageId, int unreadMessages, int undreadMentionedMessages) {
+	public Subscription(String channelId, String userId, Timestamp subscriptionTime, int lastReadMessageId, int unreadMessages, int undreadMentionedMessages) {
 		this.ChannelId = channelId;
+		this.UserId = userId;
 		this.SubscriptionTime = subscriptionTime;
-		this.LastReadMessageId = lastReadMessageId;
+		this.lastReadMessageId = lastReadMessageId;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = undreadMentionedMessages;
 	}
@@ -70,14 +71,14 @@ public class Subscription {
 	 * @return the lastReadMessageId
 	 */
 	public int getLastReadMessageId() {
-		return LastReadMessageId;
+		return lastReadMessageId;
 	}
 
 	/**
 	 * @param lastReadMessageId the lastReadMessageId to set
 	 */
 	public void setLastReadMessageId(int lastReadMessageId) {
-		LastReadMessageId = lastReadMessageId;
+		this.lastReadMessageId = lastReadMessageId;
 	}
 
 	/**

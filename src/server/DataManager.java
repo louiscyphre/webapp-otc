@@ -250,7 +250,7 @@ public final class DataManager {
 			prepStmt.setString(2, userName);
 			ResultSet rs = prepStmt.executeQuery();
 			if (rs.next()) { // subscription was found
-				subscription = new Subscription(channelName, userName);
+				subscription = new Subscription(channelName, userName, rs.getTimestamp(3), rs.getInt(4), rs.getInt(5), rs.getInt(6));
 			}
 			rs.close();
 			prepStmt.close();
@@ -342,12 +342,13 @@ public final class DataManager {
 	public static ArrayList<Message> getMessagesByChannelNameAndTimetamp(Connection conn, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
 		ArrayList<Message> messages = new ArrayList<>();
 		try {
+			System.out.println("startdate: " + startTime);
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
 			prepStmt.setString(1, channelName);
 			prepStmt.setTimestamp(2, startTime);
 			ResultSet rs = prepStmt.executeQuery();
 			while (rs.next()) { // iterate over all found messages
-				messages.add(new Message(rs.getInt(1), rs.getString(2), usersMap.get(rs.getString(3)), rs.getTimestamp(4), rs.getInt(5), rs.getString(6)));
+				messages.add(new Message(rs.getInt(1), rs.getString(2), usersMap.get(rs.getString(3)), rs.getTimestamp(4), rs.getTimestamp(5), rs.getInt(6), rs.getString(7)));
 			}
 			rs.close();
 			prepStmt.close();
@@ -421,16 +422,20 @@ public final class DataManager {
 			Collection<Channel> channels = new ArrayList<>(); // the list that will be returned
 			
 			PreparedStatement chanStmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_LIKENESS_STMT);
-			chanStmt.setString(1, query.getQuery());				
+			chanStmt.setString(1, "%" + query.getQuery() + "%");				
 			ResultSet chanRS = chanStmt.executeQuery();
 			if (chanRS.next()) {
-				channels.add(new Channel(chanRS.getString(1), chanRS.getString(2), chanRS.getInt(3), chanRS.getBoolean(4)));
+				Channel channel = new Channel(chanRS.getString(1), chanRS.getString(2), chanRS.getInt(3), chanRS.getBoolean(4));
+				if (!channels.contains(channel)) {
+					updateChannelUsers(conn, channel);
+					channels.add(channel);
+				}
 			}
 			chanRS.close();
 			chanStmt.close();
 			
 			PreparedStatement nickStmt = conn.prepareStatement(AppConstants.SELECT_USER_BY_NICKNAME_LIKENESS_STMT);
-			chanStmt.setString(1, query.getQuery());
+			nickStmt.setString(1, "%" + query.getQuery() + "%");
 			ResultSet nickRS = nickStmt.executeQuery();
 			while (nickRS.next()) { // iterate over all the users who's nickname is this
 				String username = nickRS.getString(1); // the username of the user
@@ -438,11 +443,15 @@ public final class DataManager {
 				subByUserStmt.setString(1, username);
 				ResultSet subByUserRS = subByUserStmt.executeQuery();
 				while (subByUserRS.next()) {
-					PreparedStatement chan2Stmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_STMT);
+					PreparedStatement chan2Stmt = conn.prepareStatement(AppConstants.SELECT_PUBLIC_CHANNEL_BY_CHANNELNAME_STMT);
 					chan2Stmt.setString(1, subByUserRS.getString(1));
 					ResultSet chan2RS = chan2Stmt.executeQuery();
 					if (chan2RS.next()) {
-						channels.add(new Channel(chan2RS.getString(1), chan2RS.getString(2), chan2RS.getInt(3), chan2RS.getBoolean(4)));
+						Channel channel = new Channel(chan2RS.getString(1), chan2RS.getString(2), chan2RS.getInt(3), chan2RS.getBoolean(4));
+						if (!channels.contains(channel)) {
+							updateChannelUsers(conn, channel); 
+							channels.add(channel);
+						}
 					}
 					chan2RS.close();
 					chan2Stmt.close();

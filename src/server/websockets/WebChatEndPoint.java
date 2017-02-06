@@ -15,6 +15,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -76,11 +77,11 @@ public class WebChatEndPoint {
 			try {
 				Connection conn = getDataBaseConnection();
 				if (conn != null) {
-					// get user information from database
-					User user = DataManager.getUserByUsername(conn, username);
-					//add new client to managed chat sessions
-					chatUsers.put(session, user);
-					System.out.println("the following user logged in: " + user.getUsername());
+					User user = DataManager.getUserByUsername(conn, username); // get user information from database
+					if (user != null) {
+						chatUsers.put(session, user); // add new client to managed chat sessions
+						System.out.println("the following user logged in: " + user.getUsername());
+					}
 				}
 				conn.close(); // close connection
 			} catch (SQLException e) {
@@ -95,10 +96,9 @@ public class WebChatEndPoint {
 	 * 			client end point session
 	 * @param msg
 	 * 			message to deliver		
-	 * @throws IOException
 	 */
 	@OnMessage
-	public void deliverChatMessege(Session session, String msg) throws IOException{
+	public void deliverChatMessege(Session session, String msg) {
 		try {
 			if (session.isOpen()) {
 				Connection conn = getDataBaseConnection();
@@ -130,20 +130,16 @@ public class WebChatEndPoint {
 						System.out.println("received \"Download Messages\" request");
 						handleDownloadMessagesRequest(session, conn, msgContent);
 						break;
-					/*case AppConstants.MESSAGE_CHANNEL_VIEWING: // update whether the user is viewing a channel
-						System.out.println("received \"Channel Viewing\" request");
-						handleChannelViewingRequest(session, conn, msgContent);
-						break;*/
 					case AppConstants.MESSAGE_RECEIVED_MESSAGE: // request to deal with a received message
 						System.out.println("received \"Message\" request");
 						handleReceivedMessageRequest(session, conn, msgContent);
 						break;
 					}
+					conn.close();
 				}
-				conn.close();
 			}
 		} catch (IOException | SQLException e) {
-			session.close();
+			e.printStackTrace();
 		}
 	}
 
@@ -158,16 +154,36 @@ public class WebChatEndPoint {
 		downloadedMessages.remove(session);
 	}
 	
+	@OnError
+	public void error(Session session, Throwable t) {
+	}
+	
 	/**
 	 * Notifies a user about a message
-	 * @param user the user to send the message to
-	 * @param message the message to be sent
+	 * @param session
+	 * 			the session in which to send message
+	 * @param message
+	 * 			the message to be sent
+	 * @throws IOException
+	 */
+	private void doNotify(Session session, String message) throws IOException {
+		if (session.isOpen()) {
+			session.getBasicRemote().sendText(message);
+		}
+	}
+	
+	/**
+	 * Notifies a user about a message
+	 * @param user
+	 * 			the user to send the message to
+	 * @param message
+	 * 			the message to be sent
 	 * @throws IOException
 	 */
 	private void doNotify(User user, String message) throws IOException {
 		for (Entry<Session, User> userEntry : chatUsers.entrySet()) {
 			Session session = userEntry.getKey();
-			if (userEntry.getValue().getUsername().equals(user.getUsername()) && session.isOpen()) {
+			if (session.isOpen() && userEntry.getValue().getUsername().equals(user.getUsername())) {
 				session.getBasicRemote().sendText(message);
 			}
 		}
@@ -175,14 +191,16 @@ public class WebChatEndPoint {
 
 	/**
 	 * Notifies a user about a message
-	 * @param user the user to send the message to
-	 * @param message the message to be sent
+	 * @param user
+	 * 			the user to send the message to
+	 * @param message
+	 * 			the message to be sent
 	 * @throws IOException
 	 */
 	private void doNotify(ThreadUser user, String message) throws IOException {
 		for (Entry<Session, User> userEntry : chatUsers.entrySet()) {
 			Session session = userEntry.getKey();
-			if (userEntry.getValue().getUsername().equals(user.getUsername()) && session.isOpen()) {
+			if (session.isOpen() && userEntry.getValue().getUsername().equals(user.getUsername())) {
 				session.getBasicRemote().sendText(message);
 			}
 		}
@@ -190,9 +208,12 @@ public class WebChatEndPoint {
 	
 	/**
 	 * Notifies all the users in a channel about a message
-	 * @param channel the channel which users to update
-	 * @param message the message to be sent
-	 * @param skip the session to which not to sent the message (to skip)
+	 * @param channel
+	 * 			the channel which users to update
+	 * @param message
+	 * 			the message to be sent
+	 * @param skip
+	 * 			the session to which not to sent the message (to skip)
 	 * @throws IOException
 	 */
 	private void doNotifyByChannel(Channel channel, String message, Session skip) throws IOException {
@@ -209,13 +230,10 @@ public class WebChatEndPoint {
 	}
 
 	private Connection getDataBaseConnection() {
-		// obtain CustomerDB data source from Tomcat's context
-		Context context;
 		try {
-			context = new InitialContext();
+			Context context = new InitialContext(); // obtain CustomerDB data source from Tomcat's context
 			BasicDataSource ds = (BasicDataSource)context.lookup(AppConstants.DB_CONTEXT + AppConstants.OPEN);
-			Connection conn = ds.getConnection();
-			return conn;
+			return ds.getConnection();
 		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -232,17 +250,17 @@ public class WebChatEndPoint {
 				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis()));
 				User secondUser = DataManager.getUserByUsername(conn, credentials.getUsername());
 				channel.setChannelName(secondUser.getNickname());
-				session.getBasicRemote().sendText(gson.toJson(channel));
+				doNotify(session, gson.toJson(new ChannelSuccess(channel)));
 				doNotify(secondUser, gson.toJson(BuildSuccessMessages.buidSubscribeSuccess(conn, new Channel(
 						chatUsers.get(session).getUsername(), // the name of the channel is the creator's name
 						credentials.getDescription(), // the description of the channel
 						2, // the creator of the channel and this user => 2
 						false)))); // it's a private channel (i.e. *not* public)
 			} else { // public channel
-				session.getBasicRemote().sendText(gson.toJson(new ChannelSuccess(channel)));
+				doNotify(session, gson.toJson(new ChannelSuccess(channel)));
 			}
 		} else { // channel exists
-			session.getBasicRemote().sendText(gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists")));
+			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists")));
 		}
 	}
 
@@ -259,7 +277,7 @@ public class WebChatEndPoint {
 					DataManager.updateChannel(conn, channel);
 					SubscribeSuccess subscribeSucces = BuildSuccessMessages.buidSubscribeSuccess(conn, channel);
 					if (subscribeSucces != null) {
-						session.getBasicRemote().sendText(gson.toJson(subscribeSucces));
+						doNotify(session, gson.toJson(subscribeSucces));
 						// notify the all the users in this channel of the new subscription
 						doNotifyByChannel(
 								channel,
@@ -268,16 +286,16 @@ public class WebChatEndPoint {
 										ThreadUser.getThreadUserByUser(DataManager.getUserByUsername(conn, credentials.getUsername())))),
 								session); // unsubscribe the user on all other clients
 					} else {
-						session.getBasicRemote().sendText(gson.toJson(new SubscribeFailure("General error")));
+						doNotify(session, gson.toJson(new SubscribeFailure("General error")));
 					}
 				} else {
-					session.getBasicRemote().sendText(gson.toJson(new SubscribeFailure("Already subscribed to channel")));
+					doNotify(session, gson.toJson(new SubscribeFailure("Already subscribed to channel")));
 				}
 			} else {
-				session.getBasicRemote().sendText(gson.toJson(new SubscribeFailure("Cannot subscribe to a private channel")));
+				doNotify(session, gson.toJson(new SubscribeFailure("Cannot subscribe to a private channel")));
 			}
 		} else { // channel doesn't exist
-			session.getBasicRemote().sendText(gson.toJson(new SubscribeFailure("Channel does not exist")));
+			doNotify(session, gson.toJson(new SubscribeFailure("Channel does not exist")));
 		}
 	}
 
@@ -293,27 +311,27 @@ public class WebChatEndPoint {
 					channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() - 1);
 					DataManager.updateChannel(conn, channel);
 					DataManager.updateChannelUsers(conn, channel);
-					session.getBasicRemote().sendText(gson.toJson(new Unsubscribe(credentials.getChannelName())));
+					doNotify(session, gson.toJson(new Unsubscribe(credentials.getChannelName())));
 					// update the remaining users in the channel that the user has quit
 					doNotifyByChannel(
 							channel,
 							gson.toJson(new UserUnsubscribed(channel.getChannelName(), credentials.getUsername())),
 							session); // unsubscribe the user on all other clients
 				} else {
-					session.getBasicRemote().sendText(gson.toJson(new Unsubscribe("Not subscribed to channel")));
+					doNotify(session, gson.toJson(new Unsubscribe("Not subscribed to channel")));
 				}
 			} else {
-				session.getBasicRemote().sendText(gson.toJson(new Unsubscribe("Cannot subscribe to a private channel")));
+				doNotify(session, gson.toJson(new Unsubscribe("Cannot subscribe to a private channel")));
 			}
 		} else { // channel doesn't exist
-			session.getBasicRemote().sendText(gson.toJson(new Unsubscribe("Channel does not exist")));
+			doNotify(session, gson.toJson(new Unsubscribe("Channel does not exist")));
 		}
 	}
 	
 	private void handleChannelDiscoveryRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
 		Gson gson = new Gson();
 		ChannelDiscovery credentials = gson.fromJson(msgContent, ChannelDiscovery.class);
-		session.getBasicRemote().sendText(gson.toJson(new Discovery(DataManager.discoverChannels(conn, credentials))));
+		doNotify(session, gson.toJson(new Discovery(DataManager.discoverChannels(conn, credentials))));
 	}
 	
 	private void handleDownloadMessagesRequest(Session session, Connection conn, JsonObject msgContent) throws IOException {
@@ -324,7 +342,7 @@ public class WebChatEndPoint {
 			Map<String, ThreadUser> usersMap = DataManager.getMapOfAllUsers(conn);
 			Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), chatUsers.get(session).getUsername());
 			ChannelDownloadedMessages downloaded = downloadedMessages.get(session);
-			if (session == null || !downloaded.getChannel().getChannelName().equals(channel.getChannelName())) { // downloading first messages from this channel
+			if (downloaded == null || !downloaded.getChannel().getChannelName().equals(channel.getChannelName())) { // downloading first messages from this channel
 				downloadedMessages.put(session, (downloaded = new ChannelDownloadedMessages(channel)));
 			}
 			ArrayList<Message> messages = DataManager.getMessagesByChannelNameAndTimetamp(conn, usersMap, channel.getChannelName(), subscription.getSubscriptionTime());
@@ -333,7 +351,7 @@ public class WebChatEndPoint {
 				Collection<Message> requiredMessages = messages.subList(downloaded.getDownloadedMessages(), (lastRead = Math.min(messages.size() - 1, downloaded.getDownloadedMessages() + AppConstants.MESSAGES_TO_DOWNLOAD - 1)));
 				downloaded.setDownloadedMessages(lastRead + 1);
 				// TODO check if read unread messages, and if so, to update counter accordingly
-				int maxId = -1;
+				int maxId = subscription.getLastReadMessageId();
 				for (Message message : requiredMessages) { // iterate over the messages that will be sent
 					if (message.getId() > maxId) {
 						maxId = message.getId();
@@ -344,12 +362,14 @@ public class WebChatEndPoint {
 						subscription.setLastReadMessageId(maxId);
 					}
 				}
-				// TODO update number of messages in reply
 				DataManager.updateSubscription(conn, subscription);
-				session.getBasicRemote().sendText(gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
+				System.out.println("downloaded these messages: " + gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
+				doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
+			} else { // no messages in channel
+				doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), null, 0, 0)));
 			}
-		} else {
-			session.getBasicRemote().sendText(gson.toJson(new DownloadMessages(credentials.getChannel(), null, 0, 0)));
+		} else { // channel was not found
+			doNotify(session, gson.toJson(new DownloadMessages(credentials.getChannel(), null, 0, 0)));
 		}
 	}
 	/*
@@ -385,7 +405,7 @@ public class WebChatEndPoint {
 						} while (parentMessage.getRepliedToId() >= 0);
 						DataManager.updateThread(conn, parentMessage, message.getLastModified());
 					}
-					session.getBasicRemote().sendText(gson.toJson(new MessageReceived())); // update the sender that his message was received
+					doNotify(session, gson.toJson(new MessageReceived())); // update the sender that his message was received
 					for (ThreadUser thUser : channel.getUsers()) {
 						Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), thUser.getUsername());
 						subscription.setUnreadMessages(subscription.getUnreadMessages() + 1); // mark as unread
@@ -396,13 +416,13 @@ public class WebChatEndPoint {
 						DataManager.updateSubscription(conn, subscription);
 					}
 				} else {
-					session.getBasicRemote().sendText(gson.toJson(new MessageReceived("Not subscribed to channel")));
+					doNotify(session, gson.toJson(new MessageReceived("Not subscribed to channel")));
 				}
 			} else {
-				session.getBasicRemote().sendText(gson.toJson(new MessageReceived("User does not exist")));
+				doNotify(session, gson.toJson(new MessageReceived("User does not exist")));
 			}
 		} else { // channel doesn't exist
-			session.getBasicRemote().sendText(gson.toJson(new MessageReceived("Channel does not exist")));
+			doNotify(session, gson.toJson(new MessageReceived("Channel does not exist")));
 		}
 	}
 }

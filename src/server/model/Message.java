@@ -31,6 +31,16 @@ public class Message {
 		this.Content = content;
 	}
 
+	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
+		this.Id = id;
+		this.ChannelId = channelId;
+		this.User = user;
+		this.MessageTime = messageTime;
+		this.LastModified = lastModified;
+		this.RepliedToId = repliedToId;
+		this.Content = content;
+	}
+
 	/**
 	 * @return the lastModified
 	 */
