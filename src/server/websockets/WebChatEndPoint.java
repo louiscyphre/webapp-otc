@@ -372,21 +372,7 @@ public class WebChatEndPoint {
 			doNotify(session, gson.toJson(new DownloadMessages(credentials.getChannel(), null, 0, 0)));
 		}
 	}
-	/*
-	private void handleChannelViewingRequest(Session session, Connection conn, JsonObject msgContent) {
-		Gson gson = new Gson();
-		ChannelViewing credentials = gson.fromJson(msgContent, ChannelViewing.class);
-		Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getChannel(), chatUsers.get(session).getUsername());
-		if (subscription != null) {
-			subscription.setViewing(credentials.isViewing());
-			if (subscription.isViewing()) {
-				subscription.setUnreadMessages(0);
-				subscription.setUnreadMentionedMessages(0);
-			}
-			DataManager.updateSubscription(conn, subscription);
-		}
-	}
-	*/
+
 	private void handleReceivedMessageRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
 		Gson gson = new Gson();
 		MessageCredentials credentials = gson.fromJson(msgContent, MessageCredentials.class);
