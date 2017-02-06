@@ -3,7 +3,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 103,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -11,7 +11,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Goblin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 103,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -19,7 +19,7 @@
 		"ChannelId" : "Software Engineering",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -27,7 +27,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Juga",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 103,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -35,7 +35,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Yusi",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 103,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -43,7 +43,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Shumadan",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 103,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -51,7 +51,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Ilia",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 103,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -59,7 +59,7 @@
 		"ChannelId" : "Algotrading",
 		"UserId" : "Ilia",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -67,7 +67,7 @@
 		"ChannelId" : "IliaOdmin",
 		"UserId" : "Ilia",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -75,7 +75,7 @@
 		"ChannelId" : "IliaOdmin",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"isViewing" : false,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	}
