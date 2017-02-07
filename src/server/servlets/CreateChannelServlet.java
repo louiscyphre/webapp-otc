@@ -25,7 +25,6 @@ import server.AppConstants;
 import server.DataManager;
 import server.messages.ChannelFailure;
 import server.messages.ChannelSuccess;
-import server.model.Channel;
 import server.model.ChannelCredentials;
 import server.model.Subscription;
 
@@ -90,16 +89,13 @@ public class CreateChannelServlet extends HttpServlet {
 			
 			// query the database and prepare the response
 			if (DataManager.getChannelByName(conn, credentials.getName()) == null) { // channel does not exist
-				Channel channel = DataManager.addChannel(conn, credentials);
+				DataManager.addChannel(conn, credentials);
 				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getOwner()), new Timestamp(System.currentTimeMillis()));
-				channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() + 1);
-				if (credentials.getUsername() != null) {
+				if (credentials.getUsername() != null)
 					DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis()));
-					channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() + 1);
-				}
-				writer.write(gson.toJson(new ChannelSuccess(channel)));
+				writer.write(gson.toJson(new ChannelSuccess()));
 			} else { // channel exists
-				writer.write(gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists")));
+				writer.write(gson.toJson(new ChannelFailure("Channel already exists")));
 			}
 			conn.close();
         	writer.close();

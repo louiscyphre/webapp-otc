@@ -92,7 +92,7 @@ public class UnsubscribeServlet extends HttpServlet {
 						DataManager.removeSubscription(conn, credentials);
 						channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() - 1);
 						DataManager.updateChannel(conn, channel);
-						writer.write(gson.toJson(new Unsubscribe(credentials.getChannelName())));
+						writer.write(gson.toJson(new Unsubscribe()));
 					} else {
 						writer.write(gson.toJson(new Unsubscribe("Not subscribed to channel")));
 					}

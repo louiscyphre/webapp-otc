@@ -1,44 +1,52 @@
 package server.messages;
 
-import server.model.Channel;
-
 public class ChannelSuccess {
 	
 	private String MessageType;
-	private Channel Channel;
+	private String ChannelName = null;
 	
-	public ChannelSuccess(Channel channel) {
+	public ChannelSuccess() {
 		this.MessageType = "ChannelSuccess";
-		this.Channel = channel;
 	}
 	
+	public ChannelSuccess(String channelName) {
+		this.MessageType = "ChannelSuccess";
+		this.ChannelName = channelName;
+	}
+
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
 		return MessageType;
 	}
+
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
 		MessageType = messageType;
 	}
+
 	/**
-	 * @return the channel
+	 * @return the channelName
 	 */
-	public Channel getChannel() {
-		return Channel;
+	public String getChannelName() {
+		return ChannelName;
 	}
+
 	/**
-	 * @param channel the channel to set
+	 * @param channelName the channelName to set
 	 */
-	public void setChannel(Channel channel) {
-		Channel = channel;
+	public void setChannelName(String channelName) {
+		ChannelName = channelName;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "ChannelSuccess [MessageType=" + MessageType + ", Channel=" + Channel + "]";
+		return "ChannelSuccess [MessageType=" + MessageType + ", ChannelName=" + ChannelName + "]";
 	}
 }
