@@ -132,17 +132,20 @@
         Socket.send(subscribeJson);
       };
 
-      $scope.enterChannel = function (channelName) {
+      $scope.enterChannel = function (channelName, channelsList) {
+
         //console.log('in enterChannel(): channelName: ' + JSON.stringify(channelname));
-        //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);
-        if (!findChannel(channelName, $scope.subscribedChannels)) {
+        //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);    
+        if (!findChannel(channelName, channelsList)) {
+          /// The only possible case is when on channel discovery and clicking on public channel
           //console.log('enterChannel: no subscribed channels!');
           $scope.subscribeToChannel(channelName);
+
         } else {
-          $scope.currentChannelThread = getCurrentThread(channelName, $scope.subscribedChannels);
+          $scope.currentChannelThread = getCurrentThread(channelName, channelsList);
           //console.log('ChatRoomsCtrl: got event DownloadMessages:  $scope.currentChannelThread: ' + JSON.stringify($scope.currentChannelThread));
 
-          $scope.currentChannel = findChannel(channelName, $scope.subscribedChannels).object;
+          $scope.currentChannel = findChannel(channelName, channelsList).object;
         }
       };
 
@@ -165,16 +168,23 @@
         if (targetUsername === $scope.user.Username) {
           return;
         }
-        var channelName = $scope.user.Username + targetUsername;
-        console.log('in enterPivateChannel(): entering: ' + JSON.stringify(channelName));
-        if (!findChannel(channelName, $scope.privateChannels)) {
+        var possibleChannelName1 = $scope.user.Username + targetUsername;
+        var possibleChannelName2 = targetUsername + $scope.user.Username;
+        var finalName = null;
+        if (findChannel(possibleChannelName1, $scope.privateChannels)) {
+          finalName = possibleChannelName1;
+        } else if (findChannel(possibleChannelName2, $scope.privateChannels)) {
+          finalName = possibleChannelName2;
+        }
+        if (!finalName) {
           console.log('enterPrivateChannel: no private channels!');
           var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
-          $scope.createChannel(channelName, description, $scope.user.Username);
+          $scope.createChannel(possibleChannelName1, description, $scope.user.Username);
           return;
         }
-        $scope.currentChannelThread = getCurrentThread(channelName, $scope.privateChannels);
-        $scope.currentChannel = findChannel(channelName, $scope.privateChannels).object;
+        console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));
+        $scope.currentChannelThread = getCurrentThread(finalName, $scope.privateChannels);
+        $scope.currentChannel = findChannel(finalName, $scope.privateChannels).object;
       };
 
       $scope.downloadMessages = function (channelName) {
@@ -344,6 +354,7 @@
         //????????????????????????????????????
         $scope.currentChannel = findChannel(response.Channel, channelsList).object;
         $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
+        $scope.$digest();
         //???????????????????????????????????
       });
 
