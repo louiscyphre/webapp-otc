@@ -22,7 +22,7 @@
           Username: $scope.user.Username,
           Password: $scope.user.Password
         };
-        //console.log('in login(): Sending: ' + JSON.stringify(credentials));
+        console.log('in login(): Sending: ' + JSON.stringify(credentials));
         Servlets.send("login", credentials);
       };
 
@@ -337,7 +337,7 @@
 
         console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + channel.object.ChannelName);
         if (!response.ChannelThread || !response.ChannelThread.length || !channel) {
-          console.log('ChatRoomsCtrl: got event DownloadMessages: response.ChannelThread.length ' + response.ChannelThread.length);
+          console.log('ChatRoomsCtrl: got event DownloadMessages: !response.ChannelThread || !response.ChannelThread.length || !channel happened  ');
           return;
         }
         /*if (response.ChannelThread[0].Message.RepliedToId !== -1) {
