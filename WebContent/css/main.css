@@ -338,7 +338,7 @@ ul.users-online li td {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 2%;
   left: 23%;
-  top: relative;
+  top: 50%;
   text-align: justify;
 }
 

@@ -29,23 +29,24 @@
       },
       template: "<ul><thread data-ng-repeat='thread in discussion' thread='thread'></thread></ul>"
     };
-  }).directive('scrolledDownCallback', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, element, attrs) {
-        var fn = scope.$eval(attrs.scrolledDownCallback),
-          clientHeight = element[0].clientHeight;
-
-        element.on('scroll', function (e) {
-          var el = e.target;
-
-          if ((el.scrollHeight - el.scrollTop) === clientHeight) { // fully scrolled
-            console.log("scrolled to bottom...");
-            scope.$digest(fn);
-          }
-        });
-      }
-    };
   });
+  /*.directive('scrolledDownCallback', function () {
+      return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+          var fn = scope.$eval(attrs.scrolledDownCallback),
+            clientHeight = element[0].clientHeight;
+
+          element.on('scroll', function (e) {
+            var el = e.target;
+
+            if ((el.scrollHeight - el.scrollTop) === clientHeight) { // fully scrolled
+              console.log("scrolled to bottom...");
+              scope.$apply(fn);
+            }
+          });
+        }
+      };
+    });*/
 
 }(this.window));
