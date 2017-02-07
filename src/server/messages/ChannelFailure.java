@@ -3,27 +3,11 @@ package server.messages;
 public class ChannelFailure {
 	
 	private String MessageType;
-	private String Channel;
 	private String Error;
 	
-	public ChannelFailure(String channel, String error) {
+	public ChannelFailure(String error) {
 		this.MessageType = "ChannelFailure";
-		this.Channel = channel;
 		this.Error = error;
-	}
-
-	/**
-	 * @return the channel
-	 */
-	public String getChannel() {
-		return Channel;
-	}
-
-	/**
-	 * @param channel the channel to set
-	 */
-	public void setChannel(String channel) {
-		Channel = channel;
 	}
 
 	/**

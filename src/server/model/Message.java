@@ -8,7 +8,6 @@ public class Message {
 	private String UserId = null;
 	private ThreadUser User;
 	private Timestamp MessageTime;
-	private Timestamp LastModified;
 	private int RepliedToId;
 	private String Content;
 
@@ -16,43 +15,9 @@ public class Message {
 		this.Id = id;
 		this.ChannelId = channelId;
 		this.UserId = user;
-		this.MessageTime = this.LastModified = messageTime;
-		this.RepliedToId = repliedToId;
-		this.Content = content;
-	}
-
-	public Message(int id, String channelId, String user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.UserId = user;
 		this.MessageTime = messageTime;
-		this.LastModified = lastModified;
 		this.RepliedToId = repliedToId;
 		this.Content = content;
-	}
-
-	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.User = user;
-		this.MessageTime = messageTime;
-		this.LastModified = lastModified;
-		this.RepliedToId = repliedToId;
-		this.Content = content;
-	}
-
-	/**
-	 * @return the lastModified
-	 */
-	public Timestamp getLastModified() {
-		return LastModified;
-	}
-
-	/**
-	 * @param lastModified the lastModified to set
-	 */
-	public void setLastModified(Timestamp lastModified) {
-		LastModified = lastModified;
 	}
 
 	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, int repliedToId, String content) {

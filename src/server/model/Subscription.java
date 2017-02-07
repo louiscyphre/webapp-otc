@@ -7,15 +7,14 @@ public class Subscription {
 	private String ChannelId;
 	private String UserId;
 	private Timestamp SubscriptionTime;
-	private int lastReadMessageId;
+	private boolean isViewing;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 
-	public Subscription(String channelId, String userId, Timestamp subscriptionTime, int lastReadMessageId, int unreadMessages, int undreadMentionedMessages) {
+	public Subscription(String channelId, Timestamp subscriptionTime, boolean isViewing, int unreadMessages, int undreadMentionedMessages) {
 		this.ChannelId = channelId;
-		this.UserId = userId;
 		this.SubscriptionTime = subscriptionTime;
-		this.lastReadMessageId = lastReadMessageId;
+		this.isViewing = isViewing;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = undreadMentionedMessages;
 	}
@@ -68,17 +67,17 @@ public class Subscription {
 	}
 
 	/**
-	 * @return the lastReadMessageId
+	 * @return the isViewing
 	 */
-	public int getLastReadMessageId() {
-		return lastReadMessageId;
+	public boolean isViewing() {
+		return isViewing;
 	}
 
 	/**
-	 * @param lastReadMessageId the lastReadMessageId to set
+	 * @param isViewing the isViewing to set
 	 */
-	public void setLastReadMessageId(int lastReadMessageId) {
-		this.lastReadMessageId = lastReadMessageId;
+	public void setViewing(boolean isViewing) {
+		this.isViewing = isViewing;
 	}
 
 	/**

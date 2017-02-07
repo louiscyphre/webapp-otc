@@ -100,7 +100,7 @@ public class DatabaseCreator implements ServletContextListener {
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
                 for (User user : users) {
                     pstmt2.setString(1, user.getUsername());
-                    pstmt2.setString(2, user.getPassword());
+                    pstmt2.setString(2, user.getPasswordHash());
                     pstmt2.setString(3, user.getNickname());
                     pstmt2.setString(4, user.getDescription());
                     pstmt2.setString(5, user.getAvatarUrl());
@@ -163,7 +163,7 @@ public class DatabaseCreator implements ServletContextListener {
                     pstmt2.setString (1, subscription.getChannelName());
                     pstmt2.setString (2, subscription.getUsername());
                     pstmt2.setTimestamp(3, subscription.getSubscriptionTime());
-                    pstmt2.setInt(4, subscription.getLastReadMessageId());
+                    pstmt2.setBoolean(4, subscription.isViewing());
                     pstmt2.setInt(5, subscription.getUnreadMessages());
                     pstmt2.setInt(6, subscription.getUnreadMentionedMessages());
                     pstmt2.executeUpdate();
@@ -195,9 +195,8 @@ public class DatabaseCreator implements ServletContextListener {
                     pstmt2.setString   (1, message.getChannelId());
                     pstmt2.setString   (2, message.getUserId());
                     pstmt2.setTimestamp(3, message.getMessageTime());
-                    pstmt2.setTimestamp(4, message.getLastModified());
-                    pstmt2.setInt      (5, message.getRepliedToId());
-                    pstmt2.setString   (6, message.getContent());
+                    pstmt2.setInt      (4, message.getRepliedToId());
+                    pstmt2.setString   (5, message.getContent());
                     pstmt2.executeUpdate();
                 }
                 conn.commit();
