@@ -336,7 +336,7 @@
         console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + response.Channel);
 
         console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + channel.object.ChannelName);
-        if (!response.ChannelThread.length || !channel) {
+        if (!response.ChannelThread || !response.ChannelThread.length || !channel) {
           console.log('ChatRoomsCtrl: got event DownloadMessages: response.ChannelThread.length ' + response.ChannelThread.length);
           return;
         }
