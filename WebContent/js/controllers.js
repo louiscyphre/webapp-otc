@@ -74,7 +74,11 @@
       $scope.subscribedChannels = [];
       $scope.publicChannels = [];
       $scope.privateChannels = [];
-      $scope.expression = {};
+      $scope.query = "";
+      $scope.repliedToId = -1;
+      $scope.lastMessage = "";
+
+
 
       var findChannel = function (channelName, channelsList) {
         //console.log('findChannelByName: entering ' + channelName);
@@ -222,8 +226,27 @@
         Socket.send(unsubscribeJson);
       };
 
+      $scope.sendMessage = function (message) {
+        //console.log('in sendMessage()');
+        var sendMessageJson = {
+          MessageType: "SendMessage",
+          MessageContent: {
+            Message: {
+              Channel: $scope.currentChannel.ChannelName,
+              RepliedToId: $scope.repliedToId,
+              Content: message
+            }
+          }
+        };
+        Socket.send(sendMessageJson);
+      };
+
       $scope.isActive = function (channelName) {
         return $scope.currentChannel.ChannelName === channelName;
+      };
+
+      $scope.reply = function (messageId) {
+        $scope.repliedToId = ($scope.repliedToId === messageId) ? -1 : messageId;
       };
 
       $scope.getPrivateChannelName = function (channelName) {
@@ -326,18 +349,18 @@
       });
 
       $scope.$on('DownloadMessages', function (event, response) {
-        console.log('ChatRoomsCtrl: got event DownloadMessages');
+        //console.log('ChatRoomsCtrl: got event DownloadMessages');
         var channelsList = $scope.subscribedChannels;
         var channel = findChannel(response.Channel, channelsList);
         if (!channel) {
           channelsList = $scope.privateChannels;
           channel = findChannel(response.Channel, channelsList);
         }
-        console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + response.Channel);
+        //console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + response.Channel);
 
-        console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + channel.object.ChannelName);
+        //console.log('ChatRoomsCtrl: got event DownloadMessages for channel ' + channel.object.ChannelName);
         if (!response.ChannelThread || !response.ChannelThread.length || !channel) {
-          console.log('ChatRoomsCtrl: got event DownloadMessages: !response.ChannelThread || !response.ChannelThread.length || !channel happened  ');
+          //console.log('ChatRoomsCtrl: got event DownloadMessages: !response.ChannelThread || !response.ChannelThread.length || !channel happened  ');
           return;
         }
         /*if (response.ChannelThread[0].Message.RepliedToId !== -1) {
@@ -345,24 +368,24 @@
           response.ChannelThread.splice(0, 1);
         }*/
 
-        console.log('ChatRoomsCtrl: got event DownloadMessages: channel.object.ChannelThread.length ' + channel.object.ChannelThread.length);
-        console.log('ChatRoomsCtrl: got event DownloadMessages: response.ChannelThread.length ' + response.ChannelThread.length);
+        //console.log('ChatRoomsCtrl: got event DownloadMessages: channel.object.ChannelThread.length ' + channel.object.ChannelThread.length);
+        //console.log('ChatRoomsCtrl: got event DownloadMessages: response.ChannelThread.length ' + response.ChannelThread.length);
         angular.merge(channel.object.ChannelThread, channel.object.ChannelThread, response.ChannelThread);
-        findChannel(response.Channel, channelsList).object.ChannelThread = channel.object.ChannelThread;
-        console.log('ChatRoomsCtrl: got event DownloadMessages: channel.object.ChannelThread.length ' + channel.object.ChannelThread.length);
-        console.log('ChatRoomsCtrl: got event DownloadMessages: channel.object.ChannelThread: ' + JSON.stringify(findChannel(response.Channel, channelsList).object.ChannelThread));
-        //????????????????????????????????????
-        $scope.currentChannel = findChannel(response.Channel, channelsList).object;
-        $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
+        //findChannel(response.Channel, channelsList).object.ChannelThread = channel.object.ChannelThread;
+        //console.log('ChatRoomsCtrl: got event DownloadMessages: channel.object.ChannelThread.length ' + channel.object.ChannelThread.length);
+        //console.log('ChatRoomsCtrl: got event DownloadMessages: channel.object.ChannelThread: ' + JSON.stringify(findChannel(response.Channel, channelsList).object.ChannelThread));
+        //$scope.currentChannel = findChannel(response.Channel, channelsList).object;
+        //$scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
         $scope.$digest();
-        //???????????????????????????????????
       });
 
       $scope.$on('ChannelDiscovery', function (event, response) {
         //console.log('ChatRoomsCtrl: got event ChannelDiscovery');
-        for (var i = 0; i < response.Channels.length; ++i) {
+        angular.merge($scope.publicChannels, $scope.publicChannels, response.Channels);
+        $scope.$digest();
+        /*for (var i = 0; i < response.Channels.length; ++i) {
           $scope.publicChannels.push(response.Channel);
-        }
+        }*/
       });
 
       }]);

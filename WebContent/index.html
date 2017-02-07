@@ -162,13 +162,13 @@
         </div>
       </div>
 
-      <div class="chat-text-area" scrolled-down-callback="downloadMessages(currentChannel)">
-        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread"></data-discussion>
+      <div class="chat-text-area">
+        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" scrolled-down-callback="downloadMessages(currentChannel)"></data-discussion>
         <footer class="footer">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage">
             <div class="input-group-btn">
-              <button class="btn btn-primary btn-chat-send" type="submit"> Send </button>
+              <button class="btn btn-primary btn-chat-send" type="submit" data-ng-click="sendMessage(lastMessage)"> Send </button>
             </div>
           </div>
         </footer>
