@@ -20,25 +20,22 @@ public final class BuildSuccessMessages {
 		Map<String, ThreadUser> mapUsernameToNickname = DataManager.getMapOfAllUsers(conn);
 		for (Channel channel : DataManager.getAllChannels(conn)) { // iterate over each channel
 			Channel subscribedChannel = null, privateChannel = null;
-			boolean isSubscribed = false;
 			for (Subscription subscription : DataManager.getSubscriptionsByChannelName(conn, channel.getChannelName())) { // iterate over the subscriptions
 				channel.addUser(mapUsernameToNickname.get(subscription.getUsername())); // add user to channel
 				if (subscription.getUsername().equals(credentials.getUsername())) { // check if the logged user is subscribed to this channel
-					isSubscribed = true; // if that's the user, mark that the user is subscribed to this channel
-				}
-			}
+					Channel copy;
+					if (channel.isPublic()) {
+						copy = subscribedChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), true);
+					} else {
+						copy = privateChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), false);
+					}
 
-			// if this user is subscribed to the channel
-			if (isSubscribed) {
-				Channel copy;
-				if (channel.isPublic()) {
-					copy = subscribedChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), true);
-				} else {
-					copy = privateChannel = new Channel(channel.getChannelName(), channel.getDescription(), channel.getNumberOfSubscribers(), false);
-				}
-
-				for (ThreadUser thUser : channel.getUsers()) {
-					copy.addUser(thUser);
+					for (ThreadUser thUser : channel.getUsers()) {
+						copy.addUser(thUser);
+					}
+					
+					copy.setUnreadMessages(subscription.getUnreadMessages());
+					copy.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages());
 				}
 			}
 
