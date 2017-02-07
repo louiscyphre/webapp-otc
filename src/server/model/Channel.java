@@ -11,12 +11,23 @@ public class Channel {
 	private String Description;
 	private int NumberOfSubscribers;
 	private boolean IsPublic;
+	private int unreadMessages;
+	private int unreadMentionedMessages;
 	
 	public Channel(String channelName, String description, int numberOfSubscribers, boolean isPublic) {
 		this.ChannelName = channelName;
 		this.Description = description;
 		this.NumberOfSubscribers = numberOfSubscribers;
 		this.IsPublic = isPublic;
+	}
+	
+	public Channel(String channelName, String description, int numberOfSubscribers, boolean isPublic, int unreadMessages, int undreadMentionedMessages) {
+		this.ChannelName = channelName;
+		this.Description = description;
+		this.NumberOfSubscribers = numberOfSubscribers;
+		this.IsPublic = isPublic;
+		this.unreadMessages = unreadMessages;
+		this.unreadMentionedMessages = undreadMentionedMessages;
 	}
 
 	/**
@@ -91,10 +102,52 @@ public class Channel {
 		return Users;
 	}
 
+	/**
+	 * @return the unreadMessages
+	 */
+	public int getUnreadMessages() {
+		return unreadMessages;
+	}
+
+	/**
+	 * @param unreadMessages the unreadMessages to set
+	 */
+	public void setUnreadMessages(int unreadMessages) {
+		this.unreadMessages = unreadMessages;
+	}
+
+	/**
+	 * @return the unreadMentionedMessages
+	 */
+	public int getUnreadMentionedMessages() {
+		return unreadMentionedMessages;
+	}
+
+	/**
+	 * @param unreadMentionedMessages the unreadMentionedMessages to set
+	 */
+	public void setUnreadMentionedMessages(int unreadMentionedMessages) {
+		this.unreadMentionedMessages = unreadMentionedMessages;
+	}
+
 	@Override
 	public String toString() {
 		return "Channel [numberOfSubscribers=" + NumberOfSubscribers + ", channelName=" + ChannelName
 				+ ", description=" + Description + ", isPublic=" + IsPublic + "]";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+	        return false;
+	    }
+	    
+	    if (!Channel.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    
+	    final Channel other = (Channel)obj;
+	    return this.ChannelName.equals(other.ChannelName);
 	}
 
 	public String stringify() {

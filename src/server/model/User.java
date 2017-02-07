@@ -6,15 +6,15 @@ package server.model;
 public class User {
 
 	private String Username;
-	private String PasswordHash;
+	private String Password;
 	private String Nickname;
 	private String Description;
 	private String AvatarUrl;
 
-	public User(String userName, String hashPassword, String nickname, String description, String avatarUrl) {
+	public User(String userName, String password, String nickname, String description, String avatarUrl) {
 		//idHash = Hash.getSha256Hex(userName);
 		Username = userName;
-		PasswordHash = hashPassword;
+		Password = password;
 		setNickname(nickname);
 		Description = description;
 		AvatarUrl = avatarUrl;
@@ -22,8 +22,8 @@ public class User {
 
 	public String getUsername() {  return Username; }
 	
-	public String getPasswordHash() {
-		return PasswordHash;
+	public String getPassword() {
+		return Password;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class User {
 		Username = userName;
 	}
 	public void setPasswordHash(String hash) {
-		PasswordHash = hash;
+		Password = hash;
 	}
 
 	public void setNickname(String nickname) {
@@ -64,6 +64,6 @@ public class User {
 	}
 	
 	public String stringify() {
-	  return Username + " " + PasswordHash;
+	  return Username + " " + Password;
 	}
 }

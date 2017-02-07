@@ -3,16 +3,17 @@ package server.messages;
 import java.util.Collection;
 
 import server.model.Message;
+import server.model.MessageThread;
 
 public class DownloadMessages {
 	
 	private String MessageType;
 	private String Channel;
-	private Collection<Message> ChannelThread;
+	private Collection<MessageThread> ChannelThread;
 	private int UnreadMessages;
 	private int UnreadMentionedMessages;
 	
-	public DownloadMessages(String channel, Collection<Message> channelThread, int unreadMessages, int unreadMentionedMessages) {
+	public DownloadMessages(String channel, Collection<MessageThread> channelThread, int unreadMessages, int unreadMentionedMessages) {
 		this.MessageType = "DownloadMessages";
 		this.Channel = channel;
 		this.ChannelThread = channelThread;
@@ -51,14 +52,14 @@ public class DownloadMessages {
 	/**
 	 * @return the channelThread
 	 */
-	public Collection<Message> getChannelThread() {
+	public Collection<MessageThread> getChannelThread() {
 		return ChannelThread;
 	}
 
 	/**
 	 * @param channelThread the channelThread to set
 	 */
-	public void setChannelThread(Collection<Message> channelThread) {
+	public void setChannelThread(Collection<MessageThread> channelThread) {
 		ChannelThread = channelThread;
 	}
 

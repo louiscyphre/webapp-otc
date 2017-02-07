@@ -89,7 +89,7 @@ System.out.println("register me pls: " + gsonData);
 			Gson gson = new Gson();
 			User newUser = gson.fromJson(gsonData, User.class);
 			ThreadUser thUser = new ThreadUser(newUser.getUsername(), newUser.getNickname(), newUser.getDescription(), newUser.getAvatarUrl());
-			UserCredentials credentials = new UserCredentials(newUser.getUsername(), newUser.getPasswordHash());
+			UserCredentials credentials = new UserCredentials(newUser.getUsername(), newUser.getPassword());
 			
 			if (DataManager.getUserByUsername(conn, newUser.getUsername()) == null) { // user does not exist
 				DataManager.addUser(conn, newUser); // create a new user

@@ -7,8 +7,6 @@ import server.DataManager;
 import server.messages.AuthSuccess;
 import server.messages.SubscribeSuccess;
 import server.model.Channel;
-import server.model.Message;
-import server.model.MessageThread;
 import server.model.Subscription;
 import server.model.ThreadUser;
 import server.model.UserCredentials;
@@ -23,10 +21,13 @@ public final class BuildSuccessMessages {
 		for (Channel channel : DataManager.getAllChannels(conn)) { // iterate over each channel
 			Channel subscribedChannel = null, privateChannel = null;
 			boolean isSubscribed = false;
+			int unread = 0, mentioned = 0;
 			for (Subscription subscription : DataManager.getSubscriptionsByChannelName(conn, channel.getChannelName())) { // iterate over the subscriptions
 				channel.addUser(mapUsernameToNickname.get(subscription.getUsername())); // add user to channel
 				if (subscription.getUsername().equals(credentials.getUsername())) { // check if the logged user is subscribed to this channel
 					isSubscribed = true; // if that's the user, mark that the user is subscribed to this channel
+					unread = subscription.getUnreadMessages();
+					mentioned = subscription.getUnreadMentionedMessages();
 				}
 			}
 
@@ -42,10 +43,9 @@ public final class BuildSuccessMessages {
 				for (ThreadUser thUser : channel.getUsers()) {
 					copy.addUser(thUser);
 				}
-
-				for (MessageThread thMessage : channel.getChannelThread()) {
-					copy.addMessage(thMessage);
-				}
+				
+				copy.setUnreadMessages(unread);
+				copy.setUnreadMentionedMessages(mentioned);
 			}
 
 			if (subscribedChannel != null) {
@@ -62,24 +62,7 @@ public final class BuildSuccessMessages {
 	
 	public static SubscribeSuccess buidSubscribeSuccess(Connection conn, Channel channel) {
 		SubscribeSuccess subscribeSuccess = new SubscribeSuccess(channel);
-		Map<String, ThreadUser> mapUsernameToNickname = DataManager.getMapOfAllUsers(conn);
 		DataManager.updateChannelUsers(conn, channel); // update channel's users list
-		
-		// iterate over all the messages in the thread
-		for (Message message : DataManager.getMessagesByChannelName(conn, mapUsernameToNickname, channel.getChannelName())) {
-			MessageThread messageThread = new MessageThread(message);
-			// if current message is a reply to a previous message, "concatenate" them
-			if (messageThread.getMessage().getRepliedToId() >= 0) {
-				for (MessageThread addedMessage : channel.getChannelThread()) {
-					if (addedMessage.getMessage().getId() == messageThread.getMessage().getRepliedToId()) {
-						addedMessage.addReply(messageThread);
-					}
-				}
-			} else { // current message is a message by itself (not a reply)
-				channel.addMessage(messageThread);
-			}
-		}
-		mapUsernameToNickname.clear();
 		return subscribeSuccess;
 	}
 }

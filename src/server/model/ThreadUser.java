@@ -8,13 +8,13 @@ public class ThreadUser {
 	private String Username;
 	private String Nickname;
 	private String Description;
-	private String AvatarURL;
+	private String AvatarUrl;
 
 	public ThreadUser(String username, String nickname, String description, String avatarUrl) {
 		Username = username;
 		setNickname(nickname);
 		Description = description;
-		AvatarURL = avatarUrl;
+		AvatarUrl = avatarUrl;
 	}
 	
 	public String getUsername() {
@@ -37,7 +37,7 @@ public class ThreadUser {
 	}
 
 	public String getAvatarUrl() {
-		return AvatarURL;
+		return AvatarUrl;
 	}
 
 	public void setNickname(String nickname) {
@@ -49,11 +49,11 @@ public class ThreadUser {
 	}
 
 	public void setAvatarUrl(String avatarUrl) {
-		AvatarURL = avatarUrl;
+		AvatarUrl = avatarUrl;
 	}
 	
 	public String stringify() {
-	  return Nickname + " " + AvatarURL;
+	  return Nickname + " " + AvatarUrl;
 	}
 	
 	public static ThreadUser getThreadUserByUser(User user) {
