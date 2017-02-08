@@ -160,7 +160,7 @@ ul.users-online li td {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  max-height: 25%;
+  max-height: 26%;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -338,7 +338,7 @@ ul.users-online li td {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 2%;
   left: 23%;
-  top: 50%;
+  top: 40%;
   text-align: justify;
 }
 

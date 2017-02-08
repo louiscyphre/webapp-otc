@@ -140,7 +140,7 @@
 
         //console.log('in enterChannel(): channelName: ' + JSON.stringify(channelname));
         //console.log('in enterChannel(): $scope.currentChannel: ' + $scope.currentChannel);    
-        if (!findChannel(channelName, channelsList)) {
+        if (!findChannel(channelName, channelsList) || (channelsList === $scope.publicChannels)) {
           /// The only possible case is when on channel discovery and clicking on public channel
           //console.log('enterChannel: no subscribed channels!');
           $scope.subscribeToChannel(channelName);
@@ -279,7 +279,6 @@
         //get all channels and subscribed channels from json (must be here or on auth with servlet??)
         $rootScope.user = response.User;
         //console.log('in ChatRoomsCtrl:(): public channels:' + JSON.stringify(response.PublicChannels));
-        $scope.publicChannels = response.PublicChannels;
         //console.log('in ChatRoomsCtrl:(): subscribed channels:' + JSON.stringify(response.SubscribedChannels));
         $scope.subscribedChannels = response.SubscribedChannels;
         $scope.privateChannels = response.PrivateChannels;
@@ -288,7 +287,7 @@
       });
 
       $scope.$on('SubscribeSuccess', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
+        console.log('ChatRoomsCtrl: got event SubscribeSuccess');
         var channelsList = $scope.subscribedChannels;
         var channel = findChannel(response.Channel, channelsList);
         if (!channel) {
@@ -380,12 +379,15 @@
       });
 
       $scope.$on('ChannelDiscovery', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event ChannelDiscovery');
+        console.log('ChatRoomsCtrl: got event ChannelDiscovery');
+        //if (!$scope.publicChannels || !$scope.publicChannels.length) {
+        //  $scope.publicChannels = response.Channels;
+        //}
         angular.merge($scope.publicChannels, $scope.publicChannels, response.Channels);
         $scope.$digest();
-        /*for (var i = 0; i < response.Channels.length; ++i) {
-          $scope.publicChannels.push(response.Channel);
-        }*/
+        //for (var i = 0; i < response.Channels.length; ++i) {
+        //  $scope.publicChannels.push(response.Channel);
+        //}
       });
 
       }]);

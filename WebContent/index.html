@@ -141,13 +141,15 @@
               </table>
             </li>
           </ul>
-          <ul data-ng-show="publicChannels.length">
-            <li>
-              <table class="all-channels">
-                <tr data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="enterChannel(channel.ChannelName, publicChannels)">
-                  <th> {{channel.ChannelName}} </th>
-                  <td>
-                    <span class="badge" data-ng-model="channel.NumberOfSubscribers"><img class="channel-icon" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="/>{{channel.NumberOfSubscribers}}</span>
+          <ul class="public-channels" data-ng-model="publicChannels" data-ng-show="publicChannels.length">
+            <li class="side-channel-row" data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="enterChannel(channel.ChannelName, publicChannels)">
+              <table>
+                <tr>
+                  <th colspan="2"> {{channel.ChannelName}} </th>
+                </tr>
+                <tr>
+                  <td class="side-badges">
+                    <span class="badge" data-ng-model="channel.NumberOfSubscribers"><img class="channel-icon" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />{{channel.NumberOfSubscribers}}</span>
                   </td>
                   <td>
                     <data-button class="channel-control description"><img class="channel-control-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="usubscribe" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
@@ -158,7 +160,7 @@
               </table>
             </li>
           </ul>
-          <input class="footer input-group form-control" type="text" name="search" placeholder="Search channel..." data-ng-model="query">
+          <input class="footer input-group form-control" type="text" name="search" placeholder="Search channel..." data-ng-model="query" data-ng-enter="discoverChannels(query)" />
         </div>
       </div>
 
@@ -166,7 +168,7 @@
         <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" scrolled-down-callback="downloadMessages(currentChannel)"></data-discussion>
         <footer class="footer">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage">
+            <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage" />
             <div class="input-group-btn">
               <button class="btn btn-primary btn-chat-send" type="submit" data-ng-click="sendMessage(lastMessage)"> Send </button>
             </div>
