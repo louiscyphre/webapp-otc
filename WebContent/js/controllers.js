@@ -203,6 +203,11 @@
         Socket.send(downloadMessagesJson);
       };
 
+      $scope.downloadOnScroll = function () {
+        $scope.downloadMessages($scope.currentChannel);
+
+      };
+
       $scope.discoverChannels = function (query) {
 
         var queryJson = {
@@ -232,7 +237,7 @@
           MessageType: "SendMessage",
           MessageContent: {
             Message: {
-              Channel: $scope.currentChannel.ChannelName,
+              ChannelId: $scope.currentChannel.ChannelName,
               RepliedToId: $scope.repliedToId,
               Content: message
             }
@@ -288,27 +293,33 @@
 
       $scope.$on('SubscribeSuccess', function (event, response) {
         console.log('ChatRoomsCtrl: got event SubscribeSuccess');
-        var channelsList = $scope.subscribedChannels;
-        var channel = findChannel(response.Channel, channelsList);
-        if (!channel) {
-          channelsList = $scope.privateChannels;
+        var list;
+        if (!response.Channel.IsPublic) {
+          $scope.privateChannels.push(response.Channel);
+          list = $scope.privateChannels;
+        } else {
+          $scope.subscribedChannels.push(response.Channel);
+          list = $scope.subscribedChannels;
         }
-        channelsList.push(response.Channel);
 
-        $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
-        $scope.currentChannel = findChannel(response.Channel, channelsList).object;
+        $scope.$digest();
+        console.log('ChatRoomsCtrl: after channelsList.push(response.Channel):' + JSON.stringify(list));
+        $scope.currentChannelThread = getCurrentThread(response.Channel, list);
+        $scope.currentChannel = findChannel(response.Channel, list).object;
       });
 
       $scope.$on('ChannelSuccess', function (event, response) {
         //console.log('ChatRoomsCtrl: got event ChannelSuccess');
         var channelsList;
         if (response.Channel.IsPublic) {
+          $scope.subscribedChannels.push(response.Channel);
+          $scope.$digest();
           channelsList = $scope.subscribedChannels;
         } else {
+          $scope.privateChannels.push(response.Channel);
+          $scope.$digest();
           channelsList = $scope.privateChannels;
         }
-        channelsList.push(response.Channel);
-
         $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
         $scope.currentChannel = findChannel(response.Channel, channelsList).object;
       });

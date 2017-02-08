@@ -164,8 +164,8 @@
         </div>
       </div>
 
-      <div class="chat-text-area">
-        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" scrolled-down-callback="downloadMessages(currentChannel)"></data-discussion>
+      <div class="chat-text-area" scrolled-down-callback="downloadOnScroll">
+        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread"></data-discussion>
         <footer class="footer">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage" />
