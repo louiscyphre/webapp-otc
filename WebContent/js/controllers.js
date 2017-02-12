@@ -181,7 +181,7 @@
           finalName = possibleChannelName2;
         }
         if (!finalName) {
-          console.log('enterPrivateChannel: no private channels!');
+          console.log('enterPrivateChannel: private channel not found!');
           var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
           $scope.createChannel(possibleChannelName1, description, $scope.user.Username);
           return;
@@ -204,7 +204,7 @@
       };
 
       $scope.downloadOnScroll = function () {
-        $scope.downloadMessages($scope.currentChannel);
+        $scope.downloadMessages($scope.currentChannel.Channel);
 
       };
 
@@ -244,6 +244,19 @@
           }
         };
         Socket.send(sendMessageJson);
+      };
+
+      $scope.viewingChannel = function (channelName) {
+        //console.log('in sendMessage()');
+        var viewingChannelJson = {
+          MessageType: "ChannelViewing",
+          MessageContent: {
+            Message: {
+              ChannelId: channelName
+            }
+          }
+        };
+        Socket.send(viewingChannelJson);
       };
 
       $scope.isActive = function (channelName) {
@@ -293,25 +306,26 @@
 
       $scope.$on('SubscribeSuccess', function (event, response) {
         console.log('ChatRoomsCtrl: got event SubscribeSuccess');
-        var list;
-        if (!response.Channel.IsPublic) {
-          $scope.privateChannels.push(response.Channel);
-          list = $scope.privateChannels;
-        } else {
+        var channelsList;
+        if (response.Channel.IsPublic === true) {
           $scope.subscribedChannels.push(response.Channel);
-          list = $scope.subscribedChannels;
+          $scope.$digest();
+          channelsList = $scope.subscribedChannels;
+        } else {
+          $scope.privateChannels.push(response.Channel);
+          $scope.$digest();
+          channelsList = $scope.privateChannels;
         }
 
-        $scope.$digest();
-        console.log('ChatRoomsCtrl: after channelsList.push(response.Channel):' + JSON.stringify(list));
-        $scope.currentChannelThread = getCurrentThread(response.Channel, list);
-        $scope.currentChannel = findChannel(response.Channel, list).object;
+        //console.log('ChatRoomsCtrl: after channelsList.push(response.Channel):' + JSON.stringify(list));
+        $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
+        $scope.currentChannel = findChannel(response.Channel, channelsList).object;
       });
 
       $scope.$on('ChannelSuccess', function (event, response) {
         //console.log('ChatRoomsCtrl: got event ChannelSuccess');
         var channelsList;
-        if (response.Channel.IsPublic) {
+        if (response.Channel.IsPublic === true) {
           $scope.subscribedChannels.push(response.Channel);
           $scope.$digest();
           channelsList = $scope.subscribedChannels;
