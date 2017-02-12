@@ -183,7 +183,7 @@
         if (!finalName) {
           console.log('enterPrivateChannel: private channel not found!');
           var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
-          $scope.createChannel(possibleChannelName1, description, $scope.user.Username);
+          $scope.createChannel(possibleChannelName1, description, targetUsername);
           return;
         }
         console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));
@@ -309,13 +309,13 @@
         var channelsList;
         if (response.Channel.IsPublic === true) {
           $scope.subscribedChannels.push(response.Channel);
-          $scope.$digest();
           channelsList = $scope.subscribedChannels;
         } else {
           $scope.privateChannels.push(response.Channel);
-          $scope.$digest();
           channelsList = $scope.privateChannels;
         }
+
+        $scope.$digest();
 
         //console.log('ChatRoomsCtrl: after channelsList.push(response.Channel):' + JSON.stringify(list));
         $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
@@ -334,8 +334,8 @@
           $scope.$digest();
           channelsList = $scope.privateChannels;
         }
-        $scope.currentChannelThread = getCurrentThread(response.Channel, channelsList);
-        $scope.currentChannel = findChannel(response.Channel, channelsList).object;
+        $scope.currentChannelThread = getCurrentThread(response.Channel.ChannelName, channelsList);
+        $scope.currentChannel = findChannel(response.Channel.ChannelName, channelsList).object;
       });
 
       $scope.$on('UserSubscribed', function (event, response) {

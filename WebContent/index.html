@@ -160,7 +160,7 @@
               </table>
             </li>
           </ul>
-          <input class="footer input-group form-control" type="text" name="search" placeholder="Search channel..." data-ng-model="query" data-ng-enter="discoverChannels(query)" />
+          <input class="footer input-group form-control" type="text" name="search" placeholder="Search channel..." data-ng-model="query" data-ng-enter="discoverChannels(query);query=''" />
         </div>
       </div>
 
@@ -168,9 +168,9 @@
         <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread"></data-discussion>
         <footer class="footer">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage" />
+            <input type="text" class="form-control" placeholder="Type your message here " data-ng-model="lastMessage" data-ng-enter="sendMessage(lastMessage);lastMessage=''" />
             <div class="input-group-btn">
-              <button class="btn btn-primary btn-chat-send" type="submit" data-ng-click="sendMessage(lastMessage)"> Send </button>
+              <button class="btn btn-primary btn-chat-send" type="submit" data-ng-click="sendMessage(lastMessage);lastMessage=''"> Send </button>
             </div>
           </div>
         </footer>

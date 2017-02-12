@@ -29,7 +29,7 @@
       },
       template: "<ul><thread data-ng-repeat='thread in discussion' thread='thread'></thread></ul>"
     };
-  }).directive('scrolledDownCallback', function ($document) {
+  }).directive('scrolledDownCallback', function () {
     return {
       restrict: 'A',
       scope: {
@@ -38,11 +38,11 @@
       link: function (scope, element, attrs) {
         var clientHeight = element[0].clientHeight;
 
-        element.on('scroll', function (e) {
+        element.bind('scroll', function (e) {
           var el = e.target;
 
           if ((el.scrollHeight - el.scrollTop) === clientHeight) { // fully scrolled
-            console.log("scrolled to bottom...");
+            //console.log("scrolled to bottom...");
             element.scope().downloadOnScroll();
           }
         });
