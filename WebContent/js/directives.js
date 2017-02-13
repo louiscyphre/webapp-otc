@@ -9,8 +9,28 @@
       replace: true,
       scope: {
         thread: '=',
+        enterPrivateChannel1: '&'
       },
-      template: "<li><table><tr><td><div class=\"message-info\"> <img class=\"user-avatar-chat\" data-ng-src=\"{{thread.Message.User.AvatarUrl}}\" alt=\"userpic\" /> <button class=\"channel-control chat-description\"><img class=\"channel-control chat-description channel-control-icon\" data-ng-src=\"css/img/glyphicons-info-sign.png\" alt=\"description\" src=\"data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=\"/><div class=\"chat-description-content\"> {{thread.Message.User.Description}} </div></button>  </div></td><td><div class=\"message\"> <a href=\"javascript:void(0)\" data-ng-click=\"enterPrivateChannel(thread.Message.User.Username, thread.Message.User.Nickname)\"> {{thread.Message.User.Nickname}}</a> on {{thread.Message.MessageTime}}: {{ thread.Message.Content}}</div></td></tr></table></li>",
+      template: "<li>" +
+        " <table>" +
+        "    <tr>" +
+        "      <td>" +
+        "        <img class='user-avatar-chat' data-ng-src='{{thread.Message.User.AvatarUrl}}' alt='userpic' />" +
+        "      </td>" +
+        "      <td>" +
+        "        <div class='message'> <a href='javascript:void(0)' " +
+        "          data-ng-click='enterPrivateChannel1(thread.Message.User.Username,thread.Message.User.Nickname)'>" +
+        "          <button class='channel-control chat-description'><img class='channel-control chat-description channel-control-icon' " +
+        "             data-ng-src='css/img/glyphicons-info-sign.png' alt='description'" +
+        "              src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='/>" +
+        "            <div class=chat-description-content> {{thread.Message.User.Description}} </div>" +
+        "          </button>" +
+        "            {{thread.Message.User.Nickname}}</a> on {{thread.Message.MessageTime}}: {{ thread.Message.Content}}" +
+        "        </div>" +
+        "      </td>" +
+        "    </tr>" +
+        "  </table>" +
+        "</li>",
       link: function (scope, element, attrs) {
         //check if this member has children
         if (angular.isArray(scope.thread.Replies)) {
@@ -25,9 +45,10 @@
       restrict: "E",
       replace: true,
       scope: {
-        discussion: '='
+        discussion: '=',
+        enterPrivateChannel1: '&'
       },
-      template: "<ul><thread data-ng-repeat='thread in discussion' thread='thread'></thread></ul>"
+      template: "<ul><thread data-ng-repeat='thread in discussion' thread='thread'  enter-private-channel1='enterPrivateChannel(thread.Message.User.Username, thread.Message.User.Nickname)'></thread></ul>"
     };
   }).directive('scrolledDownCallback', function () {
     return {
@@ -41,8 +62,7 @@
         element.bind('scroll', function (e) {
           var el = e.target;
 
-          if ((el.scrollHeight - el.scrollTop) === clientHeight) { // fully scrolled
-            //console.log("scrolled to bottom...");
+          if ((el.scrollHeight - el.scrollTop) === clientHeight) {
             element.scope().downloadOnScroll();
           }
         });

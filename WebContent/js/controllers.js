@@ -117,6 +117,7 @@
         if (!findChannel(channelName, channelsList).object.ChannelThread.length) {
           $scope.downloadMessages(channelName);
         }
+        $scope.viewingChannel(channelName);
         return findChannel(channelName, channelsList).object.ChannelThread;
       };
 
@@ -168,7 +169,7 @@
       };
 
       $scope.enterPrivateChannel = function (targetUsername, targetNickname) {
-        console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
         if (targetUsername === $scope.user.Username) {
           return;
         }
@@ -181,12 +182,12 @@
           finalName = possibleChannelName2;
         }
         if (!finalName) {
-          console.log('enterPrivateChannel: private channel not found!');
+          //console.log('enterPrivateChannel: private channel not found!');
           var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
           $scope.createChannel(possibleChannelName1, description, targetUsername);
           return;
         }
-        console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));
+        //console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));
         $scope.currentChannelThread = getCurrentThread(finalName, $scope.privateChannels);
         $scope.currentChannel = findChannel(finalName, $scope.privateChannels).object;
       };

@@ -160,7 +160,7 @@ ul.users-online li td {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  max-height: 26%;
+  max-height: 30%;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -186,7 +186,7 @@ ul.users-online li td {
   height: 100vh;
 }
 
-.chat-text-area ul li table tr td div.message {
+.chat-text-area ul li table tr td div.message:not(.chat-description-content) {
   background-color: #DBF7C6;
   margin-right: 2%;
   padding: 15px;
@@ -206,12 +206,12 @@ ul.users-online li td {
   font-size: 85%;
   max-height: 150px;
   max-width: 150px;
-  height: 120px;
-  width: 120px;
+  height: 100px;
+  width: 100px;
   float: left;
 }
 
-.chat-text-area ul li table tr td div {
+.chat-text-area ul li table tr td div:not(.chat-description-content) {
   border: 2px solid #B3B3B3;
   border-radius: 8px;
   font-family: monospace;
@@ -221,10 +221,15 @@ ul.users-online li td {
   display: inline-block;
 }
 
-.chat-text-area ul li table tr td {
+.chat-text-area ul li table tr td:not(.chat-description-content) {
   padding: 15px;
   height: 100%;
   overflow: hidden;
+}
+
+.chat-text-area ul li table td,
+th {
+  vertical-align: top;
 }
 
 .chat-text-area ul {
@@ -335,6 +340,7 @@ ul.users-online li td {
   overflow-y: hidden;
   position: absolute;
   background-color: #f9f9f9;
+  border-radius: 8px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 2%;
   left: 23%;
@@ -367,21 +373,23 @@ ul.users-online li td {
   overflow-y: hidden;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
-  min-height: 160px;
+  border-radius: 8px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  padding: 1%;
-  z-index: 999;
+  padding: 2%;
+  left: 23%;
+  top: 40%;
+  text-align: justify;
 }
 
 .chat-description:hover .chat-description-content {
-  max-height: 300px;
+  max-height: 400px;
   max-width: 300px;
+  min-width: 280px;
+  min-height: 320px;
   display: block;
   visibility: visible;
   background-color: #FCF8E3;
   color: #2E3436;
-  z-index: 999;
 }
 
 .chat-description .chat-description-content:hover {
