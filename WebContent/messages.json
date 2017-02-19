@@ -4,7 +4,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-02T06:49:24Z",
-		"LastModified" : "2017-01-02T06:49:24Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : -1,
 		"Content" : "Welcome to the chat!"
 	},
@@ -13,7 +13,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Goblin",
 		"MessageTime" : "2017-01-02T06:49:27Z",
-		"LastModified" : "2017-01-02T06:49:27Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : 1,
 		"Content" : "Thank you very much! I hope it will be useful Id: 2. RepliedToId : 1"
 	},
@@ -22,7 +22,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-02T06:50:02Z",
-		"LastModified" : "2017-01-02T06:50:02Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : 2,
 		"Content" : "Let's do our best! Id: 3. RepliedToId : 2"
 	},
@@ -31,7 +31,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Odmin",
 		"MessageTime" : "2017-01-26T18:19:31Z",
-		"LastModified" : "2017-01-26T18:19:31Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : -1,
 		"Content" : "Testing new message"
 	},
@@ -58,7 +58,7 @@
 		"ChannelId" : "Web Programming",
 		"UserId" : "Shumadan",
 		"MessageTime" : "2017-01-26T18:19:31Z",
-		"LastModified" : "2017-01-26T18:19:31Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : 4,
 		"Content" : " Id: 7. RepliedToId : 4. Hello fellas! The amazing world of Qumi-Qumi in which the show is set bears a remote resemblance to Earth, however, its flora and fauna hold far more fanciful traits. The Qumi world consists of three tribes which live separately: those are scientists, magicians and the military tribe. Juga, Yusi and Shumadan come from different tribes but get on much better with each other than with their co-tribesmen (who consider them weirdos). "
 	},
