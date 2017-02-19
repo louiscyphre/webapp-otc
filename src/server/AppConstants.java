@@ -94,7 +94,7 @@ public interface AppConstants {
 			+ "FOREIGN KEY(ChannelId) REFERENCES " + CHANNELS + "(ChannelName))";
 	public final String INSERT_MESSAGE_STMT = "INSERT INTO " + MESSAGES
 			+ " (ChannelId, UserId, MessageTime, LastModified, RepliedToId, Content) VALUES(?,?,?,?,?,?)";
-	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE ChannelId=? AND LastModified>=? ORDER BY LastModified, MessageTime";
+	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE ChannelId=? AND LastModified>=? ORDER BY LastModified, MessageTime, ID";
 	public final String SELECT_MESSAGE_BY_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE ID=?";
 	public final String SELECT_MESSAGE_BY_REPLY_TO_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE RepliedToId=?";
 	public final String SELECT_MESSAGES_STMT = "SELECT * FROM " + MESSAGES;
