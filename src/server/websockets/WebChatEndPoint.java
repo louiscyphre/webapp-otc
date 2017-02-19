@@ -455,6 +455,21 @@ public class WebChatEndPoint {
 				for (ThreadUser thUser : channel.getUsers()) { // iterate over all the users in the channel
 					Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), thUser.getUsername());
 					if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
+						if (message.getId() > subscription.getLastReadMessageId()) { // update that the user has read this message already
+							subscription.setLastReadMessageId(message.getId());
+							DataManager.updateSubscription(conn, subscription);
+						}
+						
+						Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(session); // get all the messages that were downloaded during this session
+						if (channelDownloadedMessages == null) { // if first time viewing then:
+							downloadedMessages.put(session, (channelDownloadedMessages = new HashMap<>())); // create new history of messages
+						}
+						Map<Integer, MessageThread> channelThread = channelDownloadedMessages.get(channel.getChannelName()); // get the history of this user
+						if (channelThread == null) { // if first time viewing this channel
+							channelDownloadedMessages.put(channel.getChannelName(), (channelThread = new HashMap<>())); // create new history for this channnel
+						}
+						channelThread.put(message.getId(), new MessageThread(message));
+						
 						doNotify(thUser, gson.toJson(new IncomingMessage(channel.getChannelName(), message, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
 					} else { // user is subscribed, but not viewing the channel at the moment
 						subscription.setUnreadMessages(subscription.getUnreadMessages() + 1); // mark as unread
