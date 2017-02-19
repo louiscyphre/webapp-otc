@@ -84,10 +84,16 @@ public class RegisterServlet extends HttpServlet {
 			if (br != null) {
 				gsonData = br.readLine();
 			}
-System.out.println("register me pls: " + gsonData);
+
 			// parse the data
 			Gson gson = new Gson();
 			User newUser = gson.fromJson(gsonData, User.class);
+			if (newUser.getNickname() == null || newUser.getNickname().isEmpty()) {
+				newUser.setNickname(newUser.getUsername());
+			}
+			if (newUser.getAvatarUrl() == null || newUser.getAvatarUrl().isEmpty()) {
+				newUser.setAvatarUrl(AppConstants.DEFAULT_AVATAR);
+			}
 			ThreadUser thUser = new ThreadUser(newUser.getUsername(), newUser.getNickname(), newUser.getDescription(), newUser.getAvatarUrl());
 			UserCredentials credentials = new UserCredentials(newUser.getUsername(), newUser.getPassword());
 			
