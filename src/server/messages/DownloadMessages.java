@@ -2,7 +2,6 @@ package server.messages;
 
 import java.util.Collection;
 
-import server.model.Message;
 import server.model.MessageThread;
 
 public class DownloadMessages {
@@ -10,15 +9,15 @@ public class DownloadMessages {
 	private String MessageType;
 	private String Channel;
 	private Collection<MessageThread> ChannelThread;
-	private int UnreadMessages;
-	private int UnreadMentionedMessages;
+	private int unreadMessages;
+	private int unreadMentionedMessages;
 	
 	public DownloadMessages(String channel, Collection<MessageThread> channelThread, int unreadMessages, int unreadMentionedMessages) {
 		this.MessageType = "DownloadMessages";
 		this.Channel = channel;
 		this.ChannelThread = channelThread;
-		this.UnreadMessages = unreadMessages;
-		this.UnreadMentionedMessages = unreadMentionedMessages;
+		this.unreadMessages = unreadMessages;
+		this.unreadMentionedMessages = unreadMentionedMessages;
 	}
 
 	/**
@@ -67,28 +66,28 @@ public class DownloadMessages {
 	 * @return the unreadMessages
 	 */
 	public int getUnreadMessages() {
-		return UnreadMessages;
+		return unreadMessages;
 	}
 
 	/**
 	 * @param unreadMessages the unreadMessages to set
 	 */
 	public void setUnreadMessages(int unreadMessages) {
-		UnreadMessages = unreadMessages;
+		unreadMessages = unreadMessages;
 	}
 
 	/**
 	 * @return the unreadMentionedMessages
 	 */
 	public int getUnreadMentionedMessages() {
-		return UnreadMentionedMessages;
+		return unreadMentionedMessages;
 	}
 
 	/**
 	 * @param unreadMentionedMessages the unreadMentionedMessages to set
 	 */
 	public void setUnreadMentionedMessages(int unreadMentionedMessages) {
-		UnreadMentionedMessages = unreadMentionedMessages;
+		unreadMentionedMessages = unreadMentionedMessages;
 	}
 
 	/* (non-Javadoc)

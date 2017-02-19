@@ -67,7 +67,7 @@ public class DatabaseCreator implements ServletContextListener {
     		BasicDataSource ds = (BasicDataSource)context.lookup(cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
     		Connection conn = ds.getConnection();
     		
-    		if (true) {
+			try {
     			System.out.println("deleting database");
     			Statement stmt = conn.createStatement();
     			stmt.execute("DROP TABLE " + AppConstants.MESSAGES);
@@ -76,8 +76,9 @@ public class DatabaseCreator implements ServletContextListener {
     			stmt.execute("DROP TABLE " + AppConstants.USERS);
     			conn.commit();
     			stmt.close();
-    			
-    		}
+			} catch (SQLException e) {
+				
+			}
     		
     		boolean created = false;
     		try{

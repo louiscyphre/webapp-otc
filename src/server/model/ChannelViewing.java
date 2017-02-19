@@ -3,11 +3,9 @@ package server.model;
 
 public class ChannelViewing {
 	private String channel;
-	private boolean isViewing;
 	
-	public ChannelViewing(String channel, boolean isViewing) {
+	public ChannelViewing(String channel) {
 		this.channel = channel;
-		this.isViewing = isViewing;
 	}
 
 	/**
@@ -24,25 +22,11 @@ public class ChannelViewing {
 		this.channel = channel;
 	}
 
-	/**
-	 * @return the isViewing
-	 */
-	public boolean isViewing() {
-		return isViewing;
-	}
-
-	/**
-	 * @param isViewing the isViewing to set
-	 */
-	public void setViewing(boolean isViewing) {
-		this.isViewing = isViewing;
-	}
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "ChannelViewing [channel=" + channel + ", isViewing=" + isViewing + "]";
+		return "ChannelViewing [channel=" + channel + "]";
 	}
 }

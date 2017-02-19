@@ -5,7 +5,9 @@ package server;
  */
 public interface AppConstants {
 
-	//derby constants
+	// default avatar
+	public final String DEFAULT_AVATAR = "img/person.png";
+	// derby constants
 	public final String DB_NAME = "DB_NAME";
 	public final String DB_DATASOURCE = "DB_DATASOURCE";
 	public final String DB_CONTEXT = "java:comp/env/jdbc/ExampleDatasource";
@@ -23,7 +25,7 @@ public interface AppConstants {
 	public final String MESSAGE_CHANNEL_DISCOVERY = "ChannelDiscovery";
 	public final String MESSAGE_DOWNLOAD_MESSAGES = "DownloadMessages";
 	public final String MESSAGE_CHANNEL_VIEWING = "ChannelViewing";
-	public final String MESSAGE_RECEIVED_MESSAGE = "MessageReceived";
+	public final String MESSAGE_RECEIVED_MESSAGE = "SendMessage";
 	// general constants
 	public final int MESSAGES_TO_DOWNLOAD = 10;
 	// users table

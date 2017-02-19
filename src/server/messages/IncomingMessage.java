@@ -5,15 +5,31 @@ import server.model.Message;
 public class IncomingMessage {
 	
 	private String MessageType;
+	private String Channel;
 	private Message Message;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 	
-	public IncomingMessage(Message message, int unreadMessages, int unreadMentionedMessages) {
+	public IncomingMessage(String channel, Message message, int unreadMessages, int unreadMentionedMessages) {
+		this.Channel = channel;
 		this.MessageType = "IncomingMessage";
 		this.Message = message;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = unreadMentionedMessages;
+	}
+
+	/**
+	 * @return the channel
+	 */
+	public String getChannel() {
+		return Channel;
+	}
+
+	/**
+	 * @param channel the channel to set
+	 */
+	public void setChannel(String channel) {
+		Channel = channel;
 	}
 
 	/**

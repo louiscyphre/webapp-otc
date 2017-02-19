@@ -133,6 +133,7 @@ public class Message {
 	 */
 	public void setUser(ThreadUser user) {
 		this.User = user;
+		this.UserId = user.getUsername();
 	}
 
 	/**
@@ -170,9 +171,5 @@ public class Message {
 	public String toString() {
 		return "Message [id=" + Id + ", channelId=" + ChannelId + ", repliedToId=" + RepliedToId + ", User=" + UserId
 				+ ", content=" + Content + ", messageTime=" + MessageTime + "]";
-	}
-	
-	public static Message getMessageByCredentials(int id, MessageCredentials credentials, ThreadUser user, Timestamp messageTime) {
-		return new Message(id, credentials.getChannel(), user, messageTime, credentials.getReplyToID(), credentials.getContent());
 	}
 }

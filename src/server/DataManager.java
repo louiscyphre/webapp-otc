@@ -14,7 +14,6 @@ import server.model.Channel;
 import server.model.ChannelCredentials;
 import server.model.ChannelDiscovery;
 import server.model.Message;
-import server.model.MessageCredentials;
 import server.model.Subscription;
 import server.model.ThreadUser;
 import server.model.User;
@@ -225,7 +224,7 @@ public final class DataManager {
 			prepStmt.setString(1, channelName);
 			ResultSet rs = prepStmt.executeQuery();
 			while (rs.next()) { // iterate over all found subscriptions
-				subscriptions.add(new Subscription(channelName, rs.getString(2)));
+				subscriptions.add(new Subscription(channelName, rs.getString(2), rs.getTimestamp(3), rs.getInt(4), rs.getInt(5), rs.getInt(6)));
 			}
 			rs.close();
 			prepStmt.close();
@@ -363,23 +362,25 @@ public final class DataManager {
 	 * @param conn the connection to the database
 	 * @param credentials the details of the new message
 	 */
-	public static Message addMessage(Connection conn, MessageCredentials credentials, ThreadUser user) {
+	public static Message addMessage(Connection conn, Message message, ThreadUser user) {
 		try {
-			Timestamp messageTime = null;
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT, new String[] { "ID" });
-			prepStmt.setString(1, credentials.getChannel());
-			prepStmt.setString(2, credentials.getUsername());
-			prepStmt.setTimestamp(3, (messageTime = new Timestamp(System.currentTimeMillis())));
-			prepStmt.setTimestamp(4, (messageTime));
-			prepStmt.setInt(5, credentials.getReplyToID());
-			prepStmt.setString(6, credentials.getContent());
+			message.setUser(user);
+			message.setMessageTime(new Timestamp(System.currentTimeMillis()));
+			message.setLastModified(message.getMessageTime());
+			prepStmt.setString(1, message.getChannelId());
+			prepStmt.setString(2, message.getUserId());
+			prepStmt.setTimestamp(3, message.getMessageTime());
+			prepStmt.setTimestamp(4, message.getLastModified());
+			prepStmt.setInt(5, message.getRepliedToId());
+			prepStmt.setString(6, message.getContent());
 			prepStmt.execute();
 			ResultSet rs = prepStmt.getGeneratedKeys();
 			rs.next();
-			int id = rs.getInt(1);
+			message.setId(rs.getInt(1));
 			rs.close();
 			prepStmt.close();
-			return Message.getMessageByCredentials(id, credentials, user, messageTime);
+			return message;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

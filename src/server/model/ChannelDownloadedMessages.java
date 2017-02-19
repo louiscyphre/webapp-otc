@@ -41,6 +41,6 @@ public class ChannelDownloadedMessages {
 	 */
 	@Override
 	public String toString() {
-		return "ChannelReadMessages [channel=" + channel + ", downloadedMessages=" + downloadedMessages + "]";
+		return "ChannelDownloadedMessages [channel=" + channel + ", downloadedMessages=" + downloadedMessages + "]";
 	}
 }

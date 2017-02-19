@@ -1,72 +1,24 @@
 package server.model;
 
 public class MessageCredentials {
-	private String Channel;
-	private String Username;
-	private int ReplyToID;
-	private String Content;
+	private Message Message;
 
-	public MessageCredentials(String channelId, String username, int repliedToId, String content) {
-		this.Channel = channelId;
-		this.Username = username;
-		this.ReplyToID = repliedToId;
-		this.Content = content;
+	public MessageCredentials(Message message) {
+		this.Message = message;
 	}
 
 	/**
-	 * @return the channel
+	 * @return the message
 	 */
-	public String getChannel() {
-		return Channel;
+	public Message getMessage() {
+		return Message;
 	}
 
 	/**
-	 * @param channel the channel to set
+	 * @param message the message to set
 	 */
-	public void setChannel(String channel) {
-		Channel = channel;
-	}
-
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return Username;
-	}
-
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		Username = username;
-	}
-
-	/**
-	 * @return the replyToID
-	 */
-	public int getReplyToID() {
-		return ReplyToID;
-	}
-
-	/**
-	 * @param replyToID the replyToID to set
-	 */
-	public void setReplyToID(int replyToID) {
-		ReplyToID = replyToID;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return Content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(String content) {
-		Content = content;
+	public void setMessage(Message message) {
+		Message = message;
 	}
 
 	/* (non-Javadoc)
@@ -74,7 +26,6 @@ public class MessageCredentials {
 	 */
 	@Override
 	public String toString() {
-		return "MessageCredentials [Channel=" + Channel + ", Username=" + Username + ", ReplyToID=" + ReplyToID
-				+ ", Content=" + Content + "]";
+		return "MessageCredentials [Message=" + Message + "]";
 	}
 }
