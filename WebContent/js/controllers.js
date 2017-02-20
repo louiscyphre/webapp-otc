@@ -22,7 +22,7 @@
           Username: $scope.user.Username,
           Password: $scope.user.Password
         };
-        console.log('in login(): Sending: ' + JSON.stringify(credentials));
+        //console.log('in login(): Sending: ' + JSON.stringify(credentials));
         Servlets.send("login", credentials);
       };
 
@@ -99,14 +99,15 @@
       };
 
       var appendToThreadById = function (reply, thread) {
-        console.log('in appendToThreadById(): appending: ' + JSON.stringify(reply));
-        for (var obj in thread) {
-          if (reply.Message.RepliedToId === obj.Message.Id) {
-            obj.Replies.push(reply);
+        console.log('in appendToThreadById(): appending a: ' + JSON.stringify(reply));
+        console.log('in appendToThreadById(): appending to: ' + JSON.stringify(thread));
+        for (var i = 0; i < thread.length; ++i) {
+          if (reply.Message.RepliedToId === thread[i].Message.Id) {
+            thread[i].Replies.push(reply);
             return;
           }
-          if (obj.Replies.length > 0) {
-            appendToThreadById(reply, obj.Replies);
+          if (thread[i].Replies.length > 0) {
+            appendToThreadById(reply, thread[i].Replies);
           }
         }
       };
@@ -162,7 +163,7 @@
       };
 
       $scope.enterPrivateChannel = function (targetUsername, targetNickname) {
-        console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
+        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
         if (targetUsername === $scope.user.Username) {
           return;
         }
@@ -176,12 +177,12 @@
           finalName = possibleChannelName2;
         }
         if (!finalName) {
-          console.log('enterPrivateChannel: private channel not found!');
+          //console.log('enterPrivateChannel: private channel not found!');
           var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
           $scope.createChannel(possibleChannelName1, description, targetUsername);
           return;
         }
-        console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));
+        //console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));
         $scope.viewingChannel(finalName);
         $scope.currentChannelThread = getCurrentThread(finalName, $scope.privateChannels);
         $scope.currentChannel = findChannel(finalName, $scope.privateChannels).object;
@@ -196,7 +197,7 @@
         };
         //console.log('in downloadMessages(): Sending: ' + JSON.stringify(downloadMessagesJson));
         if ($scope.channelSelected === true) {
-          console.log('the name is3: ' + channelName);
+          //console.log('Channel selected: ' + channelName);
           Socket.send(downloadMessagesJson);
         }
       };
@@ -304,7 +305,6 @@
       $scope.$on('AuthSuccess', function (event, response) {
         //console.log('ChatRoomsCtrl: got event AuthSuccess');
         $scope.chatRoomsScreenHidden = false;
-        //get all channels and subscribed channels from json (must be here or on auth with servlet??)
         $rootScope.user = response.User;
         //console.log('in ChatRoomsCtrl:(): public channels:' + JSON.stringify(response.PublicChannels));
         //console.log('in ChatRoomsCtrl:(): subscribed channels:' + JSON.stringify(response.SubscribedChannels));
@@ -315,7 +315,7 @@
       });
 
       $scope.$on('SubscribeSuccess', function (event, response) {
-        console.log('ChatRoomsCtrl: got event SubscribeSuccess');
+        //console.log('ChatRoomsCtrl: got event SubscribeSuccess');
         var channelsList;
         if (response.Channel.IsPublic === true) {
           $scope.subscribedChannels.push(response.Channel);
@@ -400,13 +400,21 @@
           //console.log('ChatRoomsCtrl: got event DownloadMessages: !response.ChannelThread || !response.ChannelThread.length || !channel happened  ');
           return;
         }
-        /*if (response.ChannelThread[0].Message.RepliedToId !== -1) {
-          appendToThreadById(response.ChannelThread[0], thread);
-          response.ChannelThread.splice(0, 1);
-        }*/
         for (var i = 0; i < response.ChannelThread.length; i++) {
+          if (response.ChannelThread[i].Message.RepliedToId !== -1) {
+            continue;
+          }
+          console.log('DownloadMessages: channel.object.ChannelThreadd before push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
           channel.object.ChannelThread.push(response.ChannelThread[i]);
+          console.log('DownloadMessages: channel.object.ChannelThreadd after push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
+          //console.log('DownloadMessages: removing from response.ChannelThread after push: response.ChannelThread[i]:', JSON.stringify(response.ChannelThread[i]));
+          //response.ChannelThread.splice(i, 1);
         }
+        for (var j = 0; j < response.ChannelThread.length; j++) {
+          appendToThreadById(response.ChannelThread[j], channel.object.ChannelThread);
+          //response.ChannelThread.splice(j, 1);
+        }
+
         channel.object.unreadMessages = response.unreadMessages;
         channel.object.unreadMentionedMessages = response.unreadMentionedMessages;
 
@@ -420,19 +428,13 @@
       });
 
       $scope.$on('ChannelDiscovery', function (event, response) {
-        console.log('ChatRoomsCtrl: got event ChannelDiscovery');
-        //if (!$scope.publicChannels || !$scope.publicChannels.length) {
-        //  $scope.publicChannels = response.Channels;
-        //}
+        //console.log('ChatRoomsCtrl: got event ChannelDiscovery');
         angular.merge($scope.publicChannels, $scope.publicChannels, response.Channels);
         $scope.$digest();
-        //for (var i = 0; i < response.Channels.length; ++i) {
-        //  $scope.publicChannels.push(response.Channel);
-        //}
       });
 
       $scope.$on('IncomingMessage', function (event, response) {
-        console.log('ChatRoomsCtrl: got event IncomingMessage');
+        //console.log('ChatRoomsCtrl: got event IncomingMessage');
         if (response.Channel === $scope.currentChannel.ChannelName) {
           var message = {
             Message: {
@@ -452,14 +454,14 @@
           $scope.currentChannel.ChannelThread.push(message);
           $scope.$digest();
         } else {
-          $scope.currentChannel = findChannel(response.Channel, $scope.subscribedChannels);
-          if (!$scope.currentChannel) {
-            $scope.currentChannel = findChannel(response.Channel, $scope.privateChannels);
+          var channel = findChannel(response.Channel, $scope.subscribedChannels);
+          if (!channel) {
+            channel = findChannel(response.Channel, $scope.privateChannels);
           }
-          console.log($scope.currentChannel);
-          $scope.currentChannel.object.unreadMessages = response.unreadMessages;
-          $scope.currentChannel.object.unreadMentionedMessages = response.unreadMentionedMessages;
-          console.log($scope.currentChannel);
+          //console.log($scope.currentChannel);
+          channel.object.unreadMessages = response.unreadMessages;
+          channel.object.unreadMentionedMessages = response.unreadMentionedMessages;
+          //console.log($scope.currentChannel);
           $scope.$digest(); // needed?
         }
       });

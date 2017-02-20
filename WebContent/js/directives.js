@@ -10,7 +10,26 @@
       scope: {
         thread: '=',
       },
-      template: "<li class=\"message\"> <div class=\"media\"> <div class=\"media-left\"> <img class=\"user-avatar-chat\" data-ng-src=\"{{thread.Message.User.AvatarUrl}}\" alt=\"userpic\" /> </div> <div class=\"media-body\"> <h5><a href=\"javascript:void(0)\" data-ng-click=\"enterPrivateChannel(thread.Message.User.Username, thread.Message.User.Nickname)\"> {{thread.Message.User.Nickname}}</a></h5> <h6>{{thread.Message.MessageTime}}</h6> <p>{{thread.Message.Content}}</p> </span> </div> </li>",
+      template: "" +
+        "<ul class = 'messages'>" +
+        " <li class='message'>" +
+        "  <div class='media'>" +
+        "   <div class='media-left'>" +
+        "    <img class='user-avatar-chat'" +
+        "         data-ng-src='{{thread.Message.User.AvatarUrl}}'" +
+        "         alt='userpic'/>" +
+        "   </div>" +
+        "   <div class='media-body'>" +
+        "    <h5><a href = 'javascript:void(0)'" +
+        "        data-ng-click='enterPrivateChannel(thread.Message.User.Username," +
+        "        thread.Message.User.Nickname)'> {{thread.Message.User.Nickname}}</a>" +
+        "    </h5>" +
+        "    <h6>{{thread.Message.MessageTime}}</h6>" +
+        "    <p>{{thread.Message.Content}}</p>" +
+        "   </div>" +
+        "  </div>" +
+        " </li>" +
+        "</ul>",
       link: function (scope, element, attrs) {
         //check if this member has children
         if (angular.isArray(scope.thread.Replies)) {
@@ -27,7 +46,7 @@
       scope: {
         discussion: '='
       },
-      template: "<ul class=\"messages\"><thread data-ng-repeat='thread in discussion' thread='thread'></thread></ul>"
+      template: "<ul class='messages'><thread data-ng-repeat='thread in discussion' thread='thread'></thread></ul>"
     };
   }).directive('scrolledDownCallback', function () {
     return {

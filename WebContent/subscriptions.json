@@ -5,7 +5,7 @@
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
 		"lastReadMessageId" : 8,
 		"unreadMessages" : 6,
-		"unreadMentionedMessages" : 0
+		"unreadMentionedMessages" : 2
 	},
 	{
 		"ChannelId" : "Web Programming",
@@ -56,8 +56,64 @@
 		"unreadMentionedMessages" : 0
 	},
 	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "HobGoblin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "Reaper",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "Baybaba",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
 		"ChannelId" : "Algotrading",
 		"UserId" : "Ilia",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Algotrading",
+		"UserId" : "Odmin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 0,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Programmers",
+		"UserId" : "Ilia",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 0,
+		"unreadMessages" : 1,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Programmers",
+		"UserId" : "Odmin",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 0,
+		"unreadMessages" : 1,
+		"unreadMentionedMessages" : 1
+	},
+	{
+		"ChannelId" : "Image Processing",
+		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
 		"lastReadMessageId" : 8,
 		"unreadMessages" : 0,

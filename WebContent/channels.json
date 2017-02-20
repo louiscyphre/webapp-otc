@@ -2,25 +2,31 @@
 	{
 		"ChannelName" : "Web Programming",
 		"Description" : "Channel for discussing the project",
-		"NumberOfSubscribers" : 6,
+		"NumberOfSubscribers" : 9,
 		"IsPublic" : true
 	},
 	{
 		"ChannelName" : "Software Engineering",
-		"Description" : "Channel for discussing homework and the test",
+		"Description" : "Channel for discussing homework and the test. Test test test test test test test test test test test",
 		"NumberOfSubscribers" : 1,
 		"IsPublic" : true
 	},
 	{
 		"ChannelName" : "Image Processing",
 		"Description" : "should not have taken",
-		"NumberOfSubscribers" : 0,
+		"NumberOfSubscribers" : 1,
 		"IsPublic" : true
 	},
 	{
 		"ChannelName" : "Algotrading",
 		"Description" : "seems good",
-		"NumberOfSubscribers" : 1,
+		"NumberOfSubscribers" : 2,
+		"IsPublic" : true
+	},
+	{
+		"ChannelName" : "Programmers",
+		"Description" : "How to make money from trash",
+		"NumberOfSubscribers" : 2,
 		"IsPublic" : true
 	},
 	{

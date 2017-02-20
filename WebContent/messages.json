@@ -87,7 +87,7 @@
 		"MessageTime" : "2017-01-26T18:23:39Z",
 		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : 7,
-		"Content" : "Testing yet again a new message Id: 10. RepliedToId : 7"
+		"Content" : "Hello @Odmin aka @supuser!  Testing yet again a new message Id: 10. RepliedToId : 7"
 	},
 	{
 		"Id" : 11,
@@ -123,6 +123,15 @@
 		"MessageTime" : "2017-01-26T18:23:39Z",
 		"LastModified" : "2017-01-26T18:23:39Z",
 		"RepliedToId" : 4,
-		"Content" : "Testing yet again a new message Id: 14. RepliedToId : 4"
+		"Content" : "Testing yet again a new message Id: 14. RepliedToId : 4 Hello @Odmin aka @supuser! "
+	},
+	{
+		"Id" : 15,
+		"ChannelId" : "Programmers",
+		"UserId" : "Odmin",
+		"MessageTime" : "2017-01-26T18:23:39Z",
+		"LastModified" : "2017-01-26T18:23:39Z",
+		"RepliedToId" : -1,
+		"Content" : "Money from trash https://habrahabr.ru/post/321978/ Id: 15. RepliedToId : -1 Hello @Odmin aka @supuser! "
 	}
 ]
