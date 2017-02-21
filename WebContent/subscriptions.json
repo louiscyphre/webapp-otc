@@ -16,6 +16,14 @@
 		"unreadMentionedMessages" : 0
 	},
 	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "Goblin2",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 6,
+		"unreadMentionedMessages" : 0
+	},
+	{
 		"ChannelId" : "Software Engineering",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
@@ -60,7 +68,15 @@
 		"UserId" : "HobGoblin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
 		"lastReadMessageId" : 8,
-		"unreadMessages" : 0,
+		"unreadMessages" : 6,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "HobGoblin2",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 6,
 		"unreadMentionedMessages" : 0
 	},
 	{
@@ -68,7 +84,15 @@
 		"UserId" : "Reaper",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
 		"lastReadMessageId" : 8,
-		"unreadMessages" : 0,
+		"unreadMessages" : 6,
+		"unreadMentionedMessages" : 0
+	},
+	{
+		"ChannelId" : "Web Programming",
+		"UserId" : "Reaper2",
+		"SubscriptionTime" : "2017-01-01T00:00:00Z",
+		"lastReadMessageId" : 8,
+		"unreadMessages" : 6,
 		"unreadMentionedMessages" : 0
 	},
 	{
@@ -76,14 +100,14 @@
 		"UserId" : "Baybaba",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
 		"lastReadMessageId" : 8,
-		"unreadMessages" : 0,
+		"unreadMessages" : 6,
 		"unreadMentionedMessages" : 0
 	},
 	{
 		"ChannelId" : "Algotrading",
 		"UserId" : "Ilia",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"lastReadMessageId" : 8,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -91,7 +115,7 @@
 		"ChannelId" : "Algotrading",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"lastReadMessageId" : 8,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -115,7 +139,7 @@
 		"ChannelId" : "Image Processing",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"lastReadMessageId" : 8,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -123,7 +147,7 @@
 		"ChannelId" : "IliaOdmin",
 		"UserId" : "Ilia",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"lastReadMessageId" : 8,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	},
@@ -131,7 +155,7 @@
 		"ChannelId" : "IliaOdmin",
 		"UserId" : "Odmin",
 		"SubscriptionTime" : "2017-01-01T00:00:00Z",
-		"lastReadMessageId" : 8,
+		"lastReadMessageId" : 0,
 		"unreadMessages" : 0,
 		"unreadMentionedMessages" : 0
 	}

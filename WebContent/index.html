@@ -16,6 +16,7 @@
   <script type="text/javascript" src="js/constants.js"></script>
   <script type="text/javascript" src="js/controllers.js"></script>
   <script type="text/javascript" src="js/services.js "></script>
+  <script type="text/javascript" src="js/filters.js "></script>
   <script type="text/javascript" src="js/directives.js "></script>
 
 </head>
@@ -116,7 +117,7 @@
     </div>
     <div class="chat-text-area col-md-7">
       <div class="chat-text-area-inner" scrolled-down-callback="downloadMessages(currentChannel)" data-ng-show="channelSelected == true">
-        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread"></data-discussion>
+        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" data-enter-private-channel="enterPrivateChannel"></data-discussion>
       </div>
       <div class="chat-text-area-footer" data-ng-show="channelSelected">
         <footer class="footer">
@@ -131,20 +132,20 @@
     </div>
 
     <div class="side side-right col-md-2">
-      <ul class="users-online" data-ng-show="channelSelected == true">
-        <li class="users-online-control table-row">
-          <div>
-            <div class="block-left">
-              <span class="badge badge-channel" data-ng-mouseenter="displayInfo=true" data-ng-mouseleave="displayInfo=false"><img class="badge-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></span>
-            </div>
-            <div class="block-right">
-              <button type="button" class="btn btn-danger unsubscribe" data-ng-click="unsubscribeChannel(channel.ChannelName)">Unsubscribe</button>
-            </div>
+      <div class="users-online-control table-row" data-ng-show="channelSelected == true">
+        <div>
+          <div class="block-left">
+            <span class="badge badge-channel" data-ng-mouseenter="displayInfo=true" data-ng-mouseleave="displayInfo=false"><img class="badge-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></span>
           </div>
-        </li>
-        <li class="description" data-ng-show="displayInfo == true">
-          <span>{{currentChannel.Description}}</span>
-        </li>
+          <div class="block-right">
+            <button type="button" class="btn btn-danger unsubscribe" data-ng-click="unsubscribeChannel(channel.ChannelName)">Unsubscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="description " data-ng-show="displayInfo == true">
+        <span>{{currentChannel.Description}}</span>
+      </div>
+      <ul class="users-online" data-ng-show="channelSelected == true">
         <li data-ng-repeat="user in currentChannel.Users" data-ng-click="enterPrivateChannel(user.Username, user.Nickname)" data-ng-class="{active: isActive(user.Username)}">
           <div class="side-channel-row">
             <div class="block-left">

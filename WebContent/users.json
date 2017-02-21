@@ -28,9 +28,30 @@
 		"AvatarUrl" : "img/person.png"
 	},
 	{
+		"Username" : "Goblin2",
+		"Password" : "12345",
+		"Nickname" : "supsupuser2",
+		"Description" : "שטו?",
+		"AvatarUrl" : "img/person.png"
+	},
+	{
+		"Username" : "HobGoblin2",
+		"Password" : "1q2w",
+		"Nickname" : "Someone2",
+		"Description" : "secret stuff",
+		"AvatarUrl" : "img/person.png"
+	},
+	{
 		"Username" : "Reaper",
 		"Password" : "1324",
 		"Nickname" : "Reaper",
+		"Description" : "let's reap",
+		"AvatarUrl" : "img/person.png"
+	},
+	{
+		"Username" : "Reaper2",
+		"Password" : "1324",
+		"Nickname" : "Reaper2",
 		"Description" : "let's reap",
 		"AvatarUrl" : "img/person.png"
 	},

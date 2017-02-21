@@ -162,14 +162,14 @@
         Socket.send(createChannelJson);
       };
 
-      $scope.enterPrivateChannel = function (targetUsername, targetNickname) {
-        //console.log('in enterPivateChannel(): $scope.currentChannel: ' + $scope.currentChannel);
-        if (targetUsername === $scope.user.Username) {
+      $scope.enterPrivateChannel = function (dstUsername, dstNickname) {
+        console.log('in enterPivateChannel(): entering: dstUsername, dstNickname: ' + JSON.stringify(dstUsername) + JSON.stringify(dstNickname));
+        if (dstUsername === $scope.user.Username) {
           return;
         }
         $scope.channelSelected = true;
-        var possibleChannelName1 = $scope.user.Username + targetUsername;
-        var possibleChannelName2 = targetUsername + $scope.user.Username;
+        var possibleChannelName1 = $scope.user.Username + dstUsername;
+        var possibleChannelName2 = dstUsername + $scope.user.Username;
         var finalName = null;
         if (findChannel(possibleChannelName1, $scope.privateChannels)) {
           finalName = possibleChannelName1;
@@ -178,8 +178,8 @@
         }
         if (!finalName) {
           //console.log('enterPrivateChannel: private channel not found!');
-          var description = "Private channel for " + $scope.user.Nickname + " and " + targetNickname + ", created by " + $scope.user.Nickname;
-          $scope.createChannel(possibleChannelName1, description, targetUsername);
+          var description = "Private channel for " + $scope.user.Nickname + " and " + dstNickname + ", created by " + $scope.user.Nickname;
+          $scope.createChannel(possibleChannelName1, description, dstUsername);
           return;
         }
         //console.log('in enterPivateChannel(): entering: ' + JSON.stringify(finalName));

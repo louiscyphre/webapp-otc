@@ -111,12 +111,14 @@ body {
 }
 
 .side-left {
+  padding-bottom: 0.5em;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
 .side-right {
+  height: 100%;
   padding: 1em;
 }
 
@@ -129,6 +131,7 @@ body {
 .user-information {
   background-color: #909090;
   padding: 1em;
+  height: auto;
 }
 
 .user-information h4,
@@ -151,6 +154,23 @@ body {
   overflow: hidden;
 }
 
+.users-online {
+  height: 93vh;
+}
+
+
+/* This feature is optional, but I think it's cool, 
+   but requires to make listeners on PgUp-PgDn and arrows */
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
+
 .subscribed-channels:hover,
 .private-channels:hover,
 .users-online:hover,
@@ -159,8 +179,7 @@ body {
 }
 
 .users-online-control {
-  padding: 0.5em;
-  height: 2.8em;
+  height: 3.7em;
 }
 
 .description {
@@ -212,7 +231,6 @@ body {
 
 .badge-channel {
   height: 20px;
-  /*margin: -1px;*/
   background-color: transparent;
   overflow: hidden;
   padding-top: 2px;
@@ -353,220 +371,3 @@ h6 {
   border-radius: 50%;
   background-color: #ffffff;
 }
-
-
-/*
-ul.users-online li td {
-	padding-top: 1%;
-	padding-bottom: 1%;
-}
-
-.chat-container div {
-	height: 100%;
-	overflow: auto;
-}
-
-.chat-text-area {
-	background-color: #E6DDD4;
-	overflow: auto;
-	margin-left: 20%;
-	padding-left: 2%;
-	padding-right: 2%;
-	margin-right: 0%;
-	height: 100%;
-}
-
-.chat-text-area ul li table tr td div.message {
-	background-color: #DBF7C6;
-	margin-right: 2%;
-	padding: 15px;
-	min-height: 120px;
-	min-width: 120px;
-	text-align: justify;
-}
-
-.chat-text-area ul li table tr td div.message-info {
-	background-color: #FCF8E3;
-	word-break: keep-all;
-	margin-right: 20px;
-	padding-left: 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-right: 10px;
-	font-size: 85%;
-	max-height: 150px;
-	max-width: 150px;
-	height: 120px;
-	width: 120px;
-	float: left;
-}
-
-.chat-text-area ul li table tr td div {
-	border: 2px solid #B3B3B3;
-	border-radius: 8px;
-	font-family: monospace;
-	width: 100%;
-	box-shadow: 8px 0px 10px rgba(0, 0, 0, 0.3);
-	text-align: left;
-	display: inline-block;
-}
-
-.chat-text-area ul li table tr td {
-	padding: 15px;
-	height: 100%;
-	overflow: auto;
-}
-
-.chat-text-area ul {
-	list-style-type: none;
-}
-
-.chat-text-area footer {
-	position: fixed;
-	bottom: 0;
-	left: 24%;
-	border-radius: 8px;
-	width: 74%;
-	box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.3);
-	background-color: #B3B3B3;
-}
-
-.chat-text-area input {
-	position: fixed;
-	bottom: 0;
-	border-radius: 8px;
-	font-size: 16px;
-}
-
-.chat-text-area .footer .btn-chat-send {
-	width: 100px;
-	border-top-right-radius: 8px;
-	border-bottom-right-radius: 8px;
-}
-
-.channel-icon {
-	width: 40%;
-	min-width: 20px;
-	margin: -1px;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
-
-.envelope-icon {
-	width: 40%;
-	min-width: 20px;
-	margin: -1px;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
-
-.channel-control {
-	border: 0;
-	background: transparent;
-	margin: -1px;
-	padding: 0px;
-}
-
-.channel-control-icon {
-	width: 40%;
-	min-width: 20px;
-	padding: 1px;
-}
-
-.user-avatar-chat {
-	width: 50px;
-	height: 50px;
-	margin: 0 0 10px;
-	margin-right: 10px;
-	border: 1px solid #B3B3B3;
-	border-radius: 50%;
-	background-color: #ffffff;
-}
-
-.description {
-	display: inline-block;
-	position: relative;
-}
-
-.description-content {
-	display: none;
-	overflow-y: auto;
-	position: absolute;
-	background-color: #f9f9f9;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	padding: 2%;
-	left: 23%;
-	top: 40%;
-	text-align: justify;
-}
-
-.description:hover .description-content {
-	max-height: 300px;
-	max-width: 300px;
-	min-width: 160px;
-	min-height: 160px;
-	display: block;
-	background-color: #FCF8E3;
-	color: #2E3436;
-}
-
-.description .description-content:hover {
-	overflow-y: auto;
-}
-
-.chat-description {
-	display: inline-block;
-	position: static;
-}
-
-.chat-description-content {
-	display: none;
-	visibility: hidden;
-	overflow-y: auto;
-	position: absolute;
-	background-color: #f9f9f9;
-	min-width: 160px;
-	min-height: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	padding: 1%;
-	z-index: 999;
-}
-
-.chat-description:hover .chat-description-content {
-	max-height: 300px;
-	max-width: 300px;
-	display: block;
-	visibility: visible;
-	background-color: #FCF8E3;
-	color: #2E3436;
-	z-index: 999;
-}
-
-.chat-description .chat-description-content:hover {
-	overflow-y: auto;
-}
-
-.side input:focus {
-	width: 100%;
-	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
-}
-
-.side input[type="text"] {
-	width: 16%;
-	height: auto;
-	box-sizing: border-box;
-	border-radius: 8px;
-	border: 2px solid #B3B3B3;
-	background-color: white;
-	background-image: url('../img/searchicon.png');
-	background-size: contain;
-	background-position: 4px 4px;
-	background-repeat: no-repeat;
-	padding: 6px 6px 6px 50px;
-	transition: width 0.4s ease-in-out;
-	position: fixed;
-	bottom: 0;
-	outline: none;
-	margin: 1%;
-	font-size: 18px;
-}*/
