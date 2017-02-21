@@ -418,7 +418,7 @@ public class WebChatEndPoint {
 					if (message.getMessage().getId() > maxId) {
 						maxId = message.getMessage().getId();
 						subscription.setUnreadMessages(subscription.getUnreadMessages() - 1);
-						if (message.getMessage().getContent().contains("@" + usersMap.get(message.getMessage().getUser().getNickname()))) {
+						if (message.getMessage().getContent().contains("@" + usersMap.get(chatUsers.get(session).getUsername()).getNickname())) {
 							subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() - 1);
 						}
 						subscription.setLastReadMessageId(maxId);
