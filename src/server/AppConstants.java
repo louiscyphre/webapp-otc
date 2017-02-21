@@ -98,5 +98,5 @@ public interface AppConstants {
 	public final String SELECT_MESSAGE_BY_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE ID=?";
 	public final String SELECT_MESSAGE_BY_REPLY_TO_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE RepliedToId=?";
 	public final String SELECT_MESSAGES_STMT = "SELECT * FROM " + MESSAGES;
-	public final String UPDATE_MESSAGE_LASTMODIFIED_STMT = "UPDATE " + MESSAGES + " LastModified=? WHERE ID=?";
+	public final String UPDATE_MESSAGE_LASTMODIFIED_STMT = "UPDATE " + MESSAGES + " SET LastModified=? WHERE ID=?";
 }

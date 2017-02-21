@@ -315,7 +315,7 @@ public final class DataManager {
     public static Message getMessageByID(Connection conn, int id) {
     	try {
     		Message message = null;
-			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGE_BY_ID_STMT);
 			prepStmt.setInt(1, id);
 			ResultSet rs = prepStmt.executeQuery();
 			if (rs.next()) {
@@ -324,6 +324,30 @@ public final class DataManager {
 			rs.close();
 			prepStmt.close();
 			return message;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    /**
+     * Returns the nickname of the author of a given message
+     * @param conn the connection to the database
+     * @param id the id of the message which auther to look for
+     * @return the nickname of the user who wrote the message
+     */
+    public static String getNicknameByMessageId(Connection conn, int id) {
+    	try {
+    		String nickname = "";
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGE_BY_ID_STMT);
+			prepStmt.setInt(1, id);
+			ResultSet rs = prepStmt.executeQuery();
+			if (rs.next()) {
+				nickname = getUserByUsername(conn, rs.getString(3)).getNickname();
+			}
+			rs.close();
+			prepStmt.close();
+			return nickname;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

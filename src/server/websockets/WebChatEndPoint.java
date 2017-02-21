@@ -163,7 +163,7 @@ public class WebChatEndPoint {
 		downloadedMessages.remove(session);
 		chatViewedChannels.remove(session);
 	}
-	
+
 	@OnError
 	public void error(Session session, Throwable t) {
 	}
@@ -441,6 +441,11 @@ public class WebChatEndPoint {
 		MessageCredentials credentials = gson.fromJson(msgContent, MessageCredentials.class);
 		Channel channel = DataManager.getChannelByName(conn, credentials.getMessage().getChannelId()); // get the required channel
 		if (channel != null) { // check if channel exists
+			if (credentials.getMessage().getRepliedToId() >= 0) {
+				String originalUserNickname = DataManager.getNicknameByMessageId(conn, credentials.getMessage().getRepliedToId());
+				credentials.getMessage().setContent("@" + originalUserNickname + " " + credentials.getMessage().getContent());
+			}
+			
 			User user = chatUsers.get(session);
 			if (DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getMessage().getChannelId(), user.getUsername()) != null) { // check if subscribed
 				DataManager.updateChannelUsers(conn, channel); // get the channel's users
