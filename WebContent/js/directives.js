@@ -9,7 +9,8 @@
       replace: true,
       scope: {
         thread: '=',
-        enterPrivateChannel: '='
+        enterPrivateChannel: '=',
+        setReply: '='
       },
       template: "" +
         "<ul class = 'messages'>" +
@@ -26,6 +27,9 @@
         "    </h5>" +
         "    <h6>posted at: {{thread.Message.MessageTime | toDateObject | date: 'HH:mm:ss dd/MM/yy' }}</h6>" +
         "    <p>{{thread.Message.Content}}</p>" +
+        "     <div class='block-right'>" +
+        "      <a href='javascript: void(0)' data-ng-click='setReply(thread.Message.Id)'>Reply</a>" + // TODO normally
+        "    </div>" +
         "   </div>" +
         "  </div>" +
         " </li>" +
@@ -33,7 +37,7 @@
       link: function (scope, element, attrs) {
         //check if this member has children
         if (angular.isArray(scope.thread.Replies)) {
-          $compile('<discussion discussion="thread.Replies" enter-private-channel="enterPrivateChannel"></discussion>')(scope, function (cloned, scope) {
+          $compile('<discussion discussion="thread.Replies" enter-private-channel="enterPrivateChannel" set-reply="setReply"></discussion>')(scope, function (cloned, scope) {
             element.append(cloned);
           });
         }
@@ -45,9 +49,10 @@
       replace: true,
       scope: {
         discussion: '=',
-        enterPrivateChannel: '='
+        enterPrivateChannel: '=',
+        setReply: '='
       },
-      template: "<ul class='messages'><thread data-ng-repeat='thread in discussion' thread='thread' enter-private-channel='enterPrivateChannel'></thread></ul>"
+      template: "<ul class='messages'><thread data-ng-repeat='thread in discussion' thread='thread' enter-private-channel='enterPrivateChannel' set-reply='setReply'></thread></ul>"
     };
   }).directive('scrolledDownCallback', function () {
     return {

@@ -98,16 +98,16 @@
         return null;
       };
 
-      var appendToThreadById = function (reply, thread) {
-        console.log('in appendToThreadById(): appending a: ' + JSON.stringify(reply));
-        console.log('in appendToThreadById(): appending to: ' + JSON.stringify(thread));
+      var appendToThreadById = function (replyMessage, thread) {
+        //console.log('in appendToThreadById(): appending a: ' + JSON.stringify(replyMessage));
+        //console.log('in appendToThreadById(): appending to: ' + JSON.stringify(thread));
         for (var i = 0; i < thread.length; ++i) {
-          if (reply.Message.RepliedToId === thread[i].Message.Id) {
-            thread[i].Replies.push(reply);
+          if (replyMessage.Message.RepliedToId === thread[i].Message.Id) {
+            thread[i].Replies.push(replyMessage);
             return;
           }
           if (thread[i].Replies.length > 0) {
-            appendToThreadById(reply, thread[i].Replies);
+            appendToThreadById(replyMessage, thread[i].Replies);
           }
         }
       };
@@ -247,7 +247,7 @@
           MessageType: "SendMessage",
           MessageContent: {
             Message: {
-              ChannelId: $scope.currentChannel.ChannelName,
+              Channel: $scope.currentChannel.ChannelName,
               RepliedToId: $scope.repliedToId,
               Content: message
             }
@@ -274,8 +274,9 @@
         return $scope.currentChannel.ChannelName === channelName;
       };
 
-      $scope.reply = function (messageId) {
-        $scope.repliedToId = ($scope.repliedToId === messageId) ? -1 : messageId;
+      $scope.setReply = function (repliedToId) {
+        console.log('ChatRoomsCtrl: setReply(): repliedToId is:', repliedToId);
+        $scope.repliedToId = ($scope.repliedToId === repliedToId) ? -1 : repliedToId;
       };
 
       $scope.getPrivateChannelName = function (channelName) {
