@@ -18,6 +18,11 @@ import server.model.Subscription;
 import server.model.ThreadUser;
 import server.model.User;
 
+/**
+ * Static class that manages the communication between server and the database
+ * @author Ilia & Michael
+ * 
+ */
 public final class DataManager {
 	
 	private DataManager() {} // making this class none-initializable ("pure static")
@@ -261,6 +266,12 @@ public final class DataManager {
 		}
 	}
 	
+	/**
+	 * Adds a subscription of a user to a channel into the database
+	 * @param conn the connection to the database
+	 * @param subscription the subscription to add
+	 * @param subscriptionTime the time when the subscription was made (server time)
+	 */
 	public static void addSubscription(Connection conn, Subscription subscription, Timestamp subscriptionTime) {
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.INSERT_SUBSCRIPTION_STMT);
@@ -280,6 +291,11 @@ public final class DataManager {
 		}
 	}
 	
+	/**
+	 * Removes a subscription of a user to a channel from the database
+	 * @param conn the connection to the database
+	 * @param subscription the subscription to remove
+	 */
 	public static void removeSubscription(Connection conn, Subscription subscription) {
 		try {
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.REMOVE_SUBSCRIPTION_BY_CHANNEL_AND_USER_STMT);
@@ -292,6 +308,11 @@ public final class DataManager {
 		}
 	}
     
+	/**
+	 * Updates details of an existing subscription in the database
+	 * @param conn the connection to the database
+	 * @param subscription the subscription to update (including the new details)
+	 */
     public static void updateSubscription(Connection conn, Subscription subscription) {
     	try {
     		PreparedStatement prepStmt = conn.prepareStatement(AppConstants.UPDATE_SUBSCRIPTION_STMT);
@@ -412,7 +433,14 @@ public final class DataManager {
 		}
 	}
 	
-	public static void updateThread(Connection conn, Message rootMessage, Timestamp newTime) {
+	/**
+	 * updates the "Last Modified" timestamp of all messages in a message-thread (message and its replies)
+	 * @param conn the connection to the database
+	 * @param rootMessage the current parent of the thread (or subthread)
+	 * @param newTime the new timestamp to give to the messages
+	 * @param modifiedMessages used to return the IDs of all the messages of the thread
+	 */
+	public static void updateThread(Connection conn, Message rootMessage, Timestamp newTime, ArrayList<Integer> modifiedMessages) {
 		try {
 			rootMessage.setLastModified(newTime);
 			PreparedStatement stmt = conn.prepareStatement(AppConstants.UPDATE_MESSAGE_LASTMODIFIED_STMT);
@@ -420,6 +448,10 @@ public final class DataManager {
 			stmt.setInt(2, rootMessage.getId());
 			stmt.execute();
 			stmt.close();
+			
+			if (!modifiedMessages.contains(rootMessage.getId())) {
+				modifiedMessages.add(rootMessage.getId());
+			}
 			
 			PreparedStatement repliesStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGE_BY_REPLY_TO_ID_STMT);
 			repliesStmt.setInt(1, rootMessage.getId());
@@ -433,7 +465,8 @@ public final class DataManager {
 						repliesRs.getTimestamp(4),
 						repliesRs.getTimestamp(5),
 						repliesRs.getInt(6),
-						repliesRs.getString(7)), newTime);
+						repliesRs.getString(7)),
+					newTime, modifiedMessages);
 			}
 			
 			repliesRs.close();
@@ -443,6 +476,12 @@ public final class DataManager {
 		}
 	}
 	
+	/**
+	 * Searches all public channel by a channel name and subscribed users' nicknames
+	 * @param conn the connection to the database
+	 * @param query the query that needs to be executed
+	 * @return
+	 */
 	public static Collection<Channel> discoverChannels(Connection conn, ChannelDiscovery query) {
 		try {
 			Collection<Channel> channels = new ArrayList<>(); // the list that will be returned

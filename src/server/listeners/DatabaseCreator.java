@@ -27,7 +27,6 @@ import com.google.gson.reflect.TypeToken;
 
 import server.AppConstants;
 import server.model.Channel;
-import server.model.Message;
 import server.model.MessageDB;
 import server.model.Subscription;
 import server.model.User;
@@ -41,11 +40,15 @@ import server.model.User;
 public class DatabaseCreator implements ServletContextListener {
 
     /**
-     * Default constructor. 
+     * Default C'tor
      */
-    public DatabaseCreator() {
-    }
+	public DatabaseCreator() {}
     
+	/**
+	 * Checks if a table already exists in the database
+	 * @param e an SQL exception that will be checked if it's an exception of a table that is already exists
+	 * @return true if the table already exists and false otherwise.
+	 */
     private boolean tableAlreadyExists(SQLException e) {
         boolean exists;
         if(e.getSQLState().equals("X0Y32")) {
@@ -56,7 +59,9 @@ public class DatabaseCreator implements ServletContextListener {
         return exists;
     }
 
+
 	/**
+	 * initializes the database
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent event)  { 
@@ -81,16 +86,14 @@ public class DatabaseCreator implements ServletContextListener {
 				
 			}
     		
-    		boolean created = false;
+    		boolean created = false; // will tell if a table already exists in the database
     		try{
     			Statement stmt = conn.createStatement();
     			stmt.executeUpdate(AppConstants.CREATE_USER_TABLE);
-
         		conn.commit();
         		stmt.close();
     		} catch (SQLException e){
-    			created = tableAlreadyExists(e);
-    			if (!created){
+    			if (!(created = tableAlreadyExists(e))){ // if not a 'table already exists' exception, rethrow 
     				throw e;
     			}
     		}
@@ -116,12 +119,10 @@ public class DatabaseCreator implements ServletContextListener {
     		try{
     			Statement stmt = conn.createStatement();
     			stmt.executeUpdate(AppConstants.CREATE_CHANNELS_TABLE);
-
         		conn.commit();
         		stmt.close();
     		} catch (SQLException e){
-    			created = tableAlreadyExists(e);
-    			if (!created){
+    			if (!(created = tableAlreadyExists(e))){ // if not a 'table already exists' exception, rethrow
     				throw e;
     			}
     		}
@@ -146,12 +147,10 @@ public class DatabaseCreator implements ServletContextListener {
     		try{
     			Statement stmt = conn.createStatement();
     			stmt.executeUpdate(AppConstants.CREATE_SUBSCRIPTION_TABLE);
-
         		conn.commit();
         		stmt.close();
     		} catch (SQLException e){
-    			created = tableAlreadyExists(e);
-    			if (!created){
+    			if (!(created = tableAlreadyExists(e))) { // if not a 'table already exists' exception, rethrow
     				throw e;
     			}
     		}
@@ -178,12 +177,10 @@ public class DatabaseCreator implements ServletContextListener {
     		try{
     			Statement stmt = conn.createStatement();
     			stmt.executeUpdate(AppConstants.CREATE_MESSAGES_TABLE);
-
         		conn.commit();
         		stmt.close();
     		} catch (SQLException e){
-    			created = tableAlreadyExists(e);
-    			if (!created){
+    			if (!(created = tableAlreadyExists(e))){ // if not a 'table already exists' exception, rethrow
     				throw e;
     			}
     		}
