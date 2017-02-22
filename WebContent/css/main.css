@@ -40,7 +40,7 @@
   margin-top: 50px;
   padding: 100px 0px 30px 0px;
   background-color: #D9D9D9;
-  box-shadow: 6px 0px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
 
@@ -53,7 +53,7 @@
   min-width: 220px;
   margin-top: 81%;
   margin-left: 105%;
-  box-shadow: 6px 0px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   font-size: 16px;
 }
@@ -137,6 +137,17 @@ body {
 .user-information h4,
 .user-information p {
   color: #FFFFFF;
+}
+
+.create-channel {
+  position: absolute;
+  top: 0px;
+  z-index: 1;
+  left: 1.5em;
+  padding: 1em;
+  background-color: #D9D9D9;
+  box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 }
 
 .subscribed-channels,
@@ -251,7 +262,7 @@ body {
   height: 15px;
 }
 
-.unsubscribe {
+.channel-control {
   height: 25px;
   padding-top: 0px;
   padding-bottom: 0px;
@@ -303,6 +314,7 @@ body {
   padding: 0px;
   background-color: #E6DDD4;
   height: 100%;
+  position: relative;
 }
 
 .chat-text-area-inner {

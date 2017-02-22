@@ -69,6 +69,7 @@
       $scope.chatRoomsScreenHidden = true;
       $scope.createChannelFormHidden = true;
       $scope.channelSelected = false;
+      $scope.showCreateChannelForm = false;
 
       $scope.currentChannel = {};
       $scope.currentChannelThread = {};
@@ -149,7 +150,9 @@
       };
 
       $scope.createChannel = function (channelName, description, username) {
-
+        if (!channelName) {
+          return;
+        }
         var createChannelJson = {
           MessageType: "CreateChannel",
           MessageContent: {
@@ -247,7 +250,7 @@
           MessageType: "SendMessage",
           MessageContent: {
             Message: {
-              Channel: $scope.currentChannel.ChannelName,
+              ChannelId: $scope.currentChannel.ChannelName,
               RepliedToId: $scope.repliedToId,
               Content: message
             }
@@ -258,7 +261,6 @@
       };
 
       $scope.viewingChannel = function (channelName) {
-        //console.log('in sendMessage()');
         var viewingChannelJson = {
           MessageType: "ChannelViewing",
           MessageContent: {
@@ -405,9 +407,9 @@
           if (response.ChannelThread[i].Message.RepliedToId !== -1) {
             continue;
           }
-          console.log('DownloadMessages: channel.object.ChannelThreadd before push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
+          //console.log('DownloadMessages: channel.object.ChannelThreadd before push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
           channel.object.ChannelThread.push(response.ChannelThread[i]);
-          console.log('DownloadMessages: channel.object.ChannelThreadd after push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
+          ///console.log('DownloadMessages: channel.object.ChannelThreadd after push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
           //console.log('DownloadMessages: removing from response.ChannelThread after push: response.ChannelThread[i]:', JSON.stringify(response.ChannelThread[i]));
           //response.ChannelThread.splice(i, 1);
         }
@@ -438,20 +440,9 @@
         //console.log('ChatRoomsCtrl: got event IncomingMessage');
         if (response.Channel === $scope.currentChannel.ChannelName) {
           var message = {
-            Message: {
-              Id: response.Message.Id,
-              User: {
-                Username: response.Message.User.Username,
-                Nickname: response.Message.User.Nickname,
-                Description: response.Message.User.Description,
-                AvatarUrl: response.Message.User.AvatarUrl
-              },
-              MessageTime: response.Message.MessageTime,
-              RepliedToId: response.Message.RepliedToId,
-              Content: response.Message.Content
-            },
-            Replies: []
+            Message: ""
           };
+          message.Message = response.Message;
           $scope.currentChannel.ChannelThread.push(message);
           $scope.$digest();
         } else {
