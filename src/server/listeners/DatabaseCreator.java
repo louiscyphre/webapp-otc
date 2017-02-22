@@ -28,6 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import server.AppConstants;
 import server.model.Channel;
 import server.model.Message;
+import server.model.MessageDB;
 import server.model.Subscription;
 import server.model.User;
 
@@ -190,9 +191,9 @@ public class DatabaseCreator implements ServletContextListener {
     		//if no database exist in the past - further populate its records in the table
     		if (!created){
                 // Create messages table with message data from json file
-                Collection<Message> messages = loadMessages(cntx.getResourceAsStream(File.separator + AppConstants.MESSAGES_FILE));
+                Collection<MessageDB> messages = loadMessages(cntx.getResourceAsStream(File.separator + AppConstants.MESSAGES_FILE));
                 PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT);
-                for (Message message : messages) {
+                for (MessageDB message : messages) {
                     pstmt2.setString   (1, message.getChannelId());
                     pstmt2.setString   (2, message.getUserId());
                     pstmt2.setTimestamp(3, message.getMessageTime());
@@ -315,7 +316,7 @@ public class DatabaseCreator implements ServletContextListener {
      * @return collection of Messages
      * @throws IOException
      */
-    private Collection<Message> loadMessages(InputStream is) throws IOException {
+    private Collection<MessageDB> loadMessages(InputStream is) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder jsonFileContent = new StringBuilder();
@@ -326,8 +327,8 @@ public class DatabaseCreator implements ServletContextListener {
         }
 
         Gson gson = new Gson();
-        Type type = new TypeToken<Collection<Message>>() { }.getType();
-        Collection<Message> messages = gson.fromJson(jsonFileContent.toString(), type);
+        Type type = new TypeToken<Collection<MessageDB>>() { }.getType();
+        Collection<MessageDB> messages = gson.fromJson(jsonFileContent.toString(), type);
         reader.close();
         return messages;
     }

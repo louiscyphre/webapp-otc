@@ -2,41 +2,41 @@ package server.model;
 
 import java.sql.Timestamp;
 
-public class Message {
+public class MessageDB {
 	private int Id;
 	private String ChannelId;
 	private String UserId = null;
 	private ThreadUser User;
-	private long MessageTime;
-	private long LastModified;
+	private Timestamp MessageTime;
+	private Timestamp LastModified;
 	private int RepliedToId;
 	private String Content;
 
-	public Message(int id, String channelId, String user, Timestamp messageTime, int repliedToId, String content) {
+	public MessageDB(int id, String channelId, String user, Timestamp messageTime, int repliedToId, String content) {
 		this.Id = id;
 		this.ChannelId = channelId;
 		this.UserId = user;
-		this.MessageTime = this.LastModified = messageTime.getTime();
+		this.MessageTime = this.LastModified = messageTime;
 		this.RepliedToId = repliedToId;
 		this.Content = content;
 	}
 
-	public Message(int id, String channelId, String user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
+	public MessageDB(int id, String channelId, String user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
 		this.Id = id;
 		this.ChannelId = channelId;
 		this.UserId = user;
-		this.MessageTime = messageTime.getTime();
-		this.LastModified = lastModified.getTime();
+		this.MessageTime = messageTime;
+		this.LastModified = lastModified;
 		this.RepliedToId = repliedToId;
 		this.Content = content;
 	}
 
-	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
+	public MessageDB(int id, String channelId, ThreadUser user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
 		this.Id = id;
 		this.ChannelId = channelId;
 		this.User = user;
-		this.MessageTime = messageTime.getTime();
-		this.LastModified = lastModified.getTime();
+		this.MessageTime = messageTime;
+		this.LastModified = lastModified;
 		this.RepliedToId = repliedToId;
 		this.Content = content;
 	}
@@ -45,22 +45,22 @@ public class Message {
 	 * @return the lastModified
 	 */
 	public Timestamp getLastModified() {
-		return new Timestamp(LastModified);
+		return LastModified;
 	}
 
 	/**
 	 * @param lastModified the lastModified to set
 	 */
 	public void setLastModified(Timestamp lastModified) {
-		LastModified = lastModified.getTime();
+		LastModified = lastModified;
 	}
 
-	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, int repliedToId, String content) {
+	public MessageDB(int id, String channelId, ThreadUser user, Timestamp messageTime, int repliedToId, String content) {
 		this.Id = id;
 		this.ChannelId = channelId;
 		this.User = user;
 		this.UserId = user.getUsername();
-		this.MessageTime = messageTime.getTime();
+		this.MessageTime = messageTime;
 		this.RepliedToId = repliedToId;
 		this.Content = content;
 	}
@@ -154,14 +154,14 @@ public class Message {
 	 * @return the messageTime
 	 */
 	public Timestamp getMessageTime() {
-		return new Timestamp(MessageTime);
+		return MessageTime;
 	}
 
 	/**
 	 * @param messageTime the messageTime to set
 	 */
 	public void setMessageTime(Timestamp messageTime) {
-		this.MessageTime = messageTime.getTime();
+		this.MessageTime = messageTime;
 	}
 	
 	/* (non-Javadoc)

@@ -170,6 +170,7 @@ public final class DataManager {
 				}
 			}
 		}
+		channel.setNumberOfSubscribers(channel.getUsers().size());
 		return channel;
 	}
 	

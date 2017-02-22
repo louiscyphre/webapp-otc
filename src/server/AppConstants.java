@@ -26,6 +26,7 @@ public interface AppConstants {
 	public final String MESSAGE_DOWNLOAD_MESSAGES = "DownloadMessages";
 	public final String MESSAGE_CHANNEL_VIEWING = "ChannelViewing";
 	public final String MESSAGE_RECEIVED_MESSAGE = "SendMessage";
+	public final String MESSAGE_UPDATE_COUNTERS = "UpdateCounters";
 	// general constants
 	public final int MESSAGES_TO_DOWNLOAD = 10;
 	// users table

@@ -35,11 +35,11 @@ import server.messages.ChannelFailure;
 import server.messages.ChannelSuccess;
 import server.messages.Discovery;
 import server.messages.DownloadMessages;
-import server.messages.IncomingMessage;
 import server.messages.MessageReceived;
 import server.messages.SubscribeFailure;
 import server.messages.SubscribeSuccess;
 import server.messages.Unsubscribe;
+import server.messages.UpdateCountersMessage;
 import server.messages.UserSubscribed;
 import server.messages.UserUnsubscribed;
 import server.model.Channel;
@@ -285,17 +285,16 @@ public class WebChatEndPoint {
 		
 		if (DataManager.getChannelByName(conn, channelName) == null) { // channel with this name does not exist yet
 			Channel channel = DataManager.addChannel(conn, credentials); // create channel
-			System.out.println("curr user is " + chatUsers.get(session).getUsername());
 			DataManager.addSubscription(conn, new Subscription(credentials.getName(), chatUsers.get(session).getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the creator to the channel
 			if (credentials.getUsername() != null) { // private channel
 				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis()));
 				User secondUser = DataManager.getUserByUsername(conn, credentials.getUsername());
 				channel.setChannelName(channelName);
 				DataManager.updateChannelUsers(conn, channel);
-				System.out.println("created this channel: " + gson.toJson(new ChannelSuccess(channel)));
 				doNotify(session, gson.toJson(new ChannelSuccess(channel)));
 				doNotify(secondUser, gson.toJson(BuildSuccessMessages.buidSubscribeSuccess(conn, channel))); // it's a private channel (i.e. *not* public)
 			} else { // public channel
+				DataManager.updateChannelUsers(conn, channel);
 				doNotify(session, gson.toJson(new ChannelSuccess(channel)));
 			}
 		} else { // channel exists
@@ -459,7 +458,7 @@ public class WebChatEndPoint {
 				}
 				for (ThreadUser thUser : channel.getUsers()) { // iterate over all the users in the channel
 					Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), thUser.getUsername());
-					if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
+					/*if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
 						if (message.getId() > subscription.getLastReadMessageId()) { // update that the user has read this message already
 							subscription.setLastReadMessageId(message.getId());
 							DataManager.updateSubscription(conn, subscription);
@@ -476,13 +475,13 @@ public class WebChatEndPoint {
 						channelThread.put(message.getId(), new MessageThread(message));
 						
 						doNotify(thUser, gson.toJson(new IncomingMessage(channel.getChannelName(), message, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
-					} else { // user is subscribed, but not viewing the channel at the moment
-						subscription.setUnreadMessages(subscription.getUnreadMessages() + 1); // mark as unread
-						if (message.getContent().contains("@" + thUser.getNickname())) { // check if current user was mentioned
-							subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() + 1); // update that there is an unread mention
-						}
-						doNotify(thUser, gson.toJson(new IncomingMessage(channel.getChannelName(), null, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
+					} else { // user is subscribed, but not viewing the channel at the moment */
+					subscription.setUnreadMessages(subscription.getUnreadMessages() + 1); // mark as unread
+					if (message.getContent().contains("@" + thUser.getNickname())) { // check if current user was mentioned
+						subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() + 1); // update that there is an unread mention
 					}
+					doNotify(thUser, gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
+					//}
 					DataManager.updateSubscription(conn, subscription);
 				}
 			} else {
