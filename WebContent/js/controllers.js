@@ -99,6 +99,16 @@
         return null;
       };
 
+      var findMessageIndexById = function (id, thread) {
+        for (var i = 0; i < thread.length; ++i) {
+          if (id !== thread[i].Message.Id) {
+            continue;
+          }
+          return i;
+        }
+        return -1;
+      };
+
       var appendToThreadById = function (replyMessage, thread) {
         //console.log('in appendToThreadById(): appending a: ' + JSON.stringify(replyMessage));
         //console.log('in appendToThreadById(): appending to: ' + JSON.stringify(thread));
@@ -408,6 +418,10 @@
             continue;
           }
           //console.log('DownloadMessages: channel.object.ChannelThreadd before push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
+          var index = findMessageIndexById(i, channel.object.ChannelThread);
+          if (index !== -1) {
+            channel.object.ChannelThread.splice(i, 1);
+          }
           channel.object.ChannelThread.push(response.ChannelThread[i]);
           ///console.log('DownloadMessages: channel.object.ChannelThreadd after push: response.ChannelThread[i]:', JSON.stringify(channel.object.ChannelThread));
           //console.log('DownloadMessages: removing from response.ChannelThread after push: response.ChannelThread[i]:', JSON.stringify(response.ChannelThread[i]));
@@ -436,26 +450,15 @@
         $scope.$digest();
       });
 
-      $scope.$on('IncomingMessage', function (event, response) {
-        //console.log('ChatRoomsCtrl: got event IncomingMessage');
-        if (response.Channel === $scope.currentChannel.ChannelName) {
-          var message = {
-            Message: ""
-          };
-          message.Message = response.Message;
-          $scope.currentChannel.ChannelThread.push(message);
-          $scope.$digest();
-        } else {
-          var channel = findChannel(response.Channel, $scope.subscribedChannels);
-          if (!channel) {
-            channel = findChannel(response.Channel, $scope.privateChannels);
-          }
-          //console.log($scope.currentChannel);
-          channel.object.unreadMessages = response.unreadMessages;
-          channel.object.unreadMentionedMessages = response.unreadMentionedMessages;
-          //console.log($scope.currentChannel);
-          $scope.$digest(); // needed?
+      $scope.$on('UpdateCounters', function (event, response) {
+        //console.log('ChatRoomsCtrl: got event UpdateCounters');
+        var channel = findChannel(response.channelId, $scope.subscribedChannels);
+        if (!channel) {
+          channel = findChannel(response.channelId, $scope.privateChannels);
         }
+        channel.object.unreadMessages = response.unreadMessages;
+        channel.object.unreadMentionedMessages = response.unreadMentionedMessages;
+        $scope.$digest();
       });
 
       }]);

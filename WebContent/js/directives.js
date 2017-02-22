@@ -25,7 +25,7 @@
         "    <h5><a href = 'javascript:void(0)'" +
         "     data-ng-click='enterPrivateChannel(thread.Message.User.Username,thread.Message.User.Nickname)'>{{thread.Message.User.Nickname}}</a>" +
         "    </h5>" +
-        "    <h6>posted at: {{thread.Message.MessageTime | toDateObject | date: 'HH:mm:ss dd/MM/yy' }}</h6>" +
+        "    <h6>posted at: {{thread.Message.MessageTime | date: 'HH:mm:ss dd/MM/yy' }}</h6>" +
         "    <p>{{thread.Message.Content}}</p>" +
         "     <div class='block-right'>" +
         "      <a href='javascript: void(0)' data-ng-click='setReply(thread.Message.Id)'>Reply</a>" + // TODO normally
@@ -52,7 +52,13 @@
         enterPrivateChannel: '=',
         setReply: '='
       },
-      template: "<ul class='messages'><thread data-ng-repeat='thread in discussion' thread='thread' enter-private-channel='enterPrivateChannel' set-reply='setReply'></thread></ul>"
+      template: "" +
+        "<ul class='messages'>" +
+        " <thread data-ng-repeat='thread in discussion'" +
+        "   thread='thread' enter-private-channel='enterPrivateChannel' " +
+        "   set-reply='setReply'>" +
+        "  </thread>" +
+        "</ul>"
     };
   }).directive('scrolledDownCallback', function () {
     return {
@@ -65,8 +71,8 @@
 
         element.bind('scroll', function (e) {
           var el = e.target;
-          if (el.scrollTop + element[0].offsetHeight >= element[0].scrollHeight) { // fully scrolled to bottom of element (the div)
-            //if ((el.scrollHeight - el.scrollTop) === clientHeight) { // fully scrolled
+          if (el.scrollTop + element[0].offsetHeight >= element[0].scrollHeight) {
+            // fully scrolled to bottom of element (the div)
             element.scope().downloadOnScroll();
           }
         });
