@@ -238,7 +238,7 @@ public class WebChatEndPoint {
 			}
 		}
 	}
-
+	
 	private Connection getDataBaseConnection() {
 		try {
 			Context context = new InitialContext(); // obtain CustomerDB data source from Tomcat's context
@@ -449,14 +449,30 @@ public class WebChatEndPoint {
 			if (DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getMessage().getChannelId(), user.getUsername()) != null) { // check if subscribed
 				DataManager.updateChannelUsers(conn, channel); // get the channel's users
 				Message message = DataManager.addMessage(conn, credentials.getMessage(), new ThreadUser(user.getUsername(), user.getNickname(), user.getDescription(), user.getAvatarUrl())); // parse the message
+				ArrayList<Integer> modifiedMessagesIDs = new ArrayList<>(); // if the new message is a reply, then will store the ID of all the messages in that thread
 				if (message.getRepliedToId() >= 0) {
 					Message parentMessage = null;
 					do {
 						parentMessage = DataManager.getMessageByID(conn, message.getRepliedToId());
 					} while (parentMessage.getRepliedToId() >= 0);
-					DataManager.updateThread(conn, parentMessage, message.getLastModified());
+					DataManager.updateThread(conn, parentMessage, message.getLastModified(), modifiedMessagesIDs);
 				}
+				
 				for (ThreadUser thUser : channel.getUsers()) { // iterate over all the users in the channel
+					for (Entry<Session, User> userEntry : chatUsers.entrySet()) { // iterate over all the open sessions and remove the replies from it
+						if (userEntry.getKey().isOpen() && thUser.getUsername().equals(userEntry.getValue().getUsername())) { // if user is subscribed to the channel and has an open session
+							Session userSession = userEntry.getKey();
+							Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(userSession); // get all the messages that were downloaded during this session
+							if (channelDownloadedMessages != null) { // if viewing the channel then:
+								Map<Integer, MessageThread> channelThread = channelDownloadedMessages.get(channel.getChannelName()); // get the history of this user
+								if (channelThread != null) { // if downloaded messages already
+									for (int messageToRemove : modifiedMessagesIDs) {
+										channelThread.remove(messageToRemove);
+									}
+								}
+							}
+						}
+					}
 					Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), thUser.getUsername());
 					/*if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
 						if (message.getId() > subscription.getLastReadMessageId()) { // update that the user has read this message already
