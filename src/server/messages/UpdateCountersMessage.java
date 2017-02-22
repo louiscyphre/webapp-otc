@@ -1,19 +1,33 @@
 package server.messages;
 
-import server.model.Message;
-
 public class UpdateCountersMessage {
 	
-	private String channelId;
+	private String MessageType;private String channelId;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 	
 	public UpdateCountersMessage(String channelId, int unreadMessages, int unreadMentionedMessages) {
+		this.MessageType = "UpdateCounters";
 		this.channelId = channelId;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = unreadMentionedMessages;
 	}
 
+	/**
+	 * @return the messageType
+	 */
+	public String getMessageType() {
+		return MessageType;
+	}
+
+	/**
+	 * @param messageType the messageType to set
+	 */
+	public void setMessageType(String messageType) {
+		MessageType = messageType;
+	}
+
+	
 	/**
 	 * @return the channelId
 	 */
