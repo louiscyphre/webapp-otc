@@ -56,9 +56,9 @@ import server.model.User;
 import server.util.BuildSuccessMessages;
 
 /**
- * Example of a simple Server-side WebSocket end-point that managed a chat between 
+ * Server-side WebSocket end-point that manages a chat over several channels between 
  * several client end-points
- * @author haggai
+ * @author Ilia & Michael
  */
 @ServerEndpoint("/{username}")
 public class WebChatEndPoint {
@@ -163,11 +163,11 @@ public class WebChatEndPoint {
 		downloadedMessages.remove(session);
 		chatViewedChannels.remove(session);
 	}
-
+/*
 	@OnError
 	public void error(Session session, Throwable t) {
 	}
-	
+*/	
 	/**
 	 * Notifies a user about a message
 	 * @param session
@@ -239,6 +239,10 @@ public class WebChatEndPoint {
 		}
 	}
 	
+	/**
+	 * Returns a connection to the database using the tomcat context
+	 * @return the connection to the database
+	 */
 	private Connection getDataBaseConnection() {
 		try {
 			Context context = new InitialContext(); // obtain CustomerDB data source from Tomcat's context
@@ -249,7 +253,7 @@ public class WebChatEndPoint {
 			return null;
 		}
 	}
-	
+	/*
 	private boolean isViewingChannel(ThreadUser user, String channelName) {
 		ArrayList<Channel> userChannels = new ArrayList<>();
 		for (Entry<Session, User> userEntry : chatUsers.entrySet()) {
@@ -269,15 +273,23 @@ public class WebChatEndPoint {
 		}
 		return false;
 	}
-
+*/
+	/**
+	 * Handler for a request to create a new channel (either public or private)
+	 * @param session the session of the user that sent the request
+	 * @param conn the connection to the database
+	 * @param msgContent the content of the message sent by the user
+	 * @throws IOException
+	 * @throws SQLException
+	 */
 	private void handleCreateChannelRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
 		Gson gson = new Gson();
 		ChannelCredentials credentials = gson.fromJson(msgContent, ChannelCredentials.class);
 		String channelName;
 		if (credentials.getUsername() != null) { // private channel
-			String currentUser = chatUsers.get(session).getUsername();
-			String secondUser = credentials.getUsername();
-			channelName = currentUser.compareTo(secondUser) < 0 ? currentUser + secondUser : secondUser + currentUser;
+			String currentUser = chatUsers.get(session).getUsername(); // username of the sender (will be used to set the name of the channel in the database)
+			String secondUser = credentials.getUsername(); // username of the second user (with whom the sender wants to create the channel) (will be used to set the name of the channel in the database)
+			channelName = currentUser.compareTo(secondUser) < 0 ? currentUser + secondUser : secondUser + currentUser; // concatenate both usernames in alphabetical order
 			credentials.setName(channelName);
 		} else {
 			channelName = credentials.getName();
@@ -287,42 +299,49 @@ public class WebChatEndPoint {
 			Channel channel = DataManager.addChannel(conn, credentials); // create channel
 			DataManager.addSubscription(conn, new Subscription(credentials.getName(), chatUsers.get(session).getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the creator to the channel
 			if (credentials.getUsername() != null) { // private channel
-				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis()));
-				User secondUser = DataManager.getUserByUsername(conn, credentials.getUsername());
+				DataManager.addSubscription(conn, new Subscription(credentials.getName(), credentials.getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the second user to the channel
+				User secondUser = DataManager.getUserByUsername(conn, credentials.getUsername()); // get the details of the second user
 				channel.setChannelName(channelName);
 				DataManager.updateChannelUsers(conn, channel);
-				doNotify(session, gson.toJson(new ChannelSuccess(channel)));
-				doNotify(secondUser, gson.toJson(BuildSuccessMessages.buidSubscribeSuccess(conn, channel))); // it's a private channel (i.e. *not* public)
+				doNotify(session, gson.toJson(new ChannelSuccess(channel))); // send reply to the creator of the channel informing him of success
+				doNotify(secondUser, gson.toJson(BuildSuccessMessages.buidSubscribeSuccess(conn, channel))); // send message to the second user that he was added to a private channel
 			} else { // public channel
 				DataManager.updateChannelUsers(conn, channel);
-				doNotify(session, gson.toJson(new ChannelSuccess(channel)));
+				doNotify(session, gson.toJson(new ChannelSuccess(channel))); // send reply to the creator of the channel informing him of success
 			}
 		} else { // channel exists
-			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists")));
+			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists"))); // inform the creator of the channel that an error occured: a channel with this name already exists
 		}
 	}
 
+	/**
+	 * Handler for a request to subscribe to an existing channel
+	 * @param session the session of the user that sent the request
+	 * @param conn the connection to the database
+	 * @param msgContent the content of the message sent by the user
+	 * @throws IOException
+	 * @throws SQLException
+	 */
 	private void handleSubscribeToChannelRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
 		Gson gson = new Gson();
 		Subscription credentials = gson.fromJson(msgContent, Subscription.class);
 		Channel channel = null;
 		credentials.setUsername(chatUsers.get(session).getUsername());
 		if ((channel = DataManager.getChannelByName(conn, credentials.getChannelName())) != null) { // check if channel exists
-			if (channel.isPublic()) {
-				if (DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), credentials.getUsername()) == null) { // if unsubscribed
+			if (channel.isPublic()) { // check if channel is public
+				if (DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), credentials.getUsername()) == null) { // check if the user is not subscribed to the channel
 					DataManager.addSubscription(conn, credentials, new Timestamp(System.currentTimeMillis()));
 					channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() + 1);
 					DataManager.updateChannel(conn, channel);
 					SubscribeSuccess subscribeSucces = BuildSuccessMessages.buidSubscribeSuccess(conn, channel);
 					if (subscribeSucces != null) {
-						doNotify(session, gson.toJson(subscribeSucces));
-						// notify the all the users in this channel of the new subscription
+						doNotify(session, gson.toJson(subscribeSucces)); // notify the user that he was subscribed successfully to the channel
 						doNotifyByChannel(
 								channel,
 								gson.toJson(new UserSubscribed(
 										channel.getChannelName(),
 										ThreadUser.getThreadUserByUser(DataManager.getUserByUsername(conn, credentials.getUsername())))),
-								session); // unsubscribe the user on all other clients
+								session); // notify all users, except the newly subscribed user, that a new user has been subscribed to the cahnnel
 					} else {
 						doNotify(session, gson.toJson(new SubscribeFailure("General error")));
 					}
@@ -337,23 +356,30 @@ public class WebChatEndPoint {
 		}
 	}
 
+	/**
+	 * Handler for a request to unsubscribe from a channel
+	 * @param session the session of the user that sent the request
+	 * @param conn the connection to the database
+	 * @param msgContent the content of the message sent by the user
+	 * @throws IOException
+	 * @throws SQLException
+	 */
 	private void handleUnsubscribeToChannelRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
 		Gson gson = new Gson();
 		Subscription credentials = gson.fromJson(msgContent, Subscription.class);
 		Channel channel = null;
 		credentials.setUsername(chatUsers.get(session).getUsername());
 		if ((channel = DataManager.getChannelByName(conn, credentials.getChannelName())) != null) { // check if channel exists
-			if (DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getChannelName(), credentials.getUsername()) != null) { // if subscribed
+			if (DataManager.getSubscriptionByChannelAndUsername(conn, credentials.getChannelName(), credentials.getUsername()) != null) { // check if user is subscribed
 				DataManager.removeSubscription(conn, credentials);
 				channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() - 1);
 				DataManager.updateChannel(conn, channel);
 				DataManager.updateChannelUsers(conn, channel);
-				doNotify(session, gson.toJson(new Unsubscribe(credentials.getChannelName())));
-				// update the remaining users in the channel that the user has quit
+				doNotify(session, gson.toJson(new Unsubscribe(credentials.getChannelName()))); // notify the user that he was successfully unsubscribed from the desired channel
 				doNotifyByChannel(
 						channel,
 						gson.toJson(new UserUnsubscribed(channel.getChannelName(), credentials.getUsername())),
-						session); // unsubscribe the user on all other clients
+						session); // notify all the users in the channel that a user has quit the channel
 			} else {
 				doNotify(session, gson.toJson(new Unsubscribe("Not subscribed to channel")));
 			}
@@ -450,11 +476,14 @@ public class WebChatEndPoint {
 				DataManager.updateChannelUsers(conn, channel); // get the channel's users
 				Message message = DataManager.addMessage(conn, credentials.getMessage(), new ThreadUser(user.getUsername(), user.getNickname(), user.getDescription(), user.getAvatarUrl())); // parse the message
 				ArrayList<Integer> modifiedMessagesIDs = new ArrayList<>(); // if the new message is a reply, then will store the ID of all the messages in that thread
+				System.out.println("           ehm ehm ehm              ");
 				if (message.getRepliedToId() >= 0) {
-					Message parentMessage = null;
+					Message parentMessage = message;
 					do {
-						parentMessage = DataManager.getMessageByID(conn, message.getRepliedToId());
+						parentMessage = DataManager.getMessageByID(conn, parentMessage.getRepliedToId());
+						System.out.println("aa " + parentMessage == null ? "null" : parentMessage.getId());
 					} while (parentMessage.getRepliedToId() >= 0);
+					System.out.println("           ehm2 ehm2 ehm2              ");
 					DataManager.updateThread(conn, parentMessage, message.getLastModified(), modifiedMessagesIDs);
 				}
 				
@@ -473,6 +502,7 @@ public class WebChatEndPoint {
 							}
 						}
 					}
+
 					Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), thUser.getUsername());
 					/*if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
 						if (message.getId() > subscription.getLastReadMessageId()) { // update that the user has read this message already
@@ -496,14 +526,17 @@ public class WebChatEndPoint {
 					if (message.getContent().contains("@" + thUser.getNickname())) { // check if current user was mentioned
 						subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() + 1); // update that there is an unread mention
 					}
+					System.out.println("reply to incoming message: " + gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 					doNotify(thUser, gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
 					//}
 					DataManager.updateSubscription(conn, subscription);
 				}
 			} else {
+				System.out.println("fail1");
 				doNotify(session, gson.toJson(new MessageReceived("Not subscribed to channel")));
 			}
 		} else { // channel doesn't exist
+			System.out.println("fail2");
 			doNotify(session, gson.toJson(new MessageReceived("Channel does not exist")));
 		}
 	}

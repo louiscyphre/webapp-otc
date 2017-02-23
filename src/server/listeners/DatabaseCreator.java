@@ -34,7 +34,7 @@ import server.model.User;
 
 
 /**
- * An server listener that reads the customer json file and populates the data into a Derby database
+ * An server listener that reads the users, channels, subscriptions and messages json file(s) and populates the data into a Derby database
  */
 @WebListener
 public class DatabaseCreator implements ServletContextListener {
@@ -221,8 +221,7 @@ public class DatabaseCreator implements ServletContextListener {
          //shut down database
     	 try {
      		Context context = new InitialContext();
-     		BasicDataSource ds = (BasicDataSource)context.lookup(
-     				cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.SHUTDOWN);
+     		BasicDataSource ds = (BasicDataSource)context.lookup(cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.SHUTDOWN);
      		ds.getConnection();
      		ds = null;
 		} catch (SQLException | NamingException e) {

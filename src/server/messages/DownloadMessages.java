@@ -73,7 +73,7 @@ public class DownloadMessages {
 	 * @param unreadMessages the unreadMessages to set
 	 */
 	public void setUnreadMessages(int unreadMessages) {
-		unreadMessages = unreadMessages;
+		this.unreadMessages = unreadMessages;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class DownloadMessages {
 	 * @param unreadMentionedMessages the unreadMentionedMessages to set
 	 */
 	public void setUnreadMentionedMessages(int unreadMentionedMessages) {
-		unreadMentionedMessages = unreadMentionedMessages;
+		this.unreadMentionedMessages = unreadMentionedMessages;
 	}
 
 	/* (non-Javadoc)
