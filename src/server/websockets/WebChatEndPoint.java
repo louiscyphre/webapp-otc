@@ -163,11 +163,11 @@ public class WebChatEndPoint {
 		downloadedMessages.remove(session);
 		chatViewedChannels.remove(session);
 	}
-/*
+
 	@OnError
 	public void error(Session session, Throwable t) {
 	}
-*/	
+	
 	/**
 	 * Notifies a user about a message
 	 * @param session
