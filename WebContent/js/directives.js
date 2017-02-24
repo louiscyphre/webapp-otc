@@ -2,7 +2,7 @@
 
   'use strict';
   /*global angular, console*/
-  var directives = angular.module('directives', ['constants', 'services', 'filters']);
+  var directives = angular.module('directives', ['constants', 'services']);
   directives.directive('thread', function ($compile) {
     return {
       restrict: "E",
@@ -10,34 +10,43 @@
       scope: {
         thread: '=',
         enterPrivateChannel: '=',
-        setReply: '='
+        setReply: '=',
+        sendMessage: '='
       },
       template: "" +
-        "<ul class = 'messages'>" +
-        " <li class='message'>" +
-        "  <div class='media'>" +
-        "   <div class='media-left'>" +
-        "    <img class='user-avatar-chat'" +
-        "         data-ng-src='{{thread.Message.User.AvatarUrl}}'" +
-        "         alt='userpic'/>" +
-        "   </div>" +
-        "   <div class='media-body'>" +
-        "    <h5><a href = 'javascript:void(0)'" +
-        "     data-ng-click='enterPrivateChannel(thread.Message.User.Username,thread.Message.User.Nickname)'>{{thread.Message.User.Nickname}}</a>" +
-        "    </h5>" +
-        "    <h6>posted at: {{thread.Message.MessageTime | date: 'HH:mm:ss dd/MM/yy' }}</h6>" +
-        "    <p>{{thread.Message.Content}}</p>" +
-        "     <div class='block-right'>" +
-        "      <a href='javascript: void(0)' data-ng-click='setReply(thread.Message.Id)'>Reply</a>" + // TODO normally
-        "    </div>" +
-        "   </div>" +
-        "  </div>" +
-        " </li>" +
+        "<ul class = \"messages\">" +
+        "<li class=\"message\">" +
+        " <div class=\"media\">" +
+        "<div class=\"media-left\">" +
+        "<img class=\"user-avatar-chat\" data-ng-src=\"{{thread.Message.User.AvatarUrl}}\" alt=\"userpic\"/>" +
+        "</div>" +
+        "<div class=\"media-body\">" +
+        "<h5><a href = \"javascript:void(0)\" data-ng-click=\"enterPrivateChannel(thread.Message.User.Username,thread.Message.User.Nickname)\">{{thread.Message.User.Nickname}}</a></h5>" +
+        "<h6>posted at: {{thread.Message.MessageTime | date: \"HH:mm:ss dd/MM/yy\" }}</h6>" +
+        "<p>{{thread.Message.Content}}</p>" +
+        "<table class=\"chat-reply\" data-ng-show=\"isReply\">" +
+        " <tr>" +
+        "<td>" +
+        "<input type=\"text\" class=\"form-control chat-reply\" placeholder=\"Type your message here \" data-ng-model=\"lastReply\" data-ng-focus=\"setReply(thread.Message.Id)\" data-ng-enter=\"sendMessage(lastReply); isReply = false; lastReply = ''\" />" +
+        "</td>" +
+        "<td>" +
+        "<span class=\"input-group-btn chat-reply\">" +
+        "<button class=\"btn btn-primary btn-chat-send chat-reply\" type=\"submit\" data-ng-click=\"sendMessage(lastReply); isReply = false; lastReply = ''\">Send</button>" +
+        "</span>" +
+        "</td>" +
+        " </tr>" +
+        "</table>" +
+        "<span class=\"block-right\" data-ng-hide=\"isReply\">" +
+        "<a href=\"javascript: void(0)\" data-ng-click=\"isReply = true\">Reply</a>" + // TODO normally
+        "</span>" +
+        "</div>" +
+        "</div>" +
+        "</li>" +
         "</ul>",
       link: function (scope, element, attrs) {
         //check if this member has children
         if (angular.isArray(scope.thread.Replies)) {
-          $compile('<discussion discussion="thread.Replies" enter-private-channel="enterPrivateChannel" set-reply="setReply"></discussion>')(scope, function (cloned, scope) {
+          $compile('<discussion discussion="thread.Replies" enter-private-channel="enterPrivateChannel" set-reply="setReply" send-message="sendMessage"></discussion>')(scope, function (cloned, scope) {
             element.append(cloned);
           });
         }
@@ -50,13 +59,14 @@
       scope: {
         discussion: '=',
         enterPrivateChannel: '=',
-        setReply: '='
+        setReply: '=',
+        sendMessage: '='
       },
       template: "" +
         "<ul class='messages'>" +
         " <thread data-ng-repeat='thread in discussion'" +
         "   thread='thread' enter-private-channel='enterPrivateChannel' " +
-        "   set-reply='setReply'>" +
+        "   set-reply='setReply' send-message='sendMessage'>" +
         "  </thread>" +
         "</ul>"
     };

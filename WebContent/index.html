@@ -16,7 +16,6 @@
   <script type="text/javascript" src="js/constants.js"></script>
   <script type="text/javascript" src="js/controllers.js"></script>
   <script type="text/javascript" src="js/services.js "></script>
-  <script type="text/javascript" src="js/filters.js "></script>
   <script type="text/javascript" src="js/directives.js "></script>
 
 </head>
@@ -62,7 +61,6 @@
     </div>
 
   </div>
-
   <div class="chat-container" data-ng-controller="ChatRoomsCtrl" data-ng-hide="chatRoomsScreenHidden">
     <div class="side side-left col-md-3">
 
@@ -134,12 +132,12 @@
         </form>
       </div>
       <div class="chat-text-area-inner" data-scrolled-down-callback="downloadMessages(currentChannel)" data-ng-show="channelSelected == true">
-        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" data-enter-private-channel="enterPrivateChannel" data-set-reply="setReply"></data-discussion>
+        <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" data-enter-private-channel="enterPrivateChannel" data-set-reply="setReply" data-send-message="sendMessage"></data-discussion>
       </div>
       <div class="chat-text-area-footer" data-ng-show="channelSelected">
         <footer class="footer">
           <div class="input-group">
-            <input type="text" class="form-control test" placeholder="Type your message here " data-ng-model="lastMessage" data-ng-enter="sendMessage(lastMessage)" />
+            <input type="text" class="form-control test" placeholder="Type your message here " data-ng-model="lastMessage" data-ng-focus="setReply(-1)" data-ng-enter="sendMessage(lastMessage)" />
             <div class="input-group-btn">
               <button class="btn btn-primary btn-chat-send" type="submit" data-ng-click="sendMessage(lastMessage)">Send</button>
             </div>
