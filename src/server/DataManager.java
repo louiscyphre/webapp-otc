@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import server.model.Channel;
 import server.model.ChannelCredentials;
 import server.model.ChannelDiscovery;
 import server.model.Message;
+import server.model.MessageThread;
 import server.model.Subscription;
 import server.model.ThreadUser;
 import server.model.User;
@@ -387,7 +389,6 @@ public final class DataManager {
 	public static ArrayList<Message> getMessagesByChannelNameAndTimetamp(Connection conn, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
 		ArrayList<Message> messages = new ArrayList<>();
 		try {
-			System.out.println("startdate: " + startTime);
 			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
 			prepStmt.setString(1, channelName);
 			prepStmt.setTimestamp(2, startTime);
@@ -532,5 +533,28 @@ public final class DataManager {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static boolean isInViewingWindow(Connection conn, Channel channel, Subscription subscription, Map<Integer, MessageThread> channelThread, Message message) {
+		ArrayList<Message> messages = getMessagesByChannelNameAndTimetamp(conn, getMapOfAllUsers(conn), channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
+		int minDistance = Integer.MAX_VALUE, targetMessageIndex = -1;
+		for (int i = 0; i < messages.size(); i++) {
+			if (message.getId() == messages.get(i).getId()) {
+				targetMessageIndex = i;
+			}
+		}
+		if (targetMessageIndex >= 0) {
+			for (Entry<Integer, MessageThread> msgEntry : channelThread.entrySet()) {
+				for (int i = 0; i < messages.size(); i++) {
+					if (msgEntry.getKey() == messages.get(i).getId()) {
+						if (targetMessageIndex - i < minDistance) {
+							minDistance = targetMessageIndex - i;
+						}
+					}
+				}
+			}
+		}
+		System.out.println("min distance is: " + minDistance);
+		return ((minDistance > 0) && (minDistance <= AppConstants.MESSAGES_TO_DOWNLOAD));
 	}
 }

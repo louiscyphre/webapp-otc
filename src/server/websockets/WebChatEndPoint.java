@@ -253,7 +253,13 @@ public class WebChatEndPoint {
 			return null;
 		}
 	}
-	/*
+	
+	/**
+	 * Checks if a user is currently viewing a channel discussion
+	 * @param user the user to be checked
+	 * @param channelName the name of the channel to be checked
+	 * @return true if the user is viewing the channel, and false otherwise
+	 */
 	private boolean isViewingChannel(ThreadUser user, String channelName) {
 		ArrayList<Channel> userChannels = new ArrayList<>();
 		for (Entry<Session, User> userEntry : chatUsers.entrySet()) {
@@ -273,7 +279,7 @@ public class WebChatEndPoint {
 		}
 		return false;
 	}
-*/
+
 	/**
 	 * Handler for a request to create a new channel (either public or private)
 	 * @param session the session of the user that sent the request
@@ -395,6 +401,12 @@ public class WebChatEndPoint {
 		doNotify(session, gson.toJson(new Discovery(DataManager.discoverChannels(conn, credentials))));
 	}
 	
+	/**
+	 * Updates the server what channel the user in this session is currently viewing
+	 * @param session the current session
+	 * @param conn the connection to the database
+	 * @param msgContent the content of the message sent by the user
+	 */
 	private void handleChannelViewingRequest(Session session, Connection conn, JsonObject msgContent) {
 		try {
 			Gson gson = new Gson();
@@ -405,66 +417,84 @@ public class WebChatEndPoint {
 		}
 	}
 	
+	/**
+	 * Sends the next messages to the client (limited by AppConstants.MESSAGES_TO_DOWNLOAD (currently set to 10))
+	 * @param session the current session
+	 * @param conn the connection to the database
+	 * @param msgContent the content of the message sent by the user
+	 * @throws IOException
+	 */
 	private void handleDownloadMessagesRequest(Session session, Connection conn, JsonObject msgContent) throws IOException {
 		Gson gson = new Gson();
 		MessageDownload credentials = gson.fromJson(msgContent, MessageDownload.class);
 		Channel channel = DataManager.getChannelByName(conn, credentials.getChannel());
 		
 		if (channel != null) { // check if channel exists
-			Map<String, ThreadUser> usersMap = DataManager.getMapOfAllUsers(conn); // map of all users
-			Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), chatUsers.get(session).getUsername()); // the subscription of this user to the required channel
-			Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(session); // get all the messages that were downloaded during this session
-			
-			if (channelDownloadedMessages == null) { // if first time viewing then:
-				downloadedMessages.put(session, (channelDownloadedMessages = new HashMap<>())); // create new history of messages
-			}
-			
-			Map<Integer, MessageThread> channelThread = channelDownloadedMessages.get(channel.getChannelName()); // get the history of this user
-			if (channelThread == null) { // if first time viewing this channel
-				channelDownloadedMessages.put(channel.getChannelName(), (channelThread = new HashMap<>())); // create new history for this channnel
-			}
-			
-			ArrayList<Message> messages = DataManager.getMessagesByChannelNameAndTimetamp(conn, usersMap, channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
-			int messagesRead = 0;
-			if (!messages.isEmpty()) { // if channel thread is not empty
-				Collection<MessageThread> requiredMessages = new ArrayList<>(); // the messages that will be sent
-				for (int i = 0; i < messages.size() && messagesRead < AppConstants.MESSAGES_TO_DOWNLOAD; i++) { // read available messages, not more than maximal limit (10)
-					Message message = messages.get(i);
-					if (channelThread.get(message.getId()) == null) {
-						MessageThread messageThread = new MessageThread(message);
-						messagesRead++;
-						requiredMessages.add(messageThread);
-						channelThread.put(message.getId(), messageThread);
-					}
-				}
-				
-				int maxId = subscription.getLastReadMessageId();
-				for (MessageThread message : requiredMessages) { // iterate over the messages that will be sent
-					if (message.getMessage().getId() > maxId) {
-						maxId = message.getMessage().getId();
-						subscription.setUnreadMessages(subscription.getUnreadMessages() - 1);
-						if (message.getMessage().getContent().contains("@" + usersMap.get(chatUsers.get(session).getUsername()).getNickname())) {
-							subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() - 1);
-						}
-						subscription.setLastReadMessageId(maxId);
-					}
-				}
-				DataManager.updateSubscription(conn, subscription);
-				System.out.println("downloaded these messages: " + gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
-				doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
-			} else { // no messages in channel
-				doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), null, 0, 0)));
-			}
+			downloadMessages(session, conn, channel);
 		} else { // channel was not found
 			doNotify(session, gson.toJson(new DownloadMessages(credentials.getChannel(), null, 0, 0)));
 		}
 	}
 
+	/**
+	 * Gets and sends the next messages to the client
+	 * @param session the current session
+	 * @param conn the connection to the database
+	 * @param channel the channel which message are to be sent
+	 * @throws IOException
+	 */
+	private void downloadMessages(Session session, Connection conn, Channel channel) throws IOException {
+		Gson gson = new Gson();
+		Map<String, ThreadUser> usersMap = DataManager.getMapOfAllUsers(conn); // map of all users
+		Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), chatUsers.get(session).getUsername()); // the subscription of this user to the required channel
+		Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(session); // get all the messages that were downloaded during this session
+		
+		if (channelDownloadedMessages == null) { // if first time viewing then:
+			downloadedMessages.put(session, (channelDownloadedMessages = new HashMap<>())); // create new history of messages
+		}
+		
+		Map<Integer, MessageThread> channelThread = channelDownloadedMessages.get(channel.getChannelName()); // get the history of this user
+		if (channelThread == null) { // if first time viewing this channel
+			channelDownloadedMessages.put(channel.getChannelName(), (channelThread = new HashMap<>())); // create new history for this channnel
+		}
+		
+		ArrayList<Message> messages = DataManager.getMessagesByChannelNameAndTimetamp(conn, usersMap, channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
+		int messagesRead = 0;
+		if (!messages.isEmpty()) { // if channel thread is not empty
+			Collection<MessageThread> requiredMessages = new ArrayList<>(); // the messages that will be sent
+			for (int i = 0; i < messages.size() && messagesRead < AppConstants.MESSAGES_TO_DOWNLOAD; i++) { // read available messages, not more than maximal limit (10)
+				Message message = messages.get(i);
+				if (channelThread.get(message.getId()) == null) {
+					MessageThread messageThread = new MessageThread(message);
+					messagesRead++;
+					requiredMessages.add(messageThread);
+					channelThread.put(message.getId(), messageThread);
+				}
+			}
+			
+			int maxId = subscription.getLastReadMessageId();
+			for (MessageThread message : requiredMessages) { // iterate over the messages that will be sent
+				if (message.getMessage().getId() > maxId) {
+					maxId = message.getMessage().getId();
+					subscription.setUnreadMessages(subscription.getUnreadMessages() - 1);
+					if (message.getMessage().getContent().contains("@" + usersMap.get(chatUsers.get(session).getUsername()).getNickname())) {
+						subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() - 1);
+					}
+					subscription.setLastReadMessageId(maxId);
+				}
+			}
+			DataManager.updateSubscription(conn, subscription);
+			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
+		} else { // no messages in channel
+			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), null, 0, 0)));
+		}
+	}
+
 	private void handleReceivedMessageRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
-		System.out.println("the message is: " + msgContent);
 		Gson gson = new Gson();
 		MessageCredentials credentials = gson.fromJson(msgContent, MessageCredentials.class);
 		Channel channel = DataManager.getChannelByName(conn, credentials.getMessage().getChannelId()); // get the required channel
+		
 		if (channel != null) { // check if channel exists
 			if (credentials.getMessage().getRepliedToId() >= 0) {
 				String originalUserNickname = DataManager.getNicknameByMessageId(conn, credentials.getMessage().getRepliedToId());
@@ -476,21 +506,19 @@ public class WebChatEndPoint {
 				DataManager.updateChannelUsers(conn, channel); // get the channel's users
 				Message message = DataManager.addMessage(conn, credentials.getMessage(), new ThreadUser(user.getUsername(), user.getNickname(), user.getDescription(), user.getAvatarUrl())); // parse the message
 				ArrayList<Integer> modifiedMessagesIDs = new ArrayList<>(); // if the new message is a reply, then will store the ID of all the messages in that thread
-				System.out.println("           ehm ehm ehm              ");
-				if (message.getRepliedToId() >= 0) {
+				if (message.getRepliedToId() >= 0) { // if a reply to a message
 					Message parentMessage = message;
-					do {
+					do { // find the root of this discussion (the ancestor that is not a reply to any message)
 						parentMessage = DataManager.getMessageByID(conn, parentMessage.getRepliedToId());
-						System.out.println("aa " + parentMessage == null ? "null" : parentMessage.getId());
 					} while (parentMessage.getRepliedToId() >= 0);
-					System.out.println("           ehm2 ehm2 ehm2              ");
-					DataManager.updateThread(conn, parentMessage, message.getLastModified(), modifiedMessagesIDs);
+					DataManager.updateThread(conn, parentMessage, message.getLastModified(), modifiedMessagesIDs); // update the last modified time of the thread
 				}
 				
 				for (ThreadUser thUser : channel.getUsers()) { // iterate over all the users in the channel
+					Session userSession = null;
 					for (Entry<Session, User> userEntry : chatUsers.entrySet()) { // iterate over all the open sessions and remove the replies from it
 						if (userEntry.getKey().isOpen() && thUser.getUsername().equals(userEntry.getValue().getUsername())) { // if user is subscribed to the channel and has an open session
-							Session userSession = userEntry.getKey();
+							userSession = userEntry.getKey();
 							Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(userSession); // get all the messages that were downloaded during this session
 							if (channelDownloadedMessages != null) { // if viewing the channel then:
 								Map<Integer, MessageThread> channelThread = channelDownloadedMessages.get(channel.getChannelName()); // get the history of this user
@@ -504,39 +532,35 @@ public class WebChatEndPoint {
 					}
 
 					Subscription subscription = DataManager.getSubscriptionByChannelAndUsername(conn, channel.getChannelName(), thUser.getUsername());
-					/*if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
-						if (message.getId() > subscription.getLastReadMessageId()) { // update that the user has read this message already
-							subscription.setLastReadMessageId(message.getId());
-							DataManager.updateSubscription(conn, subscription);
-						}
-						
-						Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(session); // get all the messages that were downloaded during this session
+					subscription.setUnreadMessages(subscription.getUnreadMessages() + 1); // mark as unread
+					if (message.getContent().contains("@" + thUser.getNickname())) { // check if current user was mentioned
+						subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() + 1); // update that there is an unread mention
+					}
+					DataManager.updateSubscription(conn, subscription);
+					
+					if (isViewingChannel(thUser, channel.getChannelName())) { // if user is viewing this channel
+						Map<String, Map<Integer, MessageThread>> channelDownloadedMessages = downloadedMessages.get(userSession); // get all the messages that were downloaded during this session
 						if (channelDownloadedMessages == null) { // if first time viewing then:
-							downloadedMessages.put(session, (channelDownloadedMessages = new HashMap<>())); // create new history of messages
+							downloadedMessages.put(userSession, (channelDownloadedMessages = new HashMap<>())); // create new history of messages
 						}
 						Map<Integer, MessageThread> channelThread = channelDownloadedMessages.get(channel.getChannelName()); // get the history of this user
 						if (channelThread == null) { // if first time viewing this channel
 							channelDownloadedMessages.put(channel.getChannelName(), (channelThread = new HashMap<>())); // create new history for this channnel
 						}
-						channelThread.put(message.getId(), new MessageThread(message));
 						
-						doNotify(thUser, gson.toJson(new IncomingMessage(channel.getChannelName(), message, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
-					} else { // user is subscribed, but not viewing the channel at the moment */
-					subscription.setUnreadMessages(subscription.getUnreadMessages() + 1); // mark as unread
-					if (message.getContent().contains("@" + thUser.getNickname())) { // check if current user was mentioned
-						subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() + 1); // update that there is an unread mention
+						if (channelThread.size() < AppConstants.MESSAGES_TO_DOWNLOAD || DataManager.isInViewingWindow(conn, channel, subscription, channelThread, message)) { // if barely any messages downloaded, send next batch
+							downloadMessages(userSession, conn, channel);
+						} else {
+							doNotify(thUser, gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
+						}
+					} else { // user is subscribed, but not viewing the channel at the moment
+						doNotify(thUser, gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
 					}
-					System.out.println("reply to incoming message: " + gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
-					doNotify(thUser, gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
-					//}
-					DataManager.updateSubscription(conn, subscription);
 				}
 			} else {
-				System.out.println("fail1");
 				doNotify(session, gson.toJson(new MessageReceived("Not subscribed to channel")));
 			}
 		} else { // channel doesn't exist
-			System.out.println("fail2");
 			doNotify(session, gson.toJson(new MessageReceived("Channel does not exist")));
 		}
 	}
