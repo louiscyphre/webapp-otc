@@ -43,7 +43,6 @@ public interface AppConstants {
 	public final String INSERT_USER_STMT = "INSERT INTO " + USERS + " VALUES(?,?,?,?,?)";
 	public final String SELECT_USER_BY_USERNAME_STMT = "SELECT * FROM " + USERS + " WHERE Username=?";
 	public final String SELECT_USER_BY_CREDENTIALS_STMT = "SELECT * FROM USERS WHERE Username=? AND Password=?";
-	public final String SELECT_USER_BY_NICKNAME_LIKENESS_STMT = "SELECT * FROM " + USERS + " WHERE UPPER(Nickname) LIKE UPPER(?)";
 	public final String SELECT_USERS = "SELECT * FROM USERS";
 	// channels table
 	public final String CHANNELS = "channels";
@@ -57,7 +56,6 @@ public interface AppConstants {
 	public final String INSERT_CHANNEL_STMT = "INSERT INTO " + CHANNELS + " VALUES(?,?,?,?)";
 	public final String SELECT_CHANNEL_BY_CHANNELNAME_STMT = "SELECT * FROM " + CHANNELS + " WHERE ChannelName=?";
 	public final String SELECT_PUBLIC_CHANNEL_BY_CHANNELNAME_STMT = "SELECT * FROM " + CHANNELS + " WHERE IsPublic=true AND ChannelName=?";
-	public final String SELECT_CHANNEL_BY_CHANNELNAME_LIKENESS_STMT = "SELECT * FROM " + CHANNELS + " WHERE IsPublic=true AND UPPER(ChannelName) LIKE UPPER(?)";
 	public final String SELECT_CHANNELS = "SELECT * FROM " + CHANNELS;
 	public final String UPDATE_CHANNEL_SUBSCRIBERS_COUNT_STMT = "UPDATE " + CHANNELS + " SET NumberOfSubscribers=? WHERE ChannelName=?";
 	// subscriptions table

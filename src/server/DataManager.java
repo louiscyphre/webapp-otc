@@ -486,47 +486,29 @@ public final class DataManager {
 	public static Collection<Channel> discoverChannels(Connection conn, ChannelDiscovery query) {
 		try {
 			Collection<Channel> channels = new ArrayList<>(); // the list that will be returned
-			
-			PreparedStatement chanStmt = conn.prepareStatement(AppConstants.SELECT_CHANNEL_BY_CHANNELNAME_LIKENESS_STMT);
-			chanStmt.setString(1, "%" + query.getQuery() + "%");				
+			Collection<Channel> allChannels = new ArrayList<>(); // all the channels
+			PreparedStatement chanStmt = conn.prepareStatement(AppConstants.SELECT_CHANNELS);
 			ResultSet chanRS = chanStmt.executeQuery();
-			if (chanRS.next()) {
+			while (chanRS.next()) {
 				Channel channel = new Channel(chanRS.getString(1), chanRS.getString(2), chanRS.getInt(3), chanRS.getBoolean(4));
-				if (!channels.contains(channel)) {
-					updateChannelUsers(conn, channel);
+				updateChannelUsers(conn, channel);
+				allChannels.add(channel);
+				if (channel.isPublic() && channel.getChannelName().toLowerCase().contains(query.getQuery().toLowerCase()) && !channels.contains(channel)) {
 					channels.add(channel);
 				}
 			}
 			chanRS.close();
 			chanStmt.close();
 			
-			PreparedStatement nickStmt = conn.prepareStatement(AppConstants.SELECT_USER_BY_NICKNAME_LIKENESS_STMT);
-			nickStmt.setString(1, "%" + query.getQuery() + "%");
-			ResultSet nickRS = nickStmt.executeQuery();
-			while (nickRS.next()) { // iterate over all the users who's nickname is this
-				String username = nickRS.getString(1); // the username of the user
-				PreparedStatement subByUserStmt = conn.prepareStatement(AppConstants.SELECT_SUBSCRIPTIONS_BY_USERNAME_STMT);
-				subByUserStmt.setString(1, username);
-				ResultSet subByUserRS = subByUserStmt.executeQuery();
-				while (subByUserRS.next()) {
-					PreparedStatement chan2Stmt = conn.prepareStatement(AppConstants.SELECT_PUBLIC_CHANNEL_BY_CHANNELNAME_STMT);
-					chan2Stmt.setString(1, subByUserRS.getString(1));
-					ResultSet chan2RS = chan2Stmt.executeQuery();
-					if (chan2RS.next()) {
-						Channel channel = new Channel(chan2RS.getString(1), chan2RS.getString(2), chan2RS.getInt(3), chan2RS.getBoolean(4));
-						if (!channels.contains(channel)) {
-							updateChannelUsers(conn, channel); 
+			for (Channel channel : allChannels) {
+				if (channel.isPublic()) {
+					for (ThreadUser user : channel.getUsers()) {
+						if (user.getNickname().toLowerCase().contains(query.getQuery().toLowerCase()) && !channels.contains(channel)) {
 							channels.add(channel);
 						}
 					}
-					chan2RS.close();
-					chan2Stmt.close();
 				}
-				subByUserRS.close();
-				subByUserStmt.close();
 			}
-			nickRS.close();
-			nickStmt.close();
 			
 			return channels;
 		} catch (SQLException e) {

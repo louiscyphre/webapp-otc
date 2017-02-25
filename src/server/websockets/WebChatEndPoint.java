@@ -114,31 +114,24 @@ public class WebChatEndPoint {
 					// decipher message
 					switch (msgType) {
 					case AppConstants.MESSAGE_CREATE_CHANNEL: // request to create a channel
-						System.out.println("received \"Create Channel\" request");
 						handleCreateChannelRequest(session, conn, msgContent);
 						break;
 					case AppConstants.MESSAGE_SUBSCRIBE: // request to subscribe to a channel
-						System.out.println("received \"Subscribe\" request");
 						handleSubscribeToChannelRequest(session, conn, msgContent);
 						break;
 					case AppConstants.MESSAGE_UNSUBSCRIBE: // request to unsubscribe from a channel
-						System.out.println("received \"Unsubscribe\" request");
 						handleUnsubscribeToChannelRequest(session, conn, msgContent);
 						break;
 					case AppConstants.MESSAGE_CHANNEL_DISCOVERY: // request to search for channels
-						System.out.println("received \"Discovery\" request");
 						handleChannelDiscoveryRequest(session, conn, msgContent);
 						break;
 					case AppConstants.MESSAGE_CHANNEL_VIEWING: // notified that user is currently viewing this channel
-						System.out.println("received \"Channel Viewing\" notification");
 						handleChannelViewingRequest(session, conn, msgContent);
 						break;
 					case AppConstants.MESSAGE_DOWNLOAD_MESSAGES: // request to download 10 messages of a chat
-						System.out.println("received \"Download Messages\" request");
 						handleDownloadMessagesRequest(session, conn, msgContent);
 						break;
 					case AppConstants.MESSAGE_RECEIVED_MESSAGE: // request to deal with a received message
-						System.out.println("received \"Message\" request");
 						handleReceivedMessageRequest(session, conn, msgContent);
 						break;
 					default:
@@ -397,7 +390,6 @@ public class WebChatEndPoint {
 	private void handleChannelDiscoveryRequest(Session session, Connection conn, JsonObject msgContent) throws IOException, SQLException {
 		Gson gson = new Gson();
 		ChannelDiscovery credentials = gson.fromJson(msgContent, ChannelDiscovery.class);
-		System.out.println("discovery reply: " + gson.toJson(new Discovery(DataManager.discoverChannels(conn, credentials))));
 		doNotify(session, gson.toJson(new Discovery(DataManager.discoverChannels(conn, credentials))));
 	}
 	
