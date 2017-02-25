@@ -8,7 +8,7 @@ public interface AppConstants {
 	// default avatar
 	public final String DEFAULT_AVATAR = "img/person.png";
 	// derby constants
-	public final String DB_NAME = "DB_NAME";
+	public final String DB_NAME = "projectDB";
 	public final String DB_DATASOURCE = "DB_DATASOURCE";
 	public final String DB_CONTEXT = "java:comp/env/jdbc/ExampleDatasource";
 	public final String PROTOCOL = "jdbc:derby:"; 
