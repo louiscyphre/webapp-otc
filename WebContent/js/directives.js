@@ -2,8 +2,9 @@
 
   'use strict';
   /*global angular, console*/
-  var directives = angular.module('directives', ['constants', 'services']);
+  var directives = angular.module('directives', ['services']);
   directives.directive('thread', function ($compile) {
+    // This is directive for showing message inside discussion
     return {
       restrict: "E",
       replace: true,
@@ -15,44 +16,54 @@
       },
       template: "" +
         "<ul class = \"messages\">" +
-        "<li class=\"message\">" +
-        " <div class=\"media\">" +
-        "<div class=\"media-left\">" +
-        "<img class=\"user-avatar-chat\" data-ng-src=\"{{thread.Message.User.AvatarUrl}}\" alt=\"userpic\"/>" +
-        "</div>" +
-        "<div class=\"media-body\">" +
-        "<h5><a href = \"javascript:void(0)\" data-ng-click=\"enterPrivateChannel(thread.Message.User.Username,thread.Message.User.Nickname)\">{{thread.Message.User.Nickname}}</a></h5>" +
-        "<h6>posted at: {{thread.Message.MessageTime | date: \"HH:mm:ss dd/MM/yy\" }}</h6>" +
-        "<p>{{thread.Message.Content}}</p>" +
-        "<table class=\"chat-reply\" data-ng-show=\"isReply\">" +
-        " <tr>" +
-        "<td>" +
-        "<input type=\"text\" class=\"form-control chat-reply\" placeholder=\"Type your message here \" data-ng-model=\"lastReply\" data-ng-focus=\"setReply(thread.Message.Id)\" data-ng-enter=\"sendMessage(lastReply); isReply = false; lastReply = ''\" />" +
-        "</td>" +
-        "<td>" +
-        "<span class=\"input-group-btn chat-reply\">" +
-        "<button class=\"btn btn-primary btn-chat-send chat-reply\" type=\"submit\" data-ng-click=\"sendMessage(lastReply); isReply = false; lastReply = ''\">Send</button>" +
-        "</span>" +
-        "</td>" +
-        " </tr>" +
-        "</table>" +
-        "<span class=\"block-right\" data-ng-hide=\"isReply\">" +
-        "<a href=\"javascript: void(0)\" data-ng-click=\"isReply = true\">Reply</a>" + // TODO normally
-        "</span>" +
-        "</div>" +
-        "</div>" +
-        "</li>" +
+        " <li class=\"message\">" +
+        "  <div class=\"media\">" +
+        "   <div class=\"media-left\">" +
+        "    <img class=\"user-avatar-chat\" data-ng-src=\"{{thread.Message.User.AvatarUrl}}\" " +
+        "     alt=\"userpic\"/>" +
+        "   </div>" +
+        "   <div class=\"media-body\">" +
+        "    <h5>" +
+        "     <a href = \"javascript:void(0)\" data-ng-click=\"enterPrivateChannel(thread.Message.User.Username,thread.Message.User.Nickname)\">" +
+        "           {{thread.Message.User.Nickname}}" +
+        "     </a>" +
+        "    </h5>" +
+        "    <h6>posted at: {{thread.Message.MessageTime | date: \"HH:mm:ss dd/MM/yy\" }}</h6>" +
+        "    <p>{{thread.Message.Content}}</p>" +
+        "    <table class=\"chat-reply\" data-ng-show=\"isReply\">" +
+        "     <tr>" +
+        "      <td>" +
+        "       <input type=\"text\" class=\"form-control chat-reply\" placeholder=\"Type your message here \"" +
+        "        data-ng-model=\"lastReply\" data-ng-focus=\"setReply(thread.Message.Id)\" " +
+        "        data-ng-enter=\"sendMessage(lastReply); isReply = false; lastReply = ''\" />" +
+        "      </td>" +
+        "      <td>" +
+        "       <span class=\"input-group-btn chat-reply\">" +
+        "        <button class=\"btn btn-primary btn-chat-send chat-reply\" " +
+        "         type=\"submit\" data-ng-click=\"sendMessage(lastReply); isReply = false; lastReply = ''\">Send</button>" +
+        "       </span>" +
+        "      </td>" +
+        "     </tr>" +
+        "    </table>" +
+        "    <span class=\"block-right\" data-ng-hide=\"isReply\">" +
+        "     <a href=\"javascript: void(0)\" data-ng-click=\"isReply = true\">Reply</a>" + // TODO normally
+        "    </span>" +
+        "   </div>" +
+        "  </div>" +
+        " </li>" +
         "</ul>",
       link: function (scope, element, attrs) {
         //check if this member has children
         if (angular.isArray(scope.thread.Replies)) {
-          $compile('<discussion discussion="thread.Replies" enter-private-channel="enterPrivateChannel" set-reply="setReply" send-message="sendMessage"></discussion>')(scope, function (cloned, scope) {
+          $compile('<discussion discussion="thread.Replies" enter-private-channel="enterPrivateChannel"' +
+            'set-reply="setReply" send-message="sendMessage"></discussion>')(scope, function (cloned, scope) {
             element.append(cloned);
           });
         }
       }
     };
   }).directive('discussion', function () {
+    // This is directive to show tchannel thread recursively
     return {
       restrict: "E",
       replace: true,
@@ -71,6 +82,7 @@
         "</ul>"
     };
   }).directive('scrolledDownCallback', function () {
+    // This directive is used to download more messages if chat thread is fully scrolled down
     return {
       restrict: 'A',
       scope: {
@@ -89,6 +101,8 @@
       }
     };
   }).directive('ngEnter', function () {
+    // This is directive to be able to hit enter
+    // on search channels field and send messages fields
     return function (scope, element, attrs) {
       element.bind("keydown keypress", function (event) {
         if (event.which === 13) {
@@ -102,7 +116,8 @@
       });
     };
   }).directive('clickOutside', function ($document) {
-
+    // This directive is used to close search results 
+    // and creation of new channel form if click outside happened
     return {
       restrict: 'A',
       scope: {

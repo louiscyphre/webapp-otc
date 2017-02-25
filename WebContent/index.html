@@ -131,7 +131,7 @@
           </div>
         </form>
       </div>
-      <div class="chat-text-area-inner" data-scrolled-down-callback="downloadMessages(currentChannel)" data-ng-show="channelSelected == true">
+      <div class="chat-text-area-inner" data-scrolled-down-callback="downloadMessages(currentChannel)" data-ng-show="channelSelected">
         <data-discussion discussion="currentChannelThread" data-ng-model="currentChannelThread" data-enter-private-channel="enterPrivateChannel" data-set-reply="setReply" data-send-message="sendMessage"></data-discussion>
       </div>
       <div class="chat-text-area-footer" data-ng-show="channelSelected">
@@ -147,7 +147,7 @@
     </div>
 
     <div class="side side-right col-md-2">
-      <div class="users-online-control table-row" data-ng-show="channelSelected == true">
+      <div class="users-online-control table-row" data-ng-show="channelSelected">
         <div>
           <div class="block-left">
             <span class="badge badge-channel" data-ng-mouseenter="displayInfo=true" data-ng-mouseleave="displayInfo=false"><img class="badge-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></span>
