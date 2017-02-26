@@ -129,8 +129,8 @@
     <div class="chat-text-area col-md-7">
       <div class="create-channel" data-ng-show="showCreateChannelForm">
         <form class="form-login">
-          <input type="text" class="form-control" placeholder="channel name" data-ng-model="name">
-          <textarea class="form-control" rows="3" placeholder="description" data-ng-model="description"></textarea>
+          <input type="text" class="form-control" placeholder="Channel name" data-ng-model="name">
+          <textarea class="form-control" rows="3" placeholder="Description" data-ng-model="description"></textarea>
           <div class="btn-group btn-group-justified">
             <div class="btn-group">
               <button class="btn btn-primary" data-ng-click="showCreateChannelForm=false"> Cancel</button>
@@ -170,7 +170,7 @@
             <span class="badge badge-channel" data-ng-mouseenter="displayInfo=true" data-ng-mouseleave="displayInfo=false"><img class="badge-icon" data-ng-src="css/img/glyphicons-info-sign.png" alt="description" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></span>
           </div>
           <div class="block-right">
-            <button type="button" class="btn btn-danger channel-control-btn" data-ng-click="unsubscribeChannel(channel.channelId)">Unsubscribe</button>
+            <button type="button" class="btn btn-danger channel-control-btn" data-ng-click="unsubscribeChannel(currentChannel.channelId)">Unsubscribe</button>
           </div>
         </div>
       </div>

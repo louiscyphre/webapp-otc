@@ -39,6 +39,7 @@
         webSocket.onmessage = function (evt) {
           // send .messageType event to application using messageBus service.
           // see protocol about types and structure of all messages.
+          console.log('Server response: ', JSON.stringify(evt.data));
           messageBus.send(JSON.parse(evt.data).messageType, JSON.parse(evt.data));
         };
         webSocket.onerror = function (evt) {
@@ -52,6 +53,7 @@
       // send prepared json to server as json string
       send: function send(jSonObect) {
         if (webSocket !== null) {
+          console.log('Sending request: ', JSON.stringify(jSonObect));
           webSocket.send(JSON.stringify(jSonObect));
         }
         jSonObect = {};

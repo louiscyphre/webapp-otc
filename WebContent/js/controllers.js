@@ -257,7 +257,7 @@
           socket.send(queryJson);
         };
 
-        // this function called when a button "unsubscribed" clicked. 
+        // this function called when a button "unsubscribe" clicked. 
         $scope.unsubscribeChannel = function (channelName) {
           var unsubscribeJson = {
             messageType: "unsubscribe",
@@ -368,6 +368,7 @@
             channel = findChannel(response.channelId, $scope.privateChannels);
           }
           channel.users.push(response.user.username);
+          $scope.$digest();
         });
 
         // this happens, when someone exits channel, so users list need to be updated  
@@ -377,6 +378,7 @@
             channel = findChannel(response.channelId, $scope.privateChannels);
           }
           channel.users.pop(response.username);
+          $scope.$digest();
         });
 
         // happens when user sent unsubscribe request (clicked on "unsubscribe" button),
@@ -394,6 +396,7 @@
             $scope.currentChannelThread = {};
             $scope.channelSelected = false;
           }
+          $scope.$digest();
         });
 
         // this event happens, if user scrolled down in current channel with mouse wheel,
