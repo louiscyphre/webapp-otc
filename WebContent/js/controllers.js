@@ -2,102 +2,102 @@
 
   'use strict';
   /*global angular, console*/
-  var WebChat = angular.module('webChat', ['services', 'directives'])
-    .controller('LoginCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', 'Servlets', function ($rootScope, $scope, $http, MessageBus, Servlets) {
-      // Various user data, tha used in application forms, and chat
+  var webapp = angular.module('webapp', ['services', 'directives'])
+    .controller('loginCtrl', ['$rootScope', '$scope', '$http', 'messageBus', 'servlets', function ($rootScope, $scope, $http, messageBus, servlets) {
+      // various user data, that used in application forms, and chat
       $rootScope.user = {
-        Username: "",
-        Password: "",
-        Nickname: "",
-        Description: "",
-        AvatarUrl: ""
+        username: "",
+        password: "",
+        nickname: "",
+        description: "",
+        avatarUrl: ""
       };
-      // Variables that controls hide and show of login form and auth error warning
+      // variables that controls hide and show of login form and auth error warning
       $scope.loginScreenHidden = false;
       $scope.authFailureWarningHidden = true;
 
-      // Called when user clicks "Sign in" button on login screen
+      // called when user clicks "sign in" button on login screen
       $scope.login = function () {
         var credentials = {
-          Username: $scope.user.Username,
-          Password: $scope.user.Password
+          username: $scope.user.username,
+          password: $scope.user.password
         };
-        Servlets.send("login", credentials);
+        servlets.send("login", credentials);
       };
 
-      // Called when clicking on "Register" button. Then, login form is hidden and register form is shown 
+      // called when clicking on "register" button. then, login form is hidden and register form is shown 
       $scope.doregister = function () {
         $scope.loginScreenHidden = true;
         $scope.authFailureWarningHidden = true;
-        MessageBus.send('register');
+        messageBus.send('register');
       };
 
-      // If was auth failure, show warning
-      $scope.$on('AuthFailure', function (event, data) {
-        if (data.Error === "Username does not exist" || data.Error === "Incorrect Password") {
+      // if was auth failure, show warning
+      $scope.$on('authFailure', function (event, data) {
+        if (data.error === "Username does not exist" || data.error === "Incorrect password") {
           $scope.authFailureWarningHidden = false;
           return;
         }
       });
 
-      // On successful login, hide login form
-      $scope.$on('AuthSuccess', function (event, data) {
+      // on successful login, hide login form
+      $scope.$on('authSuccess', function (event, data) {
         $scope.loginScreenHidden = true;
       });
 
-    }]).controller('RegisterCtrl', ['$rootScope', '$scope', '$http', 'MessageBus', 'Servlets',
-                                    function ($rootScope, $scope, $http, MessageBus, Servlets) {
+    }]).controller('registerCtrl', ['$rootScope', '$scope', '$http', 'messageBus', 'servlets',
+                                    function ($rootScope, $scope, $http, messageBus, servlets) {
 
-        $scope.registerScreenHidden = true; // Registration form, shown on "Register" button click
-        $scope.userExistsWarningHidden = true; // Warning is shown if user already exists
-        // When clicking submit on registration form, data sent to the server
+        $scope.registerScreenHidden = true; // registration form, shown on "register" button click
+        $scope.userExistsWarningHidden = true; // warning is shown if user already exists
+        // when clicking submit on registration form, data sent to the server
         $scope.register = function () {
-          Servlets.send("register", $rootScope.user);
+          servlets.send("register", $rootScope.user);
         };
-        // When user clicks on "Register" button on login screen, show registration form
+        // when user clicks on "register" button on login screen, show registration form
         $scope.$on('register', function (event, data) {
           $scope.registerScreenHidden = false;
         });
-        // When auth success was sent from server, hide register form.
-        $scope.$on('AuthSuccess', function (event, data) {
+        // when auth success was sent from server, hide register form.
+        $scope.$on('authSuccess', function (event, data) {
           $scope.registerScreenHidden = true;
         });
-        // Upon registration, if username already registered, show warning                              
-        $scope.$on('AuthFailure', function (event, data) {
-          if (data.Error === "Username already exists" && !$scope.registerScreenHidden) {
+        // upon registration, if username already registered, show warning                              
+        $scope.$on('authFailure', function (event, data) {
+          if (data.error === "Username already exists" && !$scope.registerScreenHidden) {
             $scope.userExistsWarningHidden = false;
             return;
           }
         });
 
-     }]).controller('ChatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'MessageBus',
-                                      'Socket', 'Servlets',
-                                      function ($rootScope, $scope, $http, $window, MessageBus, Socket, Servlets) {
+     }]).controller('chatRoomsCtrl', ['$rootScope', '$scope', '$http', '$window', 'messageBus',
+                                      'socket', 'servlets',
+                                      function ($rootScope, $scope, $http, $window, messageBus, socket, servlets) {
 
-        $scope.chatRoomsScreenHidden = true; // The main UI view of application
-        $scope.channelSelected = false; // Needed to show right side users list, unsubscribe option and description
-        $scope.showCreateChannelForm = false; // New channel creation form, shown when clicking on "Create channel" button.
+        $scope.chatRoomsScreenHidden = true; // the main uI view of application
+        $scope.channelSelected = false; // needed to show right side users list, unsubscribe option and description
+        $scope.showCreateChannelForm = false; // new channel creation form, shown when clicking on "create channel" button.
 
-        $scope.currentChannel = {}; // Channel that user currently viewing
-        $scope.currentChannelThread = {}; // Current channel's thread that user reading
-        $scope.subscribedChannels = []; // List of subscribed channels, appears on the left
-        $scope.publicChannels = []; // List of public channels, that were discovered. Appears only on search.
-        $scope.privateChannels = []; // List of private channels, appears on left side.
-        $scope.query = ""; // When discovering new public channels, this variable's value sent to server
-        // This is current reply to id value. If its -1, message will be standalone thread inside a bigger channel's thread.
-        // If it's value set to specific value, when clicking on reply link in thread, then it will be shown in threaded manner
+        $scope.currentChannel = {}; // channel that user currently viewing
+        $scope.currentChannelThread = {}; // current channel's thread that user reading
+        $scope.subscribedChannels = []; // list of subscribed channels, appears on the left
+        $scope.publicChannels = []; // list of public channels, that were discovered. appears only on search.
+        $scope.privateChannels = []; // list of private channels, appears on left side.
+        $scope.query = ""; // when discovering new public channels, this variable's value sent to server
+        // this is current reply to id value. if its -1, message will be standalone thread inside a bigger channel's thread.
+        // if it's value set to specific value, when clicking on reply link in thread, then it will be shown in threaded manner
         $scope.repliedToId = -1;
-        $scope.lastMessage = ""; // Variable for sending messages when participating in discussion
+        $scope.lastMessage = ""; // variable for sending messages when participating in discussion
 
-        // Helper function that finds channel in list.
-        // Usage: .object returns channel object, .index returns index in list
+        // helper function that finds channel in list.
+        // usage: .object returns channel object, .index returns index in list
         var findChannel = function (channelName, channelsList) {
           if (!channelsList) {
             return null;
           }
           for (var key = 0; key < channelsList.length; key++) {
             if (channelsList.hasOwnProperty(key)) {
-              if (channelsList[key].ChannelName !== channelName) {
+              if (channelsList[key].channelId !== channelName) {
                 continue;
               }
             }
@@ -109,10 +109,10 @@
           return null;
         };
 
-        // Helper function that finding message in array by it's Id
+        // helper function that finding message in array by it's id
         var findMessageIndexById = function (id, thread) {
           for (var i = 0; i < thread.length; ++i) {
-            if (id !== thread[i].Message.Id) {
+            if (id !== thread[i].message.id) {
               continue;
             }
             return i;
@@ -120,72 +120,70 @@
           return -1;
         };
 
-        // Function to recursively insert reply into thread by Id of message, 
+        // function to recursively insert reply into thread by id of message, 
         // that reply message replies to.
         var appendToThreadById = function (replyMessage, thread) {
           for (var i = 0; i < thread.length; ++i) {
-            if (replyMessage.Message.RepliedToId === thread[i].Message.Id) {
-              thread[i].Replies.push(replyMessage);
+            if (replyMessage.message.repliedToId === thread[i].message.id) {
+              thread[i].replies.push(replyMessage);
               return;
             }
-            if (thread[i].Replies.length > 0) {
-              appendToThreadById(replyMessage, thread[i].Replies);
+            if (thread[i].replies.length > 0) {
+              appendToThreadById(replyMessage, thread[i].replies);
             }
           }
         };
 
-        // This function called each time when needed to change current thread, 
-        // for example, when changing a channel. It called also on successful subscription 
-        // and on successful new channel creation. If current channel's thread empty,
+        // this function called each time when needed to change current thread, 
+        // for example, when changing a channel. it called also on successful subscription 
+        // and on successful new channel creation. if current channel's thread empty,
         // it triggers downloadMessages json sending to server.
         var getCurrentThread = function (channelName, channelsList) {
-          if (!findChannel(channelName, channelsList).object.ChannelThread.length) {
+          if (!findChannel(channelName, channelsList).object.channelThread.length) {
             downloadMessages(channelName);
           }
-          return findChannel(channelName, channelsList).object.ChannelThread;
+          return findChannel(channelName, channelsList).object.channelThread;
         };
 
-        // This function called each time on entering channel and current channel
+        // this function called each time on entering channel and current channel
         // thread is empty, or when inside channel and chat area scrolled down fully
         var downloadMessages = function (channelName) {
           var downloadMessagesJson = {
-            MessageType: "DownloadMessages",
-            MessageContent: {
-              Channel: channelName
+            messageType: "downloadMessages",
+            messageContent: {
+              channelId: channelName
             }
           };
-          //if ($scope.channelSelected === true) {
-          Socket.send(downloadMessagesJson);
-          //}
+          socket.send(downloadMessagesJson);
         };
 
-        // This is special message sent to server, when starting to view
-        // one of the channels. This helps server to determine, when needed
+        // this is special message sent to server, when starting to view
+        // one of the channels. this helps server to determine, when needed
         // to send messages on specific channel, or only updates of unread
         // messages counters.
         var viewingChannel = function (channelName) {
           var viewingChannelJson = {
-            MessageType: "ChannelViewing",
-            MessageContent: {
-              channel: channelName
+            messageType: "channelViewing",
+            messageContent: {
+              channelId: channelName
             }
           };
-          Socket.send(viewingChannelJson);
+          socket.send(viewingChannelJson);
         };
 
-        // New subscription to channel. Called when trying to enter
+        // new subscription to channel. called when trying to enter
         // to channel, that user not subscribed to it (on channel discovery).
         var subscribeToChannel = function (channelName) {
           var subscribeJson = {
-            MessageType: "Subscribe",
-            MessageContent: {
-              ChannelId: channelName,
+            messageType: "subscribe",
+            messageContent: {
+              channelId: channelName,
             }
           };
-          Socket.send(subscribeJson);
+          socket.send(subscribeJson);
         };
 
-        // New channel creation. Called on click on the green button "Create channel".
+        // new channel creation. called on click on the green button "create channel".
         // username parameter needed for private channel creation 
         // (this username is of other participiant, not that initiated chat.)
         $scope.createChannel = function (channelName, description, username) {
@@ -193,21 +191,21 @@
             return;
           }
           var createChannelJson = {
-            MessageType: "CreateChannel",
-            MessageContent: {
-              Name: channelName,
-              Description: description,
-              Username: username
+            messageType: "createChannel",
+            messageContent: {
+              channelId: channelName,
+              description: description,
+              username: username
             }
           };
-          Socket.send(createChannelJson);
+          socket.send(createChannelJson);
         };
 
-        // This function is for entering public channels by clicking on subscribed channels list.
-        // If one of discovered channels clicked, then it called and make new subscription.
+        // this function is for entering public channels by clicking on subscribed channels list.
+        // if one of discovered channels clicked, then it called and make new subscription.
         $scope.enterChannel = function (channelName, channelsList) {
           if (!findChannel(channelName, channelsList) || (channelsList === $scope.publicChannels)) {
-            /// The only possible case is when on channel discovery and clicking on public channel
+            /// the only possible case is when on channel discovery and clicking on public channel
             subscribeToChannel(channelName);
           } else {
             viewingChannel(channelName);
@@ -218,15 +216,15 @@
           }
         };
 
-        // This function called when clicking on private channel in 
+        // this function called when clicking on private channel in 
         // private channels list, or on nickname in users list, or on nickname
         // somewhere in thread of the chat
         $scope.enterPrivateChannel = function (dstUsername, dstNickname) {
-          if (dstUsername === $scope.user.Username) {
+          if (dstUsername === $scope.user.username) {
             return;
           }
-          var possibleChannelName1 = $scope.user.Username + dstUsername;
-          var possibleChannelName2 = dstUsername + $scope.user.Username;
+          var possibleChannelName1 = $scope.user.username + dstUsername;
+          var possibleChannelName2 = dstUsername + $scope.user.username;
           var finalName = null;
           if (findChannel(possibleChannelName1, $scope.privateChannels)) {
             finalName = possibleChannelName1;
@@ -234,226 +232,212 @@
             finalName = possibleChannelName2;
           }
           if (!finalName) {
-            var description = "Private channel for " + $scope.user.Nickname + " and " + dstNickname + ", created by " + $scope.user.Nickname;
+            var description = "private channel for " + $scope.user.nickname + " and " + dstNickname + ", created by " + $scope.user.nickname;
             $scope.createChannel(possibleChannelName1, description, dstUsername);
             return;
           }
           $scope.enterChannel(finalName, $scope.privateChannels);
         };
 
-        // This is callback that called when thread is scrolled down
+        // this is callback that called when thread is scrolled down
         // (with mouse wheel or page down, down arrow keys)
         $scope.downloadOnScroll = function () {
-          //if ($scope.channelSelected === true) {
-          downloadMessages($scope.currentChannel.ChannelName);
-          //}
+          downloadMessages($scope.currentChannel.channelId);
         };
 
-        // Channel discovery, called on hitting enter in "Search channel.." 
+        // channel discovery, called on hitting enter in "search channel.." 
         // field near user description.
         $scope.discoverChannels = function (query) {
           var queryJson = {
-            MessageType: "ChannelDiscovery",
-            MessageContent: {
-              Query: query,
+            messageType: "channelDiscovery",
+            messageContent: {
+              query: query,
             }
           };
-          Socket.send(queryJson);
+          socket.send(queryJson);
         };
 
-        // This function called when a button "Unsubscribed" clicked. 
+        // this function called when a button "unsubscribed" clicked. 
         $scope.unsubscribeChannel = function (channelName) {
           var unsubscribeJson = {
-            MessageType: "Unsubscribe",
-            MessageContent: {
-              ChannelId: channelName
+            messageType: "unsubscribe",
+            messageContent: {
+              channelId: channelName
             }
           };
-          Socket.send(unsubscribeJson);
+          socket.send(unsubscribeJson);
         };
 
-        // Send message in current channel. In order to see sent messages, 
-        // we download messages from server. This function called on hitting enter
+        // send message in current channel. in order to see sent messages, 
+        // we download messages from server. this function called on hitting enter
         // in input text field inside chat, or on clicking a button near this field
         $scope.sendMessage = function (message) {
           var sendMessageJson = {
-            MessageType: "SendMessage",
-            MessageContent: {
-              Message: {
-                ChannelId: $scope.currentChannel.ChannelName,
-                RepliedToId: $scope.repliedToId,
-                Content: message
+            messageType: "sendMessage",
+            messageContent: {
+              message: {
+                channelId: $scope.currentChannel.channelId,
+                repliedToId: $scope.repliedToId,
+                content: message
               }
             }
           };
-          Socket.send(sendMessageJson);
+          socket.send(sendMessageJson);
           $scope.lastMessage = '';
         };
 
-        // Helper function to change appearance of active elements  
+        // helper function to change appearance of active elements  
         $scope.isActive = function (channelName) {
-          return $scope.currentChannel.ChannelName === channelName;
+          return $scope.currentChannel.channelId === channelName;
         };
-        // This function called on click "Reply" in thead.
+        // this function called on click "reply" in thead.
         $scope.setReply = function (repliedToId) {
           $scope.repliedToId = repliedToId;
-          console.log('ChatRoomsCtrl: setReply(): repliedToId is:', $scope.repliedToId);
+          console.log('chatRoomsCtrl: setReply(): repliedToId is:', $scope.repliedToId);
         };
 
-        // Original private channel name is of the form: username1+username2, but in interface we want to
+        // original private channel name is of the form: username1+username2, but in interface we want to
         // show nickname of other user, because this is what user saw whan initiated private chat.
         $scope.getPrivateChannelName = function (channelName) {
           var privateChannelNameToShow = "";
           var channel = findChannel(channelName, $scope.privateChannels).object;
-          for (var i = 0; i < channel.Users.length; ++i) {
-            if (channel.Users[i].Username.toLowerCase().indexOf($scope.user.Username.toLowerCase()) != -1) {
+          for (var i = 0; i < channel.users.length; ++i) {
+            if (channel.users[i].username.toLowerCase().indexOf($scope.user.username.toLowerCase()) != -1) {
               continue;
             }
-            privateChannelNameToShow = channel.Users[i].Nickname;
+            privateChannelNameToShow = channel.users[i].nickname;
           }
           return privateChannelNameToShow;
         };
 
-        // This is helper binary function to additionally filter discovered channels, after hitting enter but before
-        // hitting enter again. This way query can be changed and it possible to restict search results even more 
+        // this is helper binary function to additionally filter discovered channels, after hitting enter but before
+        // hitting enter again. this way query can be changed and it possible to restict search results even more 
         // without bothering the server with requests.
         $scope.searchChannel = function (channel) {
-          if (!$scope.query || (channel.ChannelName.toLowerCase().indexOf($scope.query.toLowerCase()) != -1)) {
+          if (!$scope.query || (channel.channelId.toLowerCase().indexOf($scope.query.toLowerCase()) != -1)) {
             return true;
           }
-          for (var i = 0; i < channel.Users.length; ++i) {
-            if (channel.Users[i].Nickname.toLowerCase().indexOf($scope.query.toLowerCase()) != -1) {
+          for (var i = 0; i < channel.users.length; ++i) {
+            if (channel.users[i].nickname.toLowerCase().indexOf($scope.query.toLowerCase()) != -1) {
               return true;
             }
           }
           return false;
         };
-
-        // This event is happens on successful registration or login. Then main interface is
-        // shown to user, and lists of subscribed and private channels updated from response.
-        $scope.$on('AuthSuccess', function (event, response) {
-          $scope.chatRoomsScreenHidden = false;
-          $rootScope.user = response.User;
-          $scope.subscribedChannels = response.SubscribedChannels;
-          $scope.privateChannels = response.PrivateChannels;
-          Socket.connect($rootScope.user.Username);
-        });
-
-        // This event happens on succesful subscription on channel. First case is
-        // when user clicking on channel when discovering channels, second case
-        // is when some user initiate private chat creation by clicking on nickname
-        // in thread or in users list on the right side of main chat interface.
-        $scope.$on('SubscribeSuccess', function (event, response) {
+        // function callback, that common to two events - channelSuccess 
+        // and subscribeSuccess.                                
+        var pushChannelAndEnter = function (event, response) {
           var channelsList;
-          if (response.Channel.IsPublic === true) {
-            $scope.subscribedChannels.push(response.Channel);
+          if (response.channel.isPublic === true) {
+            $scope.subscribedChannels.push(response.channel);
             channelsList = $scope.subscribedChannels;
           } else {
-            $scope.privateChannels.push(response.Channel);
+            $scope.privateChannels.push(response.channel);
             channelsList = $scope.privateChannels;
           }
           $scope.$digest();
           $scope.channelSelected = true;
-          $scope.currentChannelThread = getCurrentThread(response.Channel.ChannelName, channelsList);
-          $scope.currentChannel = findChannel(response.Channel.ChannelName, channelsList).object;
+          $scope.currentChannelThread = getCurrentThread(response.channel.channelId, channelsList);
+          $scope.currentChannel = findChannel(response.channel.channelId, channelsList).object;
+        };
+        // this event is happens on successful registration or login. then main interface is
+        // shown to user, and lists of subscribed and private channels updated from response.
+        $scope.$on('authSuccess', function (event, response) {
+          $scope.chatRoomsScreenHidden = false;
+          $rootScope.user = response.user;
+          $scope.subscribedChannels = response.subscribedChannels;
+          $scope.privateChannels = response.privateChannels;
+          socket.connect($rootScope.user.username);
         });
 
-        // Event, that sent from server on channel creation. In this case
+        // this event happens on succesful subscription on channel. first case is
+        // when user clicking on channel when discovering channels, second case
+        // is when some user initiate private chat creation by clicking on nickname
+        // in thread or in users list on the right side of main chat interface.
+        $scope.$on('subscribeSuccess', pushChannelAndEnter);
+
+        // event, that sent from server on channel creation. in this case
         // current thread and current channel are updated to be of this new channel,
         // (user enters the channel).
-        $scope.$on('ChannelSuccess', function (event, response) {
-          var channelsList;
-          if (response.Channel.IsPublic === true) {
-            $scope.subscribedChannels.push(response.Channel);
-            $scope.$digest();
-            channelsList = $scope.subscribedChannels;
-          } else {
-            $scope.privateChannels.push(response.Channel);
-            $scope.$digest();
-            channelsList = $scope.privateChannels;
-          }
-          $scope.channelSelected = true;
-          $scope.currentChannelThread = getCurrentThread(response.Channel.ChannelName, channelsList);
-          $scope.currentChannel = findChannel(response.Channel.ChannelName, channelsList).object;
-        });
+        $scope.$on('channelSuccess', pushChannelAndEnter);
 
-        // This happens, when someone enters channel, so users list need to be updated  
-        $scope.$on('UserSubscribed', function (event, response) {
-          var channel = findChannel(response.Channel, $scope.subscribedChannels);
+        // this happens, when someone enters channel, so users list need to be updated  
+        $scope.$on('userSubscribed', function (event, response) {
+          var channel = findChannel(response.channel, $scope.subscribedChannels);
           if (!channel) {
-            channel = findChannel(response.Channel, $scope.privateChannels);
+            channel = findChannel(response.channel, $scope.privateChannels);
           }
-          channel.Users.push(response.User.Username);
+          channel.users.push(response.user.username);
         });
 
-        // This happens, when someone exits channel, so users list need to be updated  
-        $scope.$on('UserUnsubscribed', function (event, response) {
-          var channel = findChannel(response.Channel, $scope.subscribedChannels);
+        // this happens, when someone exits channel, so users list need to be updated  
+        $scope.$on('userUnsubscribed', function (event, response) {
+          var channel = findChannel(response.channel, $scope.subscribedChannels);
           if (!channel) {
-            channel = findChannel(response.Channel, $scope.privateChannels);
+            channel = findChannel(response.channel, $scope.privateChannels);
           }
-          channel.Users.pop(response.Username);
+          channel.users.pop(response.username);
         });
 
-        // Happens when user sent unsubscribe request (clicked on "Unsubscribe" button),
+        // happens when user sent unsubscribe request (clicked on "unsubscribe" button),
         // and server sent successful reply
-        $scope.$on('Unsubscribe', function (event, response) {
+        $scope.$on('unsubscribe', function (event, response) {
           var channelsList = $scope.subscribedChannels;
-          var channel = findChannel(response.Channel, channelsList);
+          var channel = findChannel(response.channel, channelsList);
           if (!channel) {
             channelsList = $scope.privateChannels;
           }
-          channelsList.splice(findChannel(response.Channel, channelsList).index, 1);
+          channelsList.splice(findChannel(response.channel, channelsList).index, 1);
 
-          if ($scope.currentChannel === response.Channel) {
+          if ($scope.currentChannel === response.channel) {
             $scope.currentChannel = {};
             $scope.currentChannelThread = {};
             $scope.channelSelected = false;
           }
         });
 
-        // This event happens, if user scrolled down in current channel with mouse wheel,
+        // this event happens, if user scrolled down in current channel with mouse wheel,
         // with page down or arrow down keys (after click on chat area), or when sending message 
         // in chat. 
-        $scope.$on('DownloadMessages', function (event, response) {
+        $scope.$on('downloadMessages', function (event, response) {
           var channelsList = $scope.subscribedChannels;
-          var channel = findChannel(response.Channel, channelsList);
+          var channel = findChannel(response.channel, channelsList);
           if (!channel) {
             channelsList = $scope.privateChannels;
-            channel = findChannel(response.Channel, channelsList);
+            channel = findChannel(response.channel, channelsList);
           }
-          if (!response.ChannelThread || !response.ChannelThread.length || !channel) {
+          if (!response.channelThread || !response.channelThread.length || !channel) {
             return;
           }
-          // Iterate on channel thread, remove all root messages, and push arrived root messages
-          // This way we move thread down and update lastModified property in whole thread
-          for (var i = 0; i < response.ChannelThread.length; i++) {
-            if (response.ChannelThread[i].Message.RepliedToId !== -1) {
+          // iterate on channel thread, remove all root messages, and push arrived root messages
+          // this way we move thread down and update lastModified property in whole thread
+          for (var i = 0; i < response.channelThread.length; i++) {
+            if (response.channelThread[i].message.repliedToId !== -1) {
               continue;
             }
-            var index = findMessageIndexById(response.ChannelThread[i].Message.Id, channel.object.ChannelThread);
+            var index = findMessageIndexById(response.channelThread[i].message.id, channel.object.channelThread);
             if (index !== -1) {
-              channel.object.ChannelThread.splice(index, 1);
+              channel.object.channelThread.splice(index, 1);
             }
-            channel.object.ChannelThread.push(response.ChannelThread[i]);
+            channel.object.channelThread.push(response.channelThread[i]);
           }
-          // Append replies to root messages according to tree structure
-          for (var j = 0; j < response.ChannelThread.length; j++) {
-            appendToThreadById(response.ChannelThread[j], channel.object.ChannelThread);
+          // append replies to root messages according to tree structure
+          for (var j = 0; j < response.channelThread.length; j++) {
+            appendToThreadById(response.channelThread[j], channel.object.channelThread);
           }
           channel.object.unreadMessages = response.unreadMessages;
           channel.object.unreadMentionedMessages = response.unreadMentionedMessages;
           $scope.$digest();
         });
 
-        // This event happens, when server replies on channel search query.  
-        $scope.$on('ChannelDiscovery', function (event, response) {
-          angular.merge($scope.publicChannels, $scope.publicChannels, response.Channels);
+        // this event happens, when server replies on channel search query.  
+        $scope.$on('channelDiscovery', function (event, response) {
+          angular.merge($scope.publicChannels, $scope.publicChannels, response.channels);
           $scope.$digest();
         });
-        // Update couters needed, when number of messages or mentioned messages changing in
+        // update couters needed, when number of messages or mentioned messages changing in
         // a channel, that user not currently viewing.  
-        $scope.$on('UpdateCounters', function (event, response) {
+        $scope.$on('updateCounters', function (event, response) {
           var channel = findChannel(response.channelId, $scope.subscribedChannels);
           if (!channel) {
             channel = findChannel(response.channelId, $scope.privateChannels);

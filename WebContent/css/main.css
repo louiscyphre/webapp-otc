@@ -1,3 +1,6 @@
+/* This are settings for login-form,
+   the first screen user see when enters a chat */
+
 .form-login {
   display: block;
   max-width: 320px;
@@ -35,6 +38,10 @@
   border-top-right-radius: 0;
 }
 
+
+/* Login and registration forms has a box around, 
+   this are settings for this box */
+
 .account-wall {
   position: relative;
   margin-top: 50px;
@@ -43,6 +50,10 @@
   box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
+
+
+/* Settings for auth and registation 
+   warning message */
 
 .auth-fail,
 .reg-fail {
@@ -58,12 +69,19 @@
   font-size: 16px;
 }
 
+
+/* Greeting message above login and 
+   registration forms */
+
 .login-title {
   color: #555;
   font-size: 18px;
   font-weight: 400;
   display: block;
 }
+
+
+/* Avatar in login form */
 
 .avatar {
   width: 96px;
@@ -74,6 +92,9 @@
   background-color: #ffffff;
 }
 
+
+/* Settings for "Register" button */
+
 .btn-secondary:hover:not (.active) {
   background-color: #8E8E8E;
   color: white;
@@ -82,6 +103,10 @@
 .btn-secondary {
   background-color: #B3B3B3;
 }
+
+
+/* Global settings for document.
+   We hide overflows by default. */
 
 html,
 body {
@@ -92,12 +117,20 @@ body {
   background-color: #E6DDD4;
 }
 
+
+/* The main section of the chat,
+   that controlled by chatRoomsCtrl */
+
 .chat-container {
   padding: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
+
+
+/* Common settings for right and left parts
+   of chat interface. */
 
 .side {
   margin: 0;
@@ -109,6 +142,11 @@ body {
   overflow: hidden;
 }
 
+
+/* This section contains user information,
+   channel discovery, list of subscribed
+   and private channels. */
+
 .side-left {
   padding-bottom: 0.5em;
   border-top-right-radius: 8px;
@@ -116,16 +154,28 @@ body {
   box-shadow: 10px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
+
+/* Section on the right, contains 
+   channel info, unsubscribe button
+   and list of users currently online */
+
 .side-right {
   height: 100%;
   padding: 1em;
 }
+
+
+/* Section for the lists of subscribed
+   and private channels, without user info */
 
 .side .side-inner {
   padding: 1em;
   position: relative;
   height: 80%;
 }
+
+
+/* Section for user info */
 
 .user-information {
   background-color: #909090;
@@ -138,6 +188,9 @@ body {
   color: #FFFFFF;
 }
 
+
+/* Create channel form, visible on button click */
+
 .create-channel {
   position: absolute;
   top: 0px;
@@ -149,6 +202,10 @@ body {
   border-radius: 8px;
 }
 
+
+/* Settings for subscribed, private and public 
+   channels lists, and for subscribed users list */
+
 .subscribed-channels,
 .private-channels {
   height: 50%;
@@ -156,7 +213,7 @@ body {
 
 .subscribed-channels,
 .private-channels,
-.users-online,
+.users-subscribed,
 .public-channels {
   list-style-type: none;
   margin: 0;
@@ -164,13 +221,13 @@ body {
   overflow: hidden;
 }
 
-.users-online {
+.users-subscribed {
   height: 93vh;
 }
 
 
-/* This feature is optional, but I think it's cool, 
-   but requires to make listeners on PgUp-PgDn and arrows */
+/* We hide scrollbar, but it is still working 
+   with mouse wheel */
 
 ::-webkit-scrollbar {
   width: 0px;
@@ -183,14 +240,14 @@ body {
 
 .subscribed-channels:hover,
 .private-channels:hover,
-.users-online:hover,
+.users-subscribed:hover,
 .public-channels:hover {
   overflow: auto;
 }
 
-.users-online-control {
-  height: 3.7em;
-}
+
+/* This is description settings for
+   user and current channel*/
 
 .description {
   border-radius: 8px;
@@ -204,6 +261,9 @@ body {
   vertical-align: middle;
   overflow: hidden;
 }
+
+
+/* This row is to show list items on sides */
 
 .side-channel-row {
   width: 100%;
@@ -229,6 +289,9 @@ body {
   background-color: #286090;
 }
 
+
+/* Classes to show items on different sides */
+
 .block-left {
   float: left;
   overflow: hidden;
@@ -238,6 +301,9 @@ body {
   float: right;
   overflow: hidden;
 }
+
+
+/* Settings for channel badges */
 
 .badge-channel {
   height: 20px;
@@ -261,13 +327,25 @@ body {
   height: 15px;
 }
 
-.channel-control {
+
+/* This section is shown when user 
+   enters channel and includes channel 
+   description and unsubscribe button */
+
+.channel-control-section {
+  height: 3.7em;
+}
+
+.channel-control-btn {
   height: 25px;
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 5px;
   padding-right: 5px;
 }
+
+
+/* Settings for shannel discovery field */
 
 .side input[type="text"] {
   height: 2em;
@@ -284,6 +362,10 @@ body {
   outline: none;
   font-size: 18px;
 }
+
+
+/* Settings for search results, that shown 
+   on public channels discovery */
 
 .search-results {
   padding: 5px;
@@ -302,12 +384,19 @@ body {
   overflow-y: auto;
 }
 
+
+/* User avatar, as it appears in right side list
+   of subscribed users */
+
 .user-avatar-side {
   width: 46px;
   height: 46px;
   border-radius: 50%;
   background-color: #ffffff;
 }
+
+
+/* Settings for chat area */
 
 .chat-text-area {
   padding: 0px;
@@ -365,18 +454,25 @@ body {
   outline: none;
 }
 
+
+/* Setting for reply field to message */
+
 .chat-reply {
   width: 100%;
+  border-radius: 4px;
 }
 
-.test {
-  /*width: 100vw;*/
-}
+
+/* This is headers to show nicknames and message
+   time in channel thread */
 
 h5,
 h6 {
   display: inline;
 }
+
+
+/* User avatar, as it appears in channel thread */
 
 .user-avatar-chat {
   width: 50px;

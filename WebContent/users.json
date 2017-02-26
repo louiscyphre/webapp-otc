@@ -1,86 +1,86 @@
 [
-	{
-		"Username" : "Odmin",
-		"Password" : "1234",
-		"Nickname" : "supuser",
-		"Description" : "Shalooom fellash. I am shumadaaaan!! Me very happy",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "Odmin",
+    "password": "1234",
+    "nickname": "supuser",
+    "description": "Shalooom fellash. I am shumadaaaan!! Me very happy",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "Goblin",
-		"Password" : "12345",
-		"Nickname" : "supsupuser",
-		"Description" : "שטו?",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "Goblin",
+    "password": "12345",
+    "nickname": "supsupuser",
+    "description": "שטו?",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "Ilia",
-		"Password" : "1123",
-		"Nickname" : "Student",
-		"Description" : "בדיקת עברית",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "Ilia",
+    "password": "1123",
+    "nickname": "Student",
+    "description": "בדיקת עברית",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "HobGoblin",
-		"Password" : "1q2w",
-		"Nickname" : "Someone",
-		"Description" : "secret stuff",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "HobGoblin",
+    "password": "1q2w",
+    "nickname": "Someone",
+    "description": "secret stuff",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "Goblin2",
-		"Password" : "12345",
-		"Nickname" : "supsupuser2",
-		"Description" : "שטו?",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "Goblin2",
+    "password": "12345",
+    "nickname": "supsupuser2",
+    "description": "שטו?",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "HobGoblin2",
-		"Password" : "1q2w",
-		"Nickname" : "Someone2",
-		"Description" : "secret stuff",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "HobGoblin2",
+    "password": "1q2w",
+    "nickname": "Someone2",
+    "description": "secret stuff",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "Reaper",
-		"Password" : "1324",
-		"Nickname" : "Reaper",
-		"Description" : "let's reap",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "Reaper",
+    "password": "1324",
+    "nickname": "Reaper",
+    "description": "let's reap",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "Reaper2",
-		"Password" : "1324",
-		"Nickname" : "Reaper2",
-		"Description" : "let's reap",
-		"AvatarUrl" : "img/person.png"
+  {
+    "username": "Reaper2",
+    "password": "1324",
+    "nickname": "Reaper2",
+    "description": "let's reap",
+    "avatarUrl": "css/img/person.png"
 	},
-	{
-		"Username" : "Juga",
-		"Password" : "1q2w",
-		"Nickname" : "Juga",
-		"Description" : "From Qumi land.",
-		"AvatarUrl" : "https://pp.vk.me/c5183/u156217694/155970130/x_32fe6103.jpg"
+  {
+    "username": "Juga",
+    "password": "1q2w",
+    "nickname": "Juga",
+    "description": "From Qumi land.",
+    "avatarUrl": "https://pp.vk.me/c5183/u156217694/155970130/x_32fe6103.jpg"
 	},
-	{
-		"Username" : "Yusi",
-		"Password" : "1324",
-		"Nickname" : "Yusi",
-		"Description" : "Hasyaka kapu, nyama-nyama hvat' hvat' hvat'!",
-		"AvatarUrl" : "https://pp.vk.me/c5183/u156217694/-12/x_1a23f67a.jpg"
+  {
+    "username": "Yusi",
+    "password": "1324",
+    "nickname": "Yusi",
+    "description": "Hasyaka kapu, nyama-nyama hvat' hvat' hvat'!",
+    "avatarUrl": "https://pp.vk.me/c5183/u156217694/-12/x_1a23f67a.jpg"
 	},
-	{
-		"Username" : "Shumadan",
-		"Password" : "1q2w",
-		"Nickname" : "Shumadan",
-		"Description" : "Juga's best friend",
-		"AvatarUrl" : "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/%D0%A8%D1%83%D0%BC%D0%B0%D0%B4%D0%B0%D0%BD.jpg/220px-%D0%A8%D1%83%D0%BC%D0%B0%D0%B4%D0%B0%D0%BD.jpg"
+  {
+    "username": "Shumadan",
+    "password": "1q2w",
+    "nickname": "Shumadan",
+    "description": "Juga's best friend",
+    "avatarUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/%D0%A8%D1%83%D0%BC%D0%B0%D0%B4%D0%B0%D0%BD.jpg/220px-%D0%A8%D1%83%D0%BC%D0%B0%D0%B4%D0%B0%D0%BD.jpg"
 	},
-	{
-		"Username" : "Baybaba",
-		"Password" : "1324",
-		"Nickname" : "Bay-Baba",
-		"Description" : "Zyaka byaka! Baduga buka!",
-		"AvatarUrl" : "http://licensingrussia.ru/media/editor/2012/12/13/kumi.jpg"
+  {
+    "username": "Baybaba",
+    "password": "1324",
+    "nickname": "Bay-Baba",
+    "description": "Zyaka byaka! Baduga buka!",
+    "avatarUrl": "http://licensingrussia.ru/media/editor/2012/12/13/kumi.jpg"
 	}
 ]

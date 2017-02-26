@@ -1,38 +1,38 @@
 [
-	{
-		"ChannelName" : "Web Programming",
-		"Description" : "Channel for discussing the project",
-		"NumberOfSubscribers" : 12,
-		"IsPublic" : true
+  {
+    "channelId": "Web Programming",
+    "description": "Channel for discussing the project",
+    "numberOfSubscribers": 12,
+    "isPublic": true
 	},
-	{
-		"ChannelName" : "Software Engineering",
-		"Description" : "Channel for discussing homework and the test. Test test test test test test test test test test test",
-		"NumberOfSubscribers" : 1,
-		"IsPublic" : true
+  {
+    "channelId": "Software Engineering",
+    "description": "Channel for discussing homework and the test. Test test test test test test test test test test test",
+    "numberOfSubscribers": 1,
+    "isPublic": true
 	},
-	{
-		"ChannelName" : "Image Processing",
-		"Description" : "should not have taken",
-		"NumberOfSubscribers" : 1,
-		"IsPublic" : true
+  {
+    "channelId": "Image Processing",
+    "description": "should not have taken",
+    "numberOfSubscribers": 1,
+    "isPublic": true
 	},
-	{
-		"ChannelName" : "Algotrading",
-		"Description" : "seems good",
-		"NumberOfSubscribers" : 2,
-		"IsPublic" : true
+  {
+    "channelId": "Algotrading",
+    "description": "seems good",
+    "numberOfSubscribers": 2,
+    "isPublic": true
 	},
-	{
-		"ChannelName" : "Programmers",
-		"Description" : "How to make money from trash",
-		"NumberOfSubscribers" : 2,
-		"IsPublic" : true
+  {
+    "channelId": "Programmers",
+    "description": "How to make money from trash",
+    "numberOfSubscribers": 2,
+    "isPublic": true
 	},
-	{
-		"ChannelName" : "IliaOdmin",
-		"Description" : "seems good",
-		"NumberOfSubscribers" : 2,
-		"IsPublic" : false
+  {
+    "channelId": "IliaOdmin",
+    "description": "seems good",
+    "numberOfSubscribers": 2,
+    "isPublic": false
 	}
 ]
