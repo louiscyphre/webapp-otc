@@ -5,27 +5,27 @@ import java.util.Collection;
 
 public class Channel {
 	
-	private String ChannelName;
-	private Collection<MessageThread> ChannelThread = new ArrayList<>();
-	private Collection<ThreadUser> Users = new ArrayList<>();
-	private String Description;
-	private int NumberOfSubscribers;
-	private boolean IsPublic;
+	private String channelId;
+	private Collection<MessageThread> channelThread = new ArrayList<>();
+	private Collection<ThreadUser> users = new ArrayList<>();
+	private String description;
+	private int numberOfSubscribers;
+	private boolean isPublic;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 	
 	public Channel(String channelName, String description, int numberOfSubscribers, boolean isPublic) {
-		this.ChannelName = channelName;
-		this.Description = description;
-		this.NumberOfSubscribers = numberOfSubscribers;
-		this.IsPublic = isPublic;
+		this.channelId = channelName;
+		this.description = description;
+		this.numberOfSubscribers = numberOfSubscribers;
+		this.isPublic = isPublic;
 	}
 	
 	public Channel(String channelName, String description, int numberOfSubscribers, boolean isPublic, int unreadMessages, int undreadMentionedMessages) {
-		this.ChannelName = channelName;
-		this.Description = description;
-		this.NumberOfSubscribers = numberOfSubscribers;
-		this.IsPublic = isPublic;
+		this.channelId = channelName;
+		this.description = description;
+		this.numberOfSubscribers = numberOfSubscribers;
+		this.isPublic = isPublic;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = undreadMentionedMessages;
 	}
@@ -34,72 +34,72 @@ public class Channel {
 	 * @return the numberOfSubscribers
 	 */
 	public int getNumberOfSubscribers() {
-		return NumberOfSubscribers;
+		return numberOfSubscribers;
 	}
 
 	/**
 	 * @param numberOfSubscribers the numberOfSubscribers to set
 	 */
 	public void setNumberOfSubscribers(int numberOfSubscribers) {
-		this.NumberOfSubscribers = numberOfSubscribers;
+		this.numberOfSubscribers = numberOfSubscribers;
 	}
 
 	/**
 	 * @return the channelName
 	 */
 	public String getChannelName() {
-		return ChannelName;
+		return channelId;
 	}
 
 	/**
 	 * @param channelName the channelName to set
 	 */
 	public void setChannelName(String channelName) {
-		this.ChannelName = channelName;
+		this.channelId = channelName;
 	}
 
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	/**
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
-		this.Description = description;
+		this.description = description;
 	}
 
 	/**
 	 * @return the isPublic
 	 */
 	public boolean isPublic() {
-		return IsPublic;
+		return isPublic;
 	}
 
 	/**
 	 * @param isPublic the isPublic to set
 	 */
 	public void setPublic(boolean isPublic) {
-		this.IsPublic = isPublic;
+		this.isPublic = isPublic;
 	}
 	
 	public void addUser(ThreadUser user) {
-		Users.add(user);
+		users.add(user);
 	}
 	
 	public void addMessage(MessageThread message) {
-		ChannelThread.add(message);
+		channelThread.add(message);
 	}
 	
 	public Collection<MessageThread> getChannelThread() {
-		return ChannelThread;
+		return channelThread;
 	}
 	
 	public Collection<ThreadUser> getUsers() {
-		return Users;
+		return users;
 	}
 
 	/**
@@ -132,8 +132,8 @@ public class Channel {
 
 	@Override
 	public String toString() {
-		return "Channel [numberOfSubscribers=" + NumberOfSubscribers + ", channelName=" + ChannelName
-				+ ", description=" + Description + ", isPublic=" + IsPublic + "]";
+		return "Channel [numberOfSubscribers=" + numberOfSubscribers + ", channelName=" + channelId
+				+ ", description=" + description + ", isPublic=" + isPublic + "]";
 	}
 	
 	@Override
@@ -147,10 +147,10 @@ public class Channel {
 	    }
 	    
 	    final Channel other = (Channel)obj;
-	    return this.ChannelName.equals(other.ChannelName);
+	    return this.channelId.equals(other.channelId);
 	}
 
 	public String stringify() {
-		return ChannelName + " " + Description;
+		return channelId + " " + description;
 	}
 }

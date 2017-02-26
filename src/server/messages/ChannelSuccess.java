@@ -4,41 +4,41 @@ import server.model.Channel;
 
 public class ChannelSuccess {
 	
-	private String MessageType;
-	private Channel Channel;
+	private String messageType;
+	private Channel channel;
 	
 	public ChannelSuccess(Channel channel) {
-		this.MessageType = "ChannelSuccess";
-		this.Channel = channel;
+		this.messageType = "channelSuccess";
+		this.channel = channel;
 	}
 	
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 	/**
 	 * @return the channel
 	 */
 	public Channel getChannel() {
-		return Channel;
+		return channel;
 	}
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(Channel channel) {
-		Channel = channel;
+		this.channel = channel;
 	}
 	
 	@Override
 	public String toString() {
-		return "ChannelSuccess [MessageType=" + MessageType + ", Channel=" + Channel + "]";
+		return "ChannelSuccess [MessageType=" + messageType + ", Channel=" + channel + "]";
 	}
 }

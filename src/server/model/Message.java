@@ -3,165 +3,166 @@ package server.model;
 import java.sql.Timestamp;
 
 public class Message {
-	private int Id;
-	private String ChannelId;
-	private String UserId = null;
-	private ThreadUser User;
-	private long MessageTime;
-	private long LastModified;
-	private int RepliedToId;
-	private String Content;
+	
+	private int id;
+	private String channelId;
+	private String userId = null;
+	private ThreadUser user;
+	private long messageTime;
+	private long lastModified;
+	private int repliedToId;
+	private String content;
 
 	public Message(int id, String channelId, String user, Timestamp messageTime, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.UserId = user;
-		this.MessageTime = this.LastModified = messageTime.getTime();
-		this.RepliedToId = repliedToId;
-		this.Content = content;
+		this.id = id;
+		this.channelId = channelId;
+		this.userId = user;
+		this.messageTime = this.lastModified = messageTime.getTime();
+		this.repliedToId = repliedToId;
+		this.content = content;
 	}
 
 	public Message(int id, String channelId, String user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.UserId = user;
-		this.MessageTime = messageTime.getTime();
-		this.LastModified = lastModified.getTime();
-		this.RepliedToId = repliedToId;
-		this.Content = content;
+		this.id = id;
+		this.channelId = channelId;
+		this.userId = user;
+		this.messageTime = messageTime.getTime();
+		this.lastModified = lastModified.getTime();
+		this.repliedToId = repliedToId;
+		this.content = content;
 	}
 
 	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, Timestamp lastModified, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.User = user;
-		this.MessageTime = messageTime.getTime();
-		this.LastModified = lastModified.getTime();
-		this.RepliedToId = repliedToId;
-		this.Content = content;
+		this.id = id;
+		this.channelId = channelId;
+		this.user = user;
+		this.messageTime = messageTime.getTime();
+		this.lastModified = lastModified.getTime();
+		this.repliedToId = repliedToId;
+		this.content = content;
 	}
 
 	/**
 	 * @return the lastModified
 	 */
 	public Timestamp getLastModified() {
-		return new Timestamp(LastModified);
+		return new Timestamp(lastModified);
 	}
 
 	/**
 	 * @param lastModified the lastModified to set
 	 */
 	public void setLastModified(Timestamp lastModified) {
-		LastModified = lastModified.getTime();
+		this.lastModified = lastModified.getTime();
 	}
 
 	public Message(int id, String channelId, ThreadUser user, Timestamp messageTime, int repliedToId, String content) {
-		this.Id = id;
-		this.ChannelId = channelId;
-		this.User = user;
-		this.UserId = user.getUsername();
-		this.MessageTime = messageTime.getTime();
-		this.RepliedToId = repliedToId;
-		this.Content = content;
+		this.id = id;
+		this.channelId = channelId;
+		this.user = user;
+		this.userId = user.getUsername();
+		this.messageTime = messageTime.getTime();
+		this.repliedToId = repliedToId;
+		this.content = content;
 	}
 
 	/**
 	 * @return the id
 	 */
 	public int getId() {
-		return Id;
+		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
-		this.Id = id;
+		this.id = id;
 	}
 
 	/**
 	 * @return the channelId
 	 */
 	public String getChannelId() {
-		return ChannelId;
+		return channelId;
 	}
 
 	/**
 	 * @param channelId the channelId to set
 	 */
 	public void setChannelId(String channelId) {
-		this.ChannelId = channelId;
+		this.channelId = channelId;
 	}
 
 	/**
 	 * @return the repliedToId
 	 */
 	public int getRepliedToId() {
-		return RepliedToId;
+		return repliedToId;
 	}
 
 	/**
 	 * @param repliedToId the repliedToId to set
 	 */
 	public void setRepliedToId(int repliedToId) {
-		this.RepliedToId = repliedToId;
+		this.repliedToId = repliedToId;
 	}
 
 	/**
 	 * @return the userId
 	 */
 	public String getUserId() {
-		return UserId;
+		return userId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
 	public void setUserId(String user) {
-		this.UserId = user;
+		this.userId = user;
 	}
 
 	/**
 	 * @return the userId
 	 */
 	public ThreadUser getUser() {
-		return User;
+		return user;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
 	public void setUser(ThreadUser user) {
-		this.User = user;
-		this.UserId = user.getUsername();
+		this.user = user;
+		this.userId = user.getUsername();
 	}
 
 	/**
 	 * @return the content
 	 */
 	public String getContent() {
-		return Content;
+		return content;
 	}
 
 	/**
 	 * @param content the content to set
 	 */
 	public void setContent(String content) {
-		this.Content = content;
+		this.content = content;
 	}
 
 	/**
 	 * @return the messageTime
 	 */
 	public Timestamp getMessageTime() {
-		return new Timestamp(MessageTime);
+		return new Timestamp(messageTime);
 	}
 
 	/**
 	 * @param messageTime the messageTime to set
 	 */
 	public void setMessageTime(Timestamp messageTime) {
-		this.MessageTime = messageTime.getTime();
+		this.messageTime = messageTime.getTime();
 	}
 	
 	/* (non-Javadoc)
@@ -169,7 +170,7 @@ public class Message {
 	 */
 	@Override
 	public String toString() {
-		return "Message [id=" + Id + ", channelId=" + ChannelId + ", repliedToId=" + RepliedToId + ", User=" + UserId
-				+ ", content=" + Content + ", messageTime=" + MessageTime + "]";
+		return "Message [id=" + id + ", channelId=" + channelId + ", repliedToId=" + repliedToId + ", User=" + userId
+				+ ", content=" + content + ", messageTime=" + messageTime + "]";
 	}
 }

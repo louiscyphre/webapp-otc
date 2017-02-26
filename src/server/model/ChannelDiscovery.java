@@ -7,24 +7,25 @@ package server.model;
  *
  */
 public class ChannelDiscovery {
-	private String Query;
+	
+	private String query;
 	
 	public ChannelDiscovery(String query) {
-		this.Query = query;
+		this.query = query;
 	}
 	
 	/**
 	 * @return the query
 	 */
 	public String getQuery() {
-		return Query;
+		return query;
 	}
 
 	/**
 	 * @param query the query to set
 	 */
 	public void setQuery(String query) {
-		Query = query;
+		this.query = query;
 	}
 
 	/* (non-Javadoc)
@@ -32,6 +33,6 @@ public class ChannelDiscovery {
 	 */
 	@Override
 	public String toString() {
-		return "ChannelDiscovery [Query=" + Query + "]";
+		return "ChannelDiscovery [Query=" + query + "]";
 	}
 }

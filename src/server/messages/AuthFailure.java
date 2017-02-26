@@ -2,40 +2,40 @@ package server.messages;
 
 public class AuthFailure {
 	
-	private String MessageType;
-	private String Error;
+	private String messageType;
+	private String error;
 	
 	public AuthFailure(String error) {
-		this.MessageType = "AuthFailure";
-		this.Error = error;
+		this.messageType = "authFailure";
+		this.error = error;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the error
 	 */
 	public String getError() {
-		return Error;
+		return error;
 	}
 
 	/**
 	 * @param error the error to set
 	 */
 	public void setError(String error) {
-		Error = error;
+		this.error = error;
 	}
 
 	/* (non-Javadoc)
@@ -43,6 +43,6 @@ public class AuthFailure {
 	 */
 	@Override
 	public String toString() {
-		return "AuthFailure [MessageType=" + MessageType + ", Error=" + Error + "]";
+		return "AuthFailure [MessageType=" + messageType + ", Error=" + error + "]";
 	}
 }

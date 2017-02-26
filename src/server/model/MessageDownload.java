@@ -1,24 +1,25 @@
 package server.model;
 
 public class MessageDownload {
-	private String Channel;
+	
+	private String channelId;
 	
 	public MessageDownload(String channel) {
-		this.Channel = channel;
+		this.channelId = channel;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return Channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		Channel = channel;
+		this.channelId = channel;
 	}
 
 	/* (non-Javadoc)
@@ -26,6 +27,6 @@ public class MessageDownload {
 	 */
 	@Override
 	public String toString() {
-		return "MessageDownload [Channel=" + Channel + "]";
+		return "MessageDownload [Channel=" + channelId + "]";
 	}
 }

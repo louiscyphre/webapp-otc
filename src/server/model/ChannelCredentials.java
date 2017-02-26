@@ -8,66 +8,66 @@ package server.model;
  */
 public class ChannelCredentials {
 	
-	private String Owner;
-	private String Name; 
-	private String Description;
-	private	String Username = null;
+	private String owner;
+	private String name; 
+	private String description;
+	private	String username = null;
 	
 	public ChannelCredentials(String owner, String channelName, String description, String username) {
-		this.Owner = owner;
-		this.Name = channelName;
-		this.Description = description;
-		this.Username = username;
+		this.owner = owner;
+		this.name = channelName;
+		this.description = description;
+		this.username = username;
 	}
 	
 	public String getOwner() {
-		return Owner;
+		return owner;
 	}
 	
 	public void setOwner(String owner) {
-		Owner = owner;
+		this.owner = owner;
 	}
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	/**
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	/**
 	 * @return the username
 	 */
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 
 	/**
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
-		Username = username;
+		this.username = username;
 	}
 
 	/* (non-Javadoc)
@@ -75,6 +75,6 @@ public class ChannelCredentials {
 	 */
 	@Override
 	public String toString() {
-		return "ChannelCredentials [Name=" + Name + ", Description=" + Description + ", Username=" + Username + "]";
+		return "ChannelCredentials [Name=" + name + ", Description=" + description + ", Username=" + username + "]";
 	}
 }

@@ -4,31 +4,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MessageThread {
-	private Message Message;
-	private Collection<MessageThread> Replies;
+	
+	private Message message;
+	private Collection<MessageThread> replies;
 
 	public MessageThread(Message message) {
-		this.Message = message;
-		this.Replies = new ArrayList<>();
+		this.message = message;
+		this.replies = new ArrayList<>();
 	}
 
 	/**
 	 * @return the Message
 	 */
 	public Message getMessage() {
-		return Message;
+		return message;
 	}
 
 	/**
 	 * @param message the message to set
 	 */
 	public void setMessage(Message message) {
-		this.Message = message;
+		this.message = message;
 	}
 
 	public void addReply(MessageThread reply) {
 		if (reply != null)
-			Replies.add(reply);
+			replies.add(reply);
 	}
 
 	/* (non-Javadoc)
@@ -36,6 +37,6 @@ public class MessageThread {
 	 */
 	@Override
 	public String toString() {
-		return "MessageThread [Message=" + Message + ", Replies=" + Replies + "]";
+		return "MessageThread [Message=" + message + ", Replies=" + replies + "]";
 	}
 }

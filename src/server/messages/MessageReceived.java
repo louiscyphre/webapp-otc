@@ -2,44 +2,44 @@ package server.messages;
 
 public class MessageReceived {
 	
-	private String MessageType;
-	private String Error = null;
+	private String messageType;
+	private String error = null;
 	
 	public MessageReceived() {
-		this.MessageType = "MessageReceived";
+		this.messageType = "messageReceived";
 	}
 	
 	public MessageReceived(String error) {
-		this.MessageType = "MessageReceived";
-		this.Error = error;
+		this.messageType = "messageReceived";
+		this.error = error;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the error
 	 */
 	public String getError() {
-		return Error;
+		return error;
 	}
 
 	/**
 	 * @param error the error to set
 	 */
 	public void setError(String error) {
-		Error = error;
+		this.error = error;
 	}
 
 	/* (non-Javadoc)
@@ -47,6 +47,6 @@ public class MessageReceived {
 	 */
 	@Override
 	public String toString() {
-		return "MessageReceived [MessageType=" + MessageType + ", Error=" + Error + "]";
+		return "MessageReceived [MessageType=" + messageType + ", Error=" + error + "]";
 	}
 }

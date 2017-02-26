@@ -4,56 +4,56 @@ import server.model.ThreadUser;
 
 public class UserSubscribed {
 	
-	private String MessageType;
-	private String Channel;
-	private ThreadUser User;
+	private String messageType;
+	private String channelId;
+	private ThreadUser user;
 	
 	public UserSubscribed(String channel, ThreadUser user) {
-		this.MessageType = "UserSubscribed";
-		this.Channel = channel;
-		this.User = user;
+		this.messageType = "userSubscribed";
+		this.channelId = channel;
+		this.user = user;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return Channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		Channel = channel;
+		this.channelId = channel;
 	}
 
 	/**
 	 * @return the user
 	 */
 	public ThreadUser getUser() {
-		return User;
+		return user;
 	}
 
 	/**
 	 * @param user the user to set
 	 */
 	public void setUser(ThreadUser user) {
-		User = user;
+		this.user = user;
 	}
 
 	/* (non-Javadoc)
@@ -61,6 +61,6 @@ public class UserSubscribed {
 	 */
 	@Override
 	public String toString() {
-		return "UserSubscribed [MessageType=" + MessageType + ", Channel=" + Channel + ", User=" + User + "]";
+		return "UserSubscribed [MessageType=" + messageType + ", Channel=" + channelId + ", User=" + user + "]";
 	}
 }

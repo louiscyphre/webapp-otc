@@ -2,56 +2,56 @@ package server.messages;
 
 public class ChannelFailure {
 	
-	private String MessageType;
-	private String Channel;
-	private String Error;
+	private String messageType;
+	private String channelId;
+	private String error;
 	
 	public ChannelFailure(String channel, String error) {
-		this.MessageType = "ChannelFailure";
-		this.Channel = channel;
-		this.Error = error;
+		this.messageType = "channelFailure";
+		this.channelId = channel;
+		this.error = error;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return Channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		Channel = channel;
+		channelId = channel;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the error
 	 */
 	public String getError() {
-		return Error;
+		return error;
 	}
 
 	/**
 	 * @param error the error to set
 	 */
 	public void setError(String error) {
-		Error = error;
+		this.error = error;
 	}
 
 	/* (non-Javadoc)
@@ -59,6 +59,6 @@ public class ChannelFailure {
 	 */
 	@Override
 	public String toString() {
-		return "AuthFailure [MessageType=" + MessageType + ", Error=" + Error + "]";
+		return "AuthFailure [MessageType=" + messageType + ", Error=" + error + "]";
 	}
 }

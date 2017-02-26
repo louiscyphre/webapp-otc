@@ -2,61 +2,61 @@ package server.messages;
 
 public class Unsubscribe {
 	
-	private String MessageType;
-	private String Channel;
-	private String Error = null;
+	private String messageType;
+	private String channelId;
+	private String error = null;
 	
 	public Unsubscribe(String channel) {
-		this.MessageType = "Unsubscribe";
-		this.Channel = channel;
+		this.messageType = "unsubscribe";
+		this.channelId = channel;
 	}
 	
 	public Unsubscribe(String channel, String error) {
-		this.MessageType = "Unsubscribe";
-		this.Channel = channel;
-		this.Error = error;
+		this.messageType = "unsubscribe";
+		this.channelId = channel;
+		this.error = error;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return Channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		Channel = channel;
+		this.channelId = channel;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the error
 	 */
 	public String getError() {
-		return Error;
+		return error;
 	}
 
 	/**
 	 * @param error the error to set
 	 */
 	public void setError(String error) {
-		Error = error;
+		this.error = error;
 	}
 
 	/* (non-Javadoc)
@@ -64,6 +64,6 @@ public class Unsubscribe {
 	 */
 	@Override
 	public String toString() {
-		return "SubscribeFailure [MessageType=" + MessageType + ", Error=" + Error + "]";
+		return "SubscribeFailure [MessageType=" + messageType + ", Error=" + error + "]";
 	}
 }

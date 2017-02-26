@@ -6,40 +6,40 @@ import server.model.Channel;
 
 public class Discovery {
 	
-	private String MessageType;
-	private Collection<Channel> Channels;
+	private String messageType;
+	private Collection<Channel> channels;
 	
 	public Discovery(Collection<Channel> channels) {
-		this.MessageType = "ChannelDiscovery";
-		this.Channels = channels; 
+		this.messageType = "channelDiscovery";
+		this.channels = channels; 
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the channels
 	 */
 	public Collection<Channel> getChannels() {
-		return Channels;
+		return channels;
 	}
 
 	/**
 	 * @param channels the channels to set
 	 */
 	public void setChannels(Collection<Channel> channels) {
-		Channels = channels;
+		this.channels = channels;
 	}
 
 	/* (non-Javadoc)
@@ -47,6 +47,6 @@ public class Discovery {
 	 */
 	@Override
 	public String toString() {
-		return "Discovery [MessageType=" + MessageType + ", Channels=" + Channels + "]";
+		return "Discovery [MessageType=" + messageType + ", Channels=" + channels + "]";
 	}
 }

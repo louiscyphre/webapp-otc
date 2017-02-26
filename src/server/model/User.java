@@ -5,65 +5,64 @@ package server.model;
  */
 public class User {
 
-	private String Username;
-	private String Password;
-	private String Nickname;
-	private String Description;
-	private String AvatarUrl;
+	private String username;
+	private String password;
+	private String nickname;
+	private String description;
+	private String avatarUrl;
 
 	public User(String userName, String password, String nickname, String description, String avatarUrl) {
-		//idHash = Hash.getSha256Hex(userName);
-		Username = userName;
-		Password = password;
+		this.username = userName;
+		this.password = password;
 		setNickname(nickname);
-		Description = description;
-		AvatarUrl = avatarUrl;
+		this.description = description;
+		this.avatarUrl = avatarUrl;
 	}
 
-	public String getUsername() {  return Username; }
+	public String getUsername() {  return username; }
 	
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getNickname() {
-		return Nickname;
+		return nickname;
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 	public String getAvatarUrl() {
-		return AvatarUrl;
+		return avatarUrl;
 	}
 
 	public void setUsername(String userName) {
-		Username = userName;
+		username = userName;
 	}
 	public void setPasswordHash(String hash) {
-		Password = hash;
+		password = hash;
 	}
 
 	public void setNickname(String nickname) {
 		if (nickname == null || nickname.equals("")) {
-			Nickname = Username;
+			this.nickname = username;
 		} else {
-			Nickname = nickname;
+			this.nickname = nickname;
 		}
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	public void setAvatarUrl(String avatarUrl) {
-		AvatarUrl = avatarUrl;
+		this.avatarUrl = avatarUrl;
 	}
 	
 	public String stringify() {
-	  return Username + " " + Password;
+	  return username + " " + password;
 	}
 }

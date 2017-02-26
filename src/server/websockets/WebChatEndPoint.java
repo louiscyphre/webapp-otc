@@ -453,6 +453,7 @@ public class WebChatEndPoint {
 		ArrayList<Message> messages = DataManager.getMessagesByChannelNameAndTimetamp(conn, usersMap, channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
 		int messagesRead = 0;
 		if (!messages.isEmpty()) { // if channel thread is not empty
+			System.out.println("before download: " + subscription.getUnreadMessages() + ", " + subscription.getUnreadMentionedMessages());
 			Collection<MessageThread> requiredMessages = new ArrayList<>(); // the messages that will be sent
 			for (int i = 0; i < messages.size() && messagesRead < AppConstants.MESSAGES_TO_DOWNLOAD; i++) { // read available messages, not more than maximal limit (10)
 				Message message = messages.get(i);
@@ -463,10 +464,11 @@ public class WebChatEndPoint {
 					channelThread.put(message.getId(), messageThread);
 				}
 			}
-			
+			int tst = 0;
 			int maxId = subscription.getLastReadMessageId();
 			for (MessageThread message : requiredMessages) { // iterate over the messages that will be sent
 				if (message.getMessage().getId() > maxId) {
+					tst++;
 					maxId = message.getMessage().getId();
 					subscription.setUnreadMessages(subscription.getUnreadMessages() - 1);
 					if (message.getMessage().getContent().contains("@" + usersMap.get(chatUsers.get(session).getUsername()).getNickname())) {
@@ -476,6 +478,8 @@ public class WebChatEndPoint {
 				}
 			}
 			DataManager.updateSubscription(conn, subscription);
+			System.out.println("should download " + tst + "/" + requiredMessages.size());
+			System.out.println("after download: " + subscription.getUnreadMessages() + ", " + subscription.getUnreadMentionedMessages());
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 		} else { // no messages in channel
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), null, 0, 0)));

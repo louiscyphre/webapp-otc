@@ -1,24 +1,25 @@
 package server.model;
 
 public class MessageCredentials {
-	private Message Message;
+	
+	private Message message;
 
 	public MessageCredentials(Message message) {
-		this.Message = message;
+		this.message = message;
 	}
 
 	/**
 	 * @return the message
 	 */
 	public Message getMessage() {
-		return Message;
+		return message;
 	}
 
 	/**
 	 * @param message the message to set
 	 */
 	public void setMessage(Message message) {
-		Message = message;
+		this.message = message;
 	}
 
 	/* (non-Javadoc)
@@ -26,6 +27,6 @@ public class MessageCredentials {
 	 */
 	@Override
 	public String toString() {
-		return "MessageCredentials [Message=" + Message + "]";
+		return "MessageCredentials [Message=" + message + "]";
 	}
 }

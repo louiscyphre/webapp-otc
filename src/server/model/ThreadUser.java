@@ -5,55 +5,55 @@ package server.model;
  */
 public class ThreadUser {
 
-	private String Username;
-	private String Nickname;
-	private String Description;
-	private String AvatarUrl;
+	private String username;
+	private String nickname;
+	private String description;
+	private String avatarUrl;
 
 	public ThreadUser(String username, String nickname, String description, String avatarUrl) {
-		Username = username;
+		this.username = username;
 		setNickname(nickname);
-		Description = description;
-		AvatarUrl = avatarUrl;
+		this.description = description;
+		this.avatarUrl = avatarUrl;
 	}
 	
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 	
 	public void setUsername(String username) {
-		Username = username;
+		this.username = username;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getNickname() {
-		return Nickname;
+		return nickname;
 	}
 	
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public String getAvatarUrl() {
-		return AvatarUrl;
+		return avatarUrl;
 	}
 
 	public void setNickname(String nickname) {
-		Nickname = nickname;
+		this.nickname = nickname;
 	}
 	
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	public void setAvatarUrl(String avatarUrl) {
-		AvatarUrl = avatarUrl;
+		this.avatarUrl = avatarUrl;
 	}
 	
 	public String stringify() {
-	  return Nickname + " " + AvatarUrl;
+	  return nickname + " " + avatarUrl;
 	}
 	
 	public static ThreadUser getThreadUserByUser(User user) {

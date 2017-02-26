@@ -6,16 +6,16 @@ import server.model.MessageThread;
 
 public class DownloadMessages {
 	
-	private String MessageType;
-	private String Channel;
-	private Collection<MessageThread> ChannelThread;
+	private String messageType;
+	private String channelId;
+	private Collection<MessageThread> channelThread;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 	
 	public DownloadMessages(String channel, Collection<MessageThread> channelThread, int unreadMessages, int unreadMentionedMessages) {
-		this.MessageType = "DownloadMessages";
-		this.Channel = channel;
-		this.ChannelThread = channelThread;
+		this.messageType = "downloadMessages";
+		this.channelId = channel;
+		this.channelThread = channelThread;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = unreadMentionedMessages;
 	}
@@ -24,42 +24,42 @@ public class DownloadMessages {
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return Channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		Channel = channel;
+		this.channelId = channel;
 	}
 
 	/**
 	 * @return the channelThread
 	 */
 	public Collection<MessageThread> getChannelThread() {
-		return ChannelThread;
+		return channelThread;
 	}
 
 	/**
 	 * @param channelThread the channelThread to set
 	 */
 	public void setChannelThread(Collection<MessageThread> channelThread) {
-		ChannelThread = channelThread;
+		this.channelThread = channelThread;
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class DownloadMessages {
 	 */
 	@Override
 	public String toString() {
-		return "DownloadMessages [MessageType=" + MessageType + ", Channel=" + Channel + ", ChannelThread="
-				+ ChannelThread + "]";
+		return "DownloadMessages [MessageType=" + messageType + ", Channel=" + channelId + ", ChannelThread="
+				+ channelThread + "]";
 	}
 }

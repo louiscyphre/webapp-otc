@@ -2,56 +2,56 @@ package server.messages;
 
 public class UserUnsubscribed {
 	
-	private String MessageType;
-	private String Channel;
-	private String Username;
+	private String messageType;
+	private String channelId;
+	private String username;
 	
 	public UserUnsubscribed(String channel, String username) {
-		this.MessageType = "UserUnsubscribed";
-		this.Channel = channel;
-		this.Username = username;
+		this.messageType = "userUnsubscribed";
+		this.channelId = channel;
+		this.username = username;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return Channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		Channel = channel;
+		this.channelId = channel;
 	}
 
 	/**
 	 * @return the username
 	 */
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 
 	/**
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
-		Username = username;
+		this.username = username;
 	}
 
 	/* (non-Javadoc)
@@ -59,6 +59,6 @@ public class UserUnsubscribed {
 	 */
 	@Override
 	public String toString() {
-		return "UserUnsubscribed [MessageType=" + MessageType + ", Channel=" + Channel + ", Username=" + Username + "]";
+		return "UserUnsubscribed [MessageType=" + messageType + ", Channel=" + channelId + ", Username=" + username + "]";
 	}
 }

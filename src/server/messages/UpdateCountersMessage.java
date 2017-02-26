@@ -2,12 +2,13 @@ package server.messages;
 
 public class UpdateCountersMessage {
 	
-	private String MessageType;private String channelId;
+	private String messageType;
+	private String channelId;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 	
 	public UpdateCountersMessage(String channelId, int unreadMessages, int unreadMentionedMessages) {
-		this.MessageType = "UpdateCounters";
+		this.messageType = "updateCounters";
 		this.channelId = channelId;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = unreadMentionedMessages;
@@ -17,14 +18,14 @@ public class UpdateCountersMessage {
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	

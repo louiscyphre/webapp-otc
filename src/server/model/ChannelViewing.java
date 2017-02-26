@@ -1,25 +1,25 @@
 package server.model;
 
-
 public class ChannelViewing {
-	private String channel;
+	
+	private String channelId;
 	
 	public ChannelViewing(String channel) {
-		this.channel = channel;
+		this.channelId = channel;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public String getChannel() {
-		return channel;
+		return channelId;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(String channel) {
-		this.channel = channel;
+		this.channelId = channel;
 	}
 
 	/* (non-Javadoc)
@@ -27,6 +27,6 @@ public class ChannelViewing {
 	 */
 	@Override
 	public String toString() {
-		return "ChannelViewing [channel=" + channel + "]";
+		return "ChannelViewing [channel=" + channelId + "]";
 	}
 }

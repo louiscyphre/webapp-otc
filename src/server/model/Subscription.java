@@ -4,67 +4,67 @@ import java.sql.Timestamp;
 
 public class Subscription {
 	
-	private String ChannelId;
-	private String UserId;
-	private Timestamp SubscriptionTime;
+	private String channelId;
+	private String userId;
+	private Timestamp subscriptionTime;
 	private int lastReadMessageId;
 	private int unreadMessages;
 	private int unreadMentionedMessages;
 
 	public Subscription(String channelId, String userId, Timestamp subscriptionTime, int lastReadMessageId, int unreadMessages, int undreadMentionedMessages) {
-		this.ChannelId = channelId;
-		this.UserId = userId;
-		this.SubscriptionTime = subscriptionTime;
+		this.channelId = channelId;
+		this.userId = userId;
+		this.subscriptionTime = subscriptionTime;
 		this.lastReadMessageId = lastReadMessageId;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = undreadMentionedMessages;
 	}
 
 	public Subscription(String channelId, String userID) {
-		this.ChannelId = channelId;
-		this.UserId = userID;
+		this.channelId = channelId;
+		this.userId = userID;
 	}
 
 	/**
 	 * @return the channelId
 	 */
 	public String getChannelName() {
-		return ChannelId;
+		return channelId;
 	}
 
 	/**
 	 * @param channelId the channelId to set
 	 */
 	public void setChannelId(String channelId) {
-		ChannelId = channelId;
+		this.channelId = channelId;
 	}
 
 	/**
 	 * @return the userId
 	 */
 	public String getUsername() {
-		return UserId;
+		return userId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
 	public void setUsername(String userId) {
-		UserId = userId;
+		this.userId = userId;
 	}
 
 	/**
 	 * @return the subscriptionTime
 	 */
 	public Timestamp getSubscriptionTime() {
-		return SubscriptionTime;
+		return subscriptionTime;
 	}
 
 	/**
 	 * @param subscriptionTime the subscriptionTime to set
 	 */
 	public void setSubscriptionTime(Timestamp subscriptionTime) {
-		SubscriptionTime = subscriptionTime;
+		this.subscriptionTime = subscriptionTime;
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class Subscription {
 	 */
 	@Override
 	public String toString() {
-		return "Subscription [ChannelId=" + ChannelId + ", UserId=" + UserId + ", SubscriptionTime=" + SubscriptionTime
+		return "Subscription [ChannelId=" + channelId + ", UserId=" + userId + ", SubscriptionTime=" + subscriptionTime
 				+ "]";
 	}
 }

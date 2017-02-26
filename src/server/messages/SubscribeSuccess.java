@@ -4,40 +4,40 @@ import server.model.Channel;
 
 public class SubscribeSuccess {
 	
-	private String MessageType;
-	private Channel Channel;
+	private String messageType;
+	private Channel channel;
 	
 	public SubscribeSuccess(Channel channel) {
-		this.MessageType = "SubscribeSuccess";
-		this.Channel = channel;
+		this.messageType = "subscribeSuccess";
+		this.channel = channel;
 	}
 
 	/**
 	 * @return the messageType
 	 */
 	public String getMessageType() {
-		return MessageType;
+		return messageType;
 	}
 
 	/**
 	 * @param messageType the messageType to set
 	 */
 	public void setMessageType(String messageType) {
-		MessageType = messageType;
+		this.messageType = messageType;
 	}
 
 	/**
 	 * @return the channel
 	 */
 	public Channel getChannel() {
-		return Channel;
+		return channel;
 	}
 
 	/**
 	 * @param channel the channel to set
 	 */
 	public void setChannel(Channel channel) {
-		Channel = channel;
+		this.channel = channel;
 	}
 
 	/* (non-Javadoc)
@@ -45,6 +45,6 @@ public class SubscribeSuccess {
 	 */
 	@Override
 	public String toString() {
-		return "SubscribeSuccess [MessageType=" + MessageType + ", Channel=" + Channel + "]";
+		return "SubscribeSuccess [MessageType=" + messageType + ", Channel=" + channel + "]";
 	}
 }

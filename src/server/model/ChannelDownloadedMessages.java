@@ -1,6 +1,7 @@
 package server.model;
 
 public class ChannelDownloadedMessages {
+	
 	private Channel channel;
 	private int downloadedMessages;
 	
