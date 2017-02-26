@@ -6,7 +6,7 @@ package server;
 public interface AppConstants {
 
 	// default avatar
-	public final String DEFAULT_AVATAR = "img/person.png";
+	public final String DEFAULT_AVATAR = "css/img/person.png";
 	// derby constants
 	public final String DB_NAME = "projectDB";
 	public final String DB_DATASOURCE = "DB_DATASOURCE";
@@ -16,8 +16,8 @@ public interface AppConstants {
 	public final String SHUTDOWN = "Shutdown";
 	public final String FILE_FORMAT = ".json";
 	// message properties
-	public final String MESSAGE_PROPERTY = "MessageType";
-	public final String MESSAGE_CONTENT = "MessageContent";
+	public final String MESSAGE_PROPERTY = "messageType";
+	public final String MESSAGE_CONTENT = "messageContent";
 	// message types
 	public final String MESSAGE_CREATE_CHANNEL = "createChannel";
 	public final String MESSAGE_SUBSCRIBE = "subscribe";
@@ -93,7 +93,7 @@ public interface AppConstants {
 			+ "FOREIGN KEY(channelId) REFERENCES " + CHANNELS + "(channelId))";
 	public final String INSERT_MESSAGE_STMT = "INSERT INTO " + MESSAGES
 			+ " (channelId, userId, messageTime, lastModified, repliedToId, content) VALUES(?,?,?,?,?,?)";
-	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE channelId=? AND lastModified>=? ORDER BY lastModified, messageTime, id";
+	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE channelId=? AND lastModified>=? AND repliedToId=? ORDER BY lastModified, messageTime, id";
 	public final String SELECT_MESSAGE_BY_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE id=?";
 	public final String SELECT_MESSAGE_BY_REPLY_TO_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE repliedToId=?";
 	public final String SELECT_MESSAGES_STMT = "SELECT * FROM " + MESSAGES;

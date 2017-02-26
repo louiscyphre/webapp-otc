@@ -386,6 +386,71 @@ public final class DataManager {
 	 * @param startTime the time from which to return messages
 	 * @return all messages in channel
 	 */
+    public static MessageThread getMessagesByChannelNameAndTimetamp(Connection conn, MessageThread message, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
+    	try {
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
+			prepStmt.setString(1, channelName);
+			prepStmt.setTimestamp(2, startTime);
+			prepStmt.setInt(3, message.getMessage().getId());
+			ResultSet rs = prepStmt.executeQuery();
+			while (rs.next()) { // iterate over all found messages
+				message.addReply(new MessageThread(new Message(rs.getInt(1), rs.getString(2), usersMap.get(rs.getString(3)), rs.getTimestamp(4), rs.getTimestamp(5), rs.getInt(6), rs.getString(7))));
+			}
+			rs.close();
+			prepStmt.close();
+			
+			for (MessageThread reply : message.getReplies()) {
+				getMessagesByChannelNameAndTimetamp(conn, reply, usersMap, channelName, startTime);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return message;
+    }
+    
+    public static MessageThread getLastReply(MessageThread message) {
+    	if (message.getReplies().isEmpty()) {
+    		return null;
+    	} else {
+    		MessageThread lastReply = message.getReplies().get(message.getReplies().size() - 1); 
+    		if (!lastReply.getReplies().isEmpty()) {
+    			return getLastReply(lastReply);
+    		} else {
+    			message.getReplies().remove(message.getReplies().size() - 1);
+    			return lastReply;
+    		}
+    	}
+    }
+    
+	public static ArrayList<MessageThread> getMessagesByChannelNameAndTimetamp(Connection conn, ArrayList<MessageThread> messages, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
+		try {
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
+			prepStmt.setString(1, channelName);
+			prepStmt.setTimestamp(2, startTime);
+			prepStmt.setInt(3, -1);
+			ResultSet rs = prepStmt.executeQuery();
+			while (rs.next()) { // iterate over all found messages
+				messages.add(new MessageThread(new Message(rs.getInt(1), rs.getString(2), usersMap.get(rs.getString(3)), rs.getTimestamp(4), rs.getTimestamp(5), rs.getInt(6), rs.getString(7))));
+			}
+			rs.close();
+			prepStmt.close();
+			
+			for (MessageThread message : messages) {
+				getMessagesByChannelNameAndTimetamp(conn, message, usersMap, channelName, startTime);
+			}
+			
+			for (int i = messages.size() - 1; i >= 0; i--) {
+				MessageThread deepestReply = null;
+				while ((deepestReply = getLastReply(messages.get(i))) != null) {
+					messages.add(i + 1, deepestReply);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return messages;
+	}
+    /*
 	public static ArrayList<Message> getMessagesByChannelNameAndTimetamp(Connection conn, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
 		ArrayList<Message> messages = new ArrayList<>();
 		try {
@@ -403,7 +468,7 @@ public final class DataManager {
 		}
 		return messages;
 	}
-	
+	*/
 	/**
 	 * Adds a new message to the database
 	 * @param conn the connection to the database
@@ -518,17 +583,18 @@ public final class DataManager {
 	}
 	
 	public static boolean isInViewingWindow(Connection conn, Channel channel, Subscription subscription, Map<Integer, MessageThread> channelThread, Message message) {
-		ArrayList<Message> messages = getMessagesByChannelNameAndTimetamp(conn, getMapOfAllUsers(conn), channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
+		ArrayList<MessageThread> messages = new ArrayList<>();
+		getMessagesByChannelNameAndTimetamp(conn, messages, getMapOfAllUsers(conn), channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
 		int minDistance = Integer.MAX_VALUE, targetMessageIndex = -1;
 		for (int i = 0; i < messages.size(); i++) {
-			if (message.getId() == messages.get(i).getId()) {
+			if (message.getId() == messages.get(i).getMessage().getId()) {
 				targetMessageIndex = i;
 			}
 		}
 		if (targetMessageIndex >= 0) {
 			for (Entry<Integer, MessageThread> msgEntry : channelThread.entrySet()) {
 				for (int i = 0; i < messages.size(); i++) {
-					if (msgEntry.getKey() == messages.get(i).getId()) {
+					if (msgEntry.getKey() == messages.get(i).getMessage().getId()) {
 						if (targetMessageIndex - i < minDistance) {
 							minDistance = targetMessageIndex - i;
 						}
@@ -536,7 +602,6 @@ public final class DataManager {
 				}
 			}
 		}
-		System.out.println("min distance is: " + minDistance);
 		return ((minDistance > 0) && (minDistance <= AppConstants.MESSAGES_TO_DOWNLOAD));
 	}
 }

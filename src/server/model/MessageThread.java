@@ -1,12 +1,11 @@
 package server.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class MessageThread {
 	
 	private Message message;
-	private Collection<MessageThread> replies;
+	private ArrayList<MessageThread> replies;
 
 	public MessageThread(Message message) {
 		this.message = message;
@@ -30,6 +29,10 @@ public class MessageThread {
 	public void addReply(MessageThread reply) {
 		if (reply != null)
 			replies.add(reply);
+	}
+	
+	public ArrayList<MessageThread> getReplies() {
+		return replies;
 	}
 
 	/* (non-Javadoc)

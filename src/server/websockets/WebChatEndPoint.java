@@ -83,7 +83,6 @@ public class WebChatEndPoint {
 					User user = DataManager.getUserByUsername(conn, username); // get user information from database
 					if (user != null) {
 						chatUsers.put(session, user); // add new client to managed chat sessions
-						System.out.println("the following user logged in: " + user.getUsername());
 					}
 				}
 				conn.close(); // close connection
@@ -135,7 +134,6 @@ public class WebChatEndPoint {
 						handleReceivedMessageRequest(session, conn, msgContent);
 						break;
 					default:
-						System.out.println("received \"" + msgType + "\"");
 					}
 					conn.close();
 				}
@@ -450,13 +448,13 @@ public class WebChatEndPoint {
 			channelDownloadedMessages.put(channel.getChannelName(), (channelThread = new HashMap<>())); // create new history for this channnel
 		}
 		
-		ArrayList<Message> messages = DataManager.getMessagesByChannelNameAndTimetamp(conn, usersMap, channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
+		ArrayList<MessageThread> messages = new ArrayList<>();
+		DataManager.getMessagesByChannelNameAndTimetamp(conn, messages, usersMap, channel.getChannelName(), subscription.getSubscriptionTime()); // gets all the messages in the channel since subscription ordered by 'last modified' and 'message date'
 		int messagesRead = 0;
 		if (!messages.isEmpty()) { // if channel thread is not empty
-			System.out.println("before download: " + subscription.getUnreadMessages() + ", " + subscription.getUnreadMentionedMessages());
 			Collection<MessageThread> requiredMessages = new ArrayList<>(); // the messages that will be sent
 			for (int i = 0; i < messages.size() && messagesRead < AppConstants.MESSAGES_TO_DOWNLOAD; i++) { // read available messages, not more than maximal limit (10)
-				Message message = messages.get(i);
+				Message message = messages.get(i).getMessage();
 				if (channelThread.get(message.getId()) == null) {
 					MessageThread messageThread = new MessageThread(message);
 					messagesRead++;
@@ -464,11 +462,9 @@ public class WebChatEndPoint {
 					channelThread.put(message.getId(), messageThread);
 				}
 			}
-			int tst = 0;
 			int maxId = subscription.getLastReadMessageId();
 			for (MessageThread message : requiredMessages) { // iterate over the messages that will be sent
 				if (message.getMessage().getId() > maxId) {
-					tst++;
 					maxId = message.getMessage().getId();
 					subscription.setUnreadMessages(subscription.getUnreadMessages() - 1);
 					if (message.getMessage().getContent().contains("@" + usersMap.get(chatUsers.get(session).getUsername()).getNickname())) {
@@ -478,8 +474,6 @@ public class WebChatEndPoint {
 				}
 			}
 			DataManager.updateSubscription(conn, subscription);
-			System.out.println("should download " + tst + "/" + requiredMessages.size());
-			System.out.println("after download: " + subscription.getUnreadMessages() + ", " + subscription.getUnreadMentionedMessages());
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 		} else { // no messages in channel
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), null, 0, 0)));
