@@ -353,7 +353,7 @@ body {
   border-radius: 8px;
   border: 2px solid #B3B3B3;
   background-color: white;
-  background-image: url('../img/searchicon.png');
+  background-image: url('img/searchicon.png');
   background-size: contain;
   background-position: 4px 4px;
   background-repeat: no-repeat;

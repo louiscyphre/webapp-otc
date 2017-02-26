@@ -33,20 +33,20 @@
         "    <table class=\"chat-reply\" data-ng-show=\"isReply\">" +
         "     <tr>" +
         "      <td>" +
-        "       <input type=\"text\" class=\"form-control chat-reply\" placeholder=\"type your message here \"" +
+        "       <input type=\"text\" class=\"form-control chat-reply\" placeholder=\"Type your message here \"" +
         "        data-ng-model=\"lastReply\" data-ng-focus=\"setReply(thread.message.id)\" " +
         "        data-ng-enter=\"sendMessage(lastReply); isReply = false; lastReply = ''\" />" +
         "      </td>" +
         "      <td>" +
         "       <span class=\"input-group-btn chat-reply\">" +
         "        <button class=\"btn btn-primary btn-chat-send chat-reply\" " +
-        "         type=\"submit\" data-ng-click=\"sendMessage(lastReply); isReply = false; lastReply = ''\">send</button>" +
+        "         type=\"submit\" data-ng-click=\"sendMessage(lastReply); isReply = false; lastReply = ''\">Send</button>" +
         "       </span>" +
         "      </td>" +
         "     </tr>" +
         "    </table>" +
         "    <span class=\"block-right\" data-ng-hide=\"isReply\">" +
-        "     <a href=\"javascript: void(0)\" data-ng-click=\"isReply = true\">reply</a>" + // tODO normally
+        "     <a href=\"javascript: void(0)\" data-ng-click=\"isReply = true\">Reply</a>" + // tODO normally
         "    </span>" +
         "   </div>" +
         "  </div>" +
