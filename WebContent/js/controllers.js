@@ -363,18 +363,18 @@
 
         // this happens, when someone enters channel, so users list need to be updated  
         $scope.$on('userSubscribed', function (event, response) {
-          var channel = findChannel(response.channel, $scope.subscribedChannels);
+          var channel = findChannel(response.channelId, $scope.subscribedChannels);
           if (!channel) {
-            channel = findChannel(response.channel, $scope.privateChannels);
+            channel = findChannel(response.channelId, $scope.privateChannels);
           }
           channel.users.push(response.user.username);
         });
 
         // this happens, when someone exits channel, so users list need to be updated  
         $scope.$on('userUnsubscribed', function (event, response) {
-          var channel = findChannel(response.channel, $scope.subscribedChannels);
+          var channel = findChannel(response.channelId, $scope.subscribedChannels);
           if (!channel) {
-            channel = findChannel(response.channel, $scope.privateChannels);
+            channel = findChannel(response.channelId, $scope.privateChannels);
           }
           channel.users.pop(response.username);
         });
@@ -383,13 +383,13 @@
         // and server sent successful reply
         $scope.$on('unsubscribe', function (event, response) {
           var channelsList = $scope.subscribedChannels;
-          var channel = findChannel(response.channel, channelsList);
+          var channel = findChannel(response.channelId, channelsList);
           if (!channel) {
             channelsList = $scope.privateChannels;
           }
-          channelsList.splice(findChannel(response.channel, channelsList).index, 1);
+          channelsList.splice(findChannel(response.channelId, channelsList).index, 1);
 
-          if ($scope.currentChannel === response.channel) {
+          if ($scope.currentChannel.channelId === response.channelId) {
             $scope.currentChannel = {};
             $scope.currentChannelThread = {};
             $scope.channelSelected = false;
@@ -401,10 +401,10 @@
         // in chat. 
         $scope.$on('downloadMessages', function (event, response) {
           var channelsList = $scope.subscribedChannels;
-          var channel = findChannel(response.channel, channelsList);
+          var channel = findChannel(response.channelId, channelsList);
           if (!channel) {
             channelsList = $scope.privateChannels;
-            channel = findChannel(response.channel, channelsList);
+            channel = findChannel(response.channelId, channelsList);
           }
           if (!response.channelThread || !response.channelThread.length || !channel) {
             return;
