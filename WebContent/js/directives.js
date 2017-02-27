@@ -2,7 +2,7 @@
 
   'use strict';
   /*global angular, console*/
-  var directives = angular.module('directives', ['services']);
+  var directives = angular.module('directives', []);
   directives.directive('thread', function ($compile) {
     // this is directive for showing message inside discussion
     return {
