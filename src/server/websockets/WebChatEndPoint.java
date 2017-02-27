@@ -293,6 +293,10 @@ public class WebChatEndPoint {
 			channelName = credentials.getName();
 		}
 		
+		if (credentials.getDescription() == null) {
+			credentials.setDescription("");
+		}
+		
 		if (channelName == null || channelName.isEmpty() || channelName.trim().isEmpty()) {
 			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel name must not be empty"))); // update the user that this is an illegal length for a channel's name
 		} else if (channelName.length() > AppConstants.MAX_LENGTH_CHANNEL_NAME) {
@@ -483,7 +487,7 @@ public class WebChatEndPoint {
 					channelThread.put(message.getId(), messageThread);
 				}
 			}
-			System.out.println("messages#=" + messages.size() + ", channelThread#=" + channelThread.size() + ", mentioned#=" + mentionedMessages + ", last#=" + subscription.getNumberOfReadMessages());
+			
 			if (channelThread.size() > subscription.getNumberOfReadMessages()) {
 				subscription.setUnreadMentionedMessages(Math.max(subscription.getUnreadMentionedMessages() - mentionedMessages, 0));
 				subscription.setUnreadMessages(Math.max(messages.size() - channelThread.size(), 0));
@@ -502,7 +506,6 @@ public class WebChatEndPoint {
 				}
 			}*/
 			DataManager.updateSubscription(conn, subscription);
-			System.out.println("download: " + gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 		} else { // no messages in channel
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), null, 0, 0)));
@@ -572,7 +575,6 @@ public class WebChatEndPoint {
 						if (channelThread.size() < AppConstants.MESSAGES_TO_DOWNLOAD || DataManager.isInViewingWindow(conn, channel, subscription, channelThread, message)) { // if barely any messages downloaded, send next batch
 							downloadMessages(userSession, conn, channel);
 						} else {
-							System.out.println("updateCounters: " + gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 							doNotify(thUser, gson.toJson(new UpdateCountersMessage(channel.getChannelName(), subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages()))); // update all users in chat about the new message
 						}
 					} else { // user is subscribed, but not viewing the channel at the moment
