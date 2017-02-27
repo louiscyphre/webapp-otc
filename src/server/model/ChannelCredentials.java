@@ -2,16 +2,16 @@ package server.model;
 
 
 /**
- * Class used for check users login credentials before they enter the chat
- * @author Michael
+ * Class used for check channel credentials before creation
+ * @author Ilia and Michael
  *
  */
 public class ChannelCredentials {
 	
-	private String owner;
-	private String channelId; 
-	private String description;
-	private	String username = null;
+	private String owner; // nickname of the user who wants to create the channel
+	private String channelId; // channel name
+	private String description; // channel description
+	private	String username = null; // username of a second user (if it's a private channel between the two users)
 	
 	public ChannelCredentials(String owner, String channelName, String description, String username) {
 		this.owner = owner;
@@ -20,10 +20,16 @@ public class ChannelCredentials {
 		this.username = username;
 	}
 	
+	/**
+	 * @return the creator of the channel
+	 */
 	public String getOwner() {
 		return owner;
 	}
 	
+	/**
+	 * @param owner username of the user that created the channel
+	 */
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}

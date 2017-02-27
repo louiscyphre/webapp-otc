@@ -2,14 +2,18 @@ package server.messages;
 
 import server.model.ThreadUser;
 
+/**
+ * This message is sent to all users in a channel to notify them of an addition of a new user to the channel
+ * @author Ilia and Michael
+ *
+ */
 public class UserSubscribed {
 	
-	private String messageType;
-	private String channelId;
-	private ThreadUser user;
+	private String messageType = "userSubscribed"; // the type of message
+	private String channelId; // the channel's name
+	private ThreadUser user; // user's details (username, nickname, description and avatar)
 	
 	public UserSubscribed(String channel, ThreadUser user) {
-		this.messageType = "userSubscribed";
 		this.channelId = channel;
 		this.user = user;
 	}

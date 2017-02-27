@@ -1,12 +1,16 @@
 package server.messages;
 
+/**
+ * This message is sent to the client whenever login/registration fails
+ * @author Ilia and Michael
+ *
+ */
 public class AuthFailure {
 	
-	private String messageType;
-	private String error;
+	private String messageType = "authFailure"; // the type of message
+	private String error; // the error that occured
 	
 	public AuthFailure(String error) {
-		this.messageType = "authFailure";
 		this.error = error;
 	}
 

@@ -2,13 +2,13 @@ package server.model;
 
 
 /**
- * Class used for check users login credentials before they enter the chat
- * @author Michael
+ * Class used for representing a user's query to search for channels
+ * @author Ilia and Michael
  *
  */
 public class ChannelDiscovery {
 	
-	private String query;
+	private String query; // the query that the user entered
 	
 	public ChannelDiscovery(String query) {
 		this.query = query;

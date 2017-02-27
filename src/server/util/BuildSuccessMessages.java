@@ -11,10 +11,22 @@ import server.model.Subscription;
 import server.model.ThreadUser;
 import server.model.UserCredentials;
 
+/**
+ * A utility class to simplify building a AuthSuccess Message
+ * @author Ilia and Michael
+ *
+ */
 public final class BuildSuccessMessages {
 	
 	private BuildSuccessMessages() {} // making this class none-initializable ("pure static")
 	
+	/**
+	 * Builds an AuthSuccess message (the message that is sent when a user logs in successfully)
+	 * @param conn the connection to the database
+	 * @param credentials the users credentials
+	 * @param user the user that logged in
+	 * @return returns the AuthSuccess message that will be sent to the client
+	 */
 	public static AuthSuccess buildAuthSuccess(Connection conn, UserCredentials credentials, ThreadUser user) {
 		AuthSuccess authSuccess = new AuthSuccess(user);
 		Map<String, ThreadUser> mapUsernameToNickname = DataManager.getMapOfAllUsers(conn);

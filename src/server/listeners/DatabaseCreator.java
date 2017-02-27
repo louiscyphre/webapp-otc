@@ -164,7 +164,7 @@ public class DatabaseCreator implements ServletContextListener {
                     pstmt2.setString (1, subscription.getChannelName());
                     pstmt2.setString (2, subscription.getUsername());
                     pstmt2.setTimestamp(3, subscription.getSubscriptionTime());
-                    pstmt2.setInt(4, subscription.getLastReadMessageId());
+                    pstmt2.setInt(4, subscription.getNumberOfReadMessages());
                     pstmt2.setInt(5, subscription.getUnreadMessages());
                     pstmt2.setInt(6, subscription.getUnreadMentionedMessages());
                     pstmt2.executeUpdate();

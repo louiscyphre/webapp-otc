@@ -4,13 +4,17 @@ import java.util.Collection;
 
 import server.model.Channel;
 
+/**
+ * The message that is sent to the client whenever a request to search for channels is received
+ * @author Ilia and Michael
+ *
+ */
 public class Discovery {
 	
-	private String messageType;
-	private Collection<Channel> channels;
+	private String messageType = "channelDiscovery"; // the message type
+	private Collection<Channel> channels; // the list of channels that meet the search criteria
 	
 	public Discovery(Collection<Channel> channels) {
-		this.messageType = "channelDiscovery";
 		this.channels = channels; 
 	}
 

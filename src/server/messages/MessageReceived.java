@@ -1,16 +1,19 @@
 package server.messages;
 
+/**
+ * This message is sent to the client when a new message is successfully received
+ * @author Ilia and Michael
+ *
+ */
 public class MessageReceived {
 	
-	private String messageType;
-	private String error = null;
+	private String messageType = "messageReceived"; // the type of message
+	private String error = null; // the error that happened (or null if everything is fine)
 	
 	public MessageReceived() {
-		this.messageType = "messageReceived";
 	}
 	
 	public MessageReceived(String error) {
-		this.messageType = "messageReceived";
 		this.error = error;
 	}
 

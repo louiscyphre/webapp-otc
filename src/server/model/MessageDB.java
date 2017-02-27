@@ -2,16 +2,21 @@ package server.model;
 
 import java.sql.Timestamp;
 
+/**
+ * Model of a message as it is stored in the database
+ * @author Ilia and Michael
+ *
+ */
 public class MessageDB {
 	
-	private int id;
-	private String channelId;
-	private String userId = null;
-	private ThreadUser user;
-	private Timestamp messageTime;
-	private Timestamp lastModified;
-	private int repliedToId;
-	private String content;
+	private int id; // message id number
+	private String channelId; // channel name (of the channel where the message is posted)
+	private String userId = null; // username of the author of the message
+	private ThreadUser user; // user details of the author of the message
+	private Timestamp messageTime; // the time when the message was posted (in milliseconds)
+	private Timestamp lastModified; // the time the message was last modified (in milliseconds)
+	private int repliedToId; // if this message is a reply to another message, then that message's id number. otherwise, -1
+	private String content; // the content of the message
 
 	public MessageDB(int id, String channelId, String user, Timestamp messageTime, int repliedToId, String content) {
 		this.id = id;
@@ -116,7 +121,7 @@ public class MessageDB {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param user the userId to set
 	 */
 	public void setUserId(String user) {
 		this.userId = user;
@@ -130,7 +135,7 @@ public class MessageDB {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param user the userId to set
 	 */
 	public void setUser(ThreadUser user) {
 		this.user = user;

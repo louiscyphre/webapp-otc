@@ -2,13 +2,17 @@ package server.messages;
 
 import server.model.Channel;
 
+/**
+ * This message is sent to the user when subscription done successfully
+ * @author Ilia and Michael
+ *
+ */
 public class SubscribeSuccess {
 	
-	private String messageType;
-	private Channel channel;
+	private String messageType = "subscribeSuccess"; // the message type
+	private Channel channel; // the channel details (name, description, messages, users and etc.)
 	
 	public SubscribeSuccess(Channel channel) {
-		this.messageType = "subscribeSuccess";
 		this.channel = channel;
 	}
 

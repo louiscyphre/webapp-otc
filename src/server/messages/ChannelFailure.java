@@ -1,13 +1,17 @@
 package server.messages;
 
+/**
+ * The message sent to the client when channel creation fails
+ * @author Ilia and Michael
+ *
+ */
 public class ChannelFailure {
 	
-	private String messageType;
-	private String channelId;
-	private String error;
+	private String messageType = "channelFailure"; // the type of message 
+	private String channelId; // the channel's name
+	private String error; // the error that occured
 	
 	public ChannelFailure(String channel, String error) {
-		this.messageType = "channelFailure";
 		this.channelId = channel;
 		this.error = error;
 	}

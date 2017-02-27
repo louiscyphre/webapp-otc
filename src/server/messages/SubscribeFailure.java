@@ -1,12 +1,16 @@
 package server.messages;
 
+/**
+ * This message is sent to the user when subscribing into a channel fails
+ * @author Ilia and Michael
+ *
+ */
 public class SubscribeFailure {
 	
-	private String messageType;
-	private String error;
+	private String messageType = "subscribeFailure"; // the type of message
+	private String error; // the error that occured
 	
 	public SubscribeFailure(String error) {
-		this.messageType = "subscribeFailure";
 		this.error = error;
 	}
 

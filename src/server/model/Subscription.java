@@ -2,20 +2,25 @@ package server.model;
 
 import java.sql.Timestamp;
 
+/**
+ * This model represents a subscription of a user to a channel
+ * @author Ilia and Michael
+ *
+ */
 public class Subscription {
 	
-	private String channelId;
-	private String userId;
-	private Timestamp subscriptionTime;
-	private int lastReadMessageId;
-	private int unreadMessages;
-	private int unreadMentionedMessages;
+	private String channelId; // the channel name
+	private String userId; // the user's username
+	private Timestamp subscriptionTime; // time when the user subscribed to the channel
+	private int numberOfReadMessages; // number of messages the user has read
+	private int unreadMessages; // number of messages the user still hasn't read
+	private int unreadMentionedMessages; // number of messages the user still hasn't read that contain his nickname
 
-	public Subscription(String channelId, String userId, Timestamp subscriptionTime, int lastReadMessageId, int unreadMessages, int undreadMentionedMessages) {
+	public Subscription(String channelId, String userId, Timestamp subscriptionTime, int numberOfReadMessageId, int unreadMessages, int undreadMentionedMessages) {
 		this.channelId = channelId;
 		this.userId = userId;
 		this.subscriptionTime = subscriptionTime;
-		this.lastReadMessageId = lastReadMessageId;
+		this.numberOfReadMessages = numberOfReadMessageId;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = undreadMentionedMessages;
 	}
@@ -68,17 +73,17 @@ public class Subscription {
 	}
 
 	/**
-	 * @return the lastReadMessageId
+	 * @return the numberOfReadMessages
 	 */
-	public int getLastReadMessageId() {
-		return lastReadMessageId;
+	public int getNumberOfReadMessages() {
+		return numberOfReadMessages;
 	}
 
 	/**
-	 * @param lastReadMessageId the lastReadMessageId to set
+	 * @param numberOfReadMessages the number of read messages to set
 	 */
-	public void setLastReadMessageId(int lastReadMessageId) {
-		this.lastReadMessageId = lastReadMessageId;
+	public void setNumberOfReadMessages(int numberOfReadMessages) {
+		this.numberOfReadMessages = numberOfReadMessages;
 	}
 
 	/**

@@ -2,13 +2,17 @@ package server.messages;
 
 import server.model.Channel;
 
+/**
+ * The channel that is sent to the client when creating of a channel succeeded
+ * @author Ilia and Michael
+ *
+ */
 public class ChannelSuccess {
 	
-	private String messageType;
-	private Channel channel;
+	private String messageType = "channelSuccess"; // the type of message
+	private Channel channel; // the channel details (name, description, users, messages and etc.)
 	
 	public ChannelSuccess(Channel channel) {
-		this.messageType = "channelSuccess";
 		this.channel = channel;
 	}
 	

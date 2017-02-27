@@ -1,8 +1,13 @@
 package server.model;
 
+/**
+ * This model represents a message from the client to download messages for a certain channel
+ * @author Ilia and Michael
+ *
+ */
 public class MessageDownload {
 	
-	private String channelId;
+	private String channelId; // the channel's name
 	
 	public MessageDownload(String channel) {
 		this.channelId = channel;

@@ -4,16 +4,20 @@ import java.util.Collection;
 
 import server.model.MessageThread;
 
+/**
+ * This message is sent to the client whenever a request for more thread messages is received
+ * @author Ilia and Michael
+ *
+ */
 public class DownloadMessages {
 	
-	private String messageType;
-	private String channelId;
-	private Collection<MessageThread> channelThread;
-	private int unreadMessages;
-	private int unreadMentionedMessages;
+	private String messageType = "downloadMessages"; // the type of message
+	private String channelId; // the name of the channel which messages are sent
+	private Collection<MessageThread> channelThread; // the list of messages that are downloaded this time
+	private int unreadMessages; // number of remaining unread messages
+	private int unreadMentionedMessages; // number of remaining messages in which the requesting user's nickname is mentioned
 	
 	public DownloadMessages(String channel, Collection<MessageThread> channelThread, int unreadMessages, int unreadMentionedMessages) {
-		this.messageType = "downloadMessages";
 		this.channelId = channel;
 		this.channelThread = channelThread;
 		this.unreadMessages = unreadMessages;

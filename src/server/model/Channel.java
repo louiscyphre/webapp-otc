@@ -3,16 +3,21 @@ package server.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Model to represent a channel
+ * @author Ilia and Michael
+ *
+ */
 public class Channel {
 	
-	private String channelId;
-	private Collection<MessageThread> channelThread = new ArrayList<>();
-	private Collection<ThreadUser> users = new ArrayList<>();
-	private String description;
-	private int numberOfSubscribers;
-	private boolean isPublic;
-	private int unreadMessages;
-	private int unreadMentionedMessages;
+	private String channelId; // the channel's name
+	private Collection<MessageThread> channelThread = new ArrayList<>(); // list of messages in the channel
+	private Collection<ThreadUser> users = new ArrayList<>(); // list of users subscribed to the channel
+	private String description; // description of the channel
+	private int numberOfSubscribers; // number of users currently in the channel
+	private boolean isPublic; // whether the channel is public or private
+	private int unreadMessages; // number of unread message in the channel (for a specific user)
+	private int unreadMentionedMessages; // number of unread message in the channel (for a specific user) with the mention of the user's nickname
 	
 	public Channel(String channelName, String description, int numberOfSubscribers, boolean isPublic) {
 		this.channelId = channelName;

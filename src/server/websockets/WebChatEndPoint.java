@@ -58,7 +58,7 @@ import server.util.BuildSuccessMessages;
 /**
  * Server-side WebSocket end-point that manages a chat over several channels between 
  * several client end-points
- * @author Ilia & Michael
+ * @author Ilia and Michael
  */
 @ServerEndpoint("/{username}")
 public class WebChatEndPoint {
@@ -70,26 +70,27 @@ public class WebChatEndPoint {
 
 	/**
 	 * Joins a new client to the chat
-	 * @param session 
-	 * 			client end point session
-	 * @throws IOException
+	 * @param session session client end point session
+	 * @param username the user's username
 	 */
 	@OnOpen
-	public void joinChat(Session session, @PathParam("username") String username) throws IOException{
-		if (session.isOpen()) {
-			try {
-				Connection conn = getDataBaseConnection();
-				if (conn != null) {
-					User user = DataManager.getUserByUsername(conn, username); // get user information from database
-					if (user != null) {
-						chatUsers.put(session, user); // add new client to managed chat sessions
+	public void joinChat(Session session, @PathParam("username") String username) {
+		try {
+			if (session.isOpen()) {
+				try {
+					Connection conn = getDataBaseConnection();
+					if (conn != null) {
+						User user = DataManager.getUserByUsername(conn, username); // get user information from database
+						if (user != null) {
+							chatUsers.put(session, user); // add new client to managed chat sessions
+						}
 					}
+					conn.close(); // close connection
+				} catch (SQLException e) {
+					session.close();
 				}
-				conn.close(); // close connection
-			} catch (SQLException e) {
-				session.close();
 			}
-		}
+		} catch (IOException e) { }
 	}
 
 	/**
@@ -291,8 +292,11 @@ public class WebChatEndPoint {
 		} else { // public channel
 			channelName = credentials.getName();
 		}
-		
-		if (DataManager.getChannelByName(conn, channelName) == null) { // channel with this name does not exist yet
+		if (channelName.length() > AppConstants.MAX_LENGTH_CHANNEL_NAME) {
+			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel name is too long"))); // update the user that this is an illegal length for a channel's name
+		} else if (credentials.getDescription().length() > AppConstants.MAX_LENGTH_CHANNEL_DESCRIPTIONS) {
+			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel description is too long"))); // update the user that this is an illegal length for a channel's description
+		} else if (DataManager.getChannelByName(conn, channelName) == null) { // channel with this name does not exist yet
 			Channel channel = DataManager.addChannel(conn, credentials); // create channel
 			DataManager.addSubscription(conn, new Subscription(credentials.getName(), chatUsers.get(session).getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the creator to the channel
 			if (credentials.getUsername() != null) { // private channel
@@ -476,11 +480,11 @@ public class WebChatEndPoint {
 					channelThread.put(message.getId(), messageThread);
 				}
 			}
-			System.out.println("messages#=" + messages.size() + ", channelThread#=" + channelThread.size() + ", mentioned#=" + mentionedMessages + ", last#=" + subscription.getLastReadMessageId());
-			if (channelThread.size() > subscription.getLastReadMessageId()) {
+			System.out.println("messages#=" + messages.size() + ", channelThread#=" + channelThread.size() + ", mentioned#=" + mentionedMessages + ", last#=" + subscription.getNumberOfReadMessages());
+			if (channelThread.size() > subscription.getNumberOfReadMessages()) {
 				subscription.setUnreadMentionedMessages(Math.max(subscription.getUnreadMentionedMessages() - mentionedMessages, 0));
 				subscription.setUnreadMessages(Math.max(messages.size() - channelThread.size(), 0));
-				subscription.setLastReadMessageId(channelThread.size());
+				subscription.setNumberOfReadMessages(channelThread.size());
 			}
 			/*
 			int maxId = subscription.getLastReadMessageId();
@@ -507,7 +511,9 @@ public class WebChatEndPoint {
 		MessageCredentials credentials = gson.fromJson(msgContent, MessageCredentials.class);
 		Channel channel = DataManager.getChannelByName(conn, credentials.getMessage().getChannelId()); // get the required channel
 		
-		if (channel != null) { // check if channel exists
+		if (credentials.getMessage().getContent().length() > AppConstants.MAX_LENGTH_MESSAGE) {
+			doNotify(session, gson.toJson(new MessageReceived("Message is too long"))); // inform the user that his message content is too long
+		} else if (channel != null) { // check if channel exists
 			if (credentials.getMessage().getRepliedToId() >= 0) {
 				String originalUserNickname = DataManager.getNicknameByMessageId(conn, credentials.getMessage().getRepliedToId());
 				credentials.getMessage().setContent("@" + originalUserNickname + " " + credentials.getMessage().getContent());

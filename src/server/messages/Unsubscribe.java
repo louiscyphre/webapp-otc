@@ -1,18 +1,21 @@
 package server.messages;
 
+/**
+ * This message is sent to a client whenver unsubscription of the channel is done successfully
+ * @author Ilia and Michael
+ *
+ */
 public class Unsubscribe {
 	
-	private String messageType;
-	private String channelId;
-	private String error = null;
+	private String messageType = "unsubscribe"; // the type of message
+	private String channelId; // the channel's name
+	private String error = null; // the error (if no error then null)
 	
 	public Unsubscribe(String channel) {
-		this.messageType = "unsubscribe";
 		this.channelId = channel;
 	}
 	
 	public Unsubscribe(String channel, String error) {
-		this.messageType = "unsubscribe";
 		this.channelId = channel;
 		this.error = error;
 	}

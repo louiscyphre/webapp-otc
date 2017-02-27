@@ -1,8 +1,13 @@
 package server.model;
 
+/**
+ * Represents a message of a client informing the server which channel the user is viewing
+ * @author Ilia and Michael
+ *
+ */
 public class ChannelViewing {
 	
-	private String channelId;
+	private String channelId; // the channel name
 	
 	public ChannelViewing(String channel) {
 		this.channelId = channel;

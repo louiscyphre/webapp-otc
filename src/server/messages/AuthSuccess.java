@@ -6,15 +6,19 @@ import java.util.Collection;
 import server.model.Channel;
 import server.model.ThreadUser;
 
+/**
+ * This message is sent to the client on a login/registration success
+ * @author Ilia and Michael
+ *
+ */
 public class AuthSuccess {
 	
-	private String messageType;
-	private ThreadUser user;
-	private Collection<Channel> subscribedChannels;
-	private Collection<Channel> privateChannels;
+	private String messageType = "authSuccess"; // the message type
+	private ThreadUser user; // the user details (username, nickname, description and avatar)
+	private Collection<Channel> subscribedChannels; // list of the public channels to which the user is subscribed
+	private Collection<Channel> privateChannels; // list of the private channels to which the user is subscribed
 	
 	public AuthSuccess(ThreadUser user) {
-		this.messageType = "authSuccess";
 		this.user = user;
 		this.subscribedChannels = new ArrayList<>();
 		this.privateChannels = new ArrayList<>();

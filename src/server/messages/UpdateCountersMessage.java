@@ -1,14 +1,18 @@
 package server.messages;
 
+/**
+ * This message is sent to the client whenver a message is sent in a channel the user is not viewing
+ * @author Ilia and Michael
+ *
+ */
 public class UpdateCountersMessage {
 	
-	private String messageType;
-	private String channelId;
-	private int unreadMessages;
-	private int unreadMentionedMessages;
+	private String messageType = "updateCounters"; // the message type
+	private String channelId; // the channel's name
+	private int unreadMessages; // number of unread messages
+	private int unreadMentionedMessages; // number of unread messages that mention the user's nickname
 	
 	public UpdateCountersMessage(String channelId, int unreadMessages, int unreadMentionedMessages) {
-		this.messageType = "updateCounters";
 		this.channelId = channelId;
 		this.unreadMessages = unreadMessages;
 		this.unreadMentionedMessages = unreadMentionedMessages;

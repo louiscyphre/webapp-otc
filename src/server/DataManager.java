@@ -22,7 +22,7 @@ import server.model.User;
 
 /**
  * Static class that manages the communication between server and the database
- * @author Ilia & Michael
+ * @author Ilia and Michael
  * 
  */
 public final class DataManager {
@@ -162,10 +162,10 @@ public final class DataManager {
 	}
 	
 	/**
-	 * Returns a channel by given channel name, including its subscribers
-	 * @param conn
-	 * @param channelName
-	 * @return
+	 * Returns a channel by given channel, including its subscribers
+	 * @param conn the connection to the database
+	 * @param channel the required channel
+	 * @return returns the channel with updated users' list
 	 */
 	public static Channel updateChannelUsers(Connection conn, Channel channel) {
 		Collection<Subscription> subscriptions = getSubscriptionsByChannelName(conn, channel.getChannelName());
@@ -185,6 +185,7 @@ public final class DataManager {
 	 * Adds a new channel to the database
 	 * @param conn the connection to the database
 	 * @param credentials the channel's details
+	 * @return returns the channel matching the given credentials
 	 */
 	public static Channel addChannel(Connection conn, ChannelCredentials credentials) {
 		try {
@@ -280,7 +281,7 @@ public final class DataManager {
 			prepStmt.setString(1, subscription.getChannelName());
 			prepStmt.setString(2, subscription.getUsername());
 			prepStmt.setTimestamp(3, subscriptionTime);
-			prepStmt.setInt(4, subscription.getLastReadMessageId());
+			prepStmt.setInt(4, subscription.getNumberOfReadMessages());
 			prepStmt.setInt(5, subscription.getUnreadMessages());
 			prepStmt.setInt(6, subscription.getUnreadMentionedMessages());
 			prepStmt.execute();
@@ -318,7 +319,7 @@ public final class DataManager {
     public static void updateSubscription(Connection conn, Subscription subscription) {
     	try {
     		PreparedStatement prepStmt = conn.prepareStatement(AppConstants.UPDATE_SUBSCRIPTION_STMT);
-    		prepStmt.setInt(1, subscription.getLastReadMessageId());
+    		prepStmt.setInt(1, subscription.getNumberOfReadMessages());
     		prepStmt.setInt(2, subscription.getUnreadMessages());
     		prepStmt.setInt(3, subscription.getUnreadMentionedMessages());
     		prepStmt.setString(4, subscription.getChannelName());
@@ -378,17 +379,18 @@ public final class DataManager {
 		}
     }
 
-	/**
-	 * Returns all the message in a certain channel from a date
-	 * @param conn the connection to the database
-	 * @param usersMap map of users' names to users
-	 * @param channelName the channel's name
-	 * @param startTime the time from which to return messages
-	 * @return all messages in channel
-	 */
-    public static MessageThread getMessagesByChannelNameAndTimetamp(Connection conn, MessageThread message, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
+    /**
+     * Returns all the message in a certain channel from a certain date that are a reply to a message
+     * @param conn the connection to the database
+     * @param message the message which replies are to be looked for
+     * @param usersMap the list of all users
+     * @param channelName the name of the channel in which to search
+     * @param startTime the date since a user's registration
+     * @return returns all the messages of a channel since a given registration date that are a reply to a message
+     */
+    private static MessageThread getMessagesByChannelNameAndTimetamp(Connection conn, MessageThread message, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
     	try {
-			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_AND_REPLY_TO_ID_STMT);
 			prepStmt.setString(1, channelName);
 			prepStmt.setTimestamp(2, startTime);
 			prepStmt.setInt(3, message.getMessage().getId());
@@ -408,23 +410,37 @@ public final class DataManager {
 		return message;
     }
     
-    public static MessageThread getLastReply(MessageThread message) {
-    	if (message.getReplies().isEmpty()) {
+    /**
+     * Removes and returns the last (nested) reply to the given message
+     * @param message the message which reply to find
+     * @return returns the required reply (or null if none exists)
+     */
+    private static MessageThread getLastReply(MessageThread message) {
+    	if (message.getReplies().isEmpty()) { // if message doesn't have any replies, return null
     		return null;
     	} else {
-    		MessageThread lastReply = message.getReplies().get(message.getReplies().size() - 1); 
-    		if (!lastReply.getReplies().isEmpty()) {
+    		MessageThread lastReply = message.getReplies().get(message.getReplies().size() - 1); // get last (not nested) reply 
+    		if (!lastReply.getReplies().isEmpty()) { // if it has replies of its own, do recursion
     			return getLastReply(lastReply);
     		} else {
-    			message.getReplies().remove(message.getReplies().size() - 1);
-    			return lastReply;
+    			message.getReplies().remove(message.getReplies().size() - 1); // remove the last reply
+    			return lastReply; // return it
     		}
     	}
     }
     
+    /**
+     * Returns the list of all messages in a channel sorted by last modified (since a user's subscription time)
+     * @param conn the connection to the database
+     * @param messages the list of all channel messages that will be returned
+     * @param usersMap list of all users
+     * @param channelName the name of the channel which messages to return
+     * @param startTime the subscription time of the user
+     * @return returns all the messages since subscription
+     */
 	public static ArrayList<MessageThread> getMessagesByChannelNameAndTimetamp(Connection conn, ArrayList<MessageThread> messages, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
 		try {
-			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
+			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_AND_REPLY_TO_ID_STMT);
 			prepStmt.setString(1, channelName);
 			prepStmt.setTimestamp(2, startTime);
 			prepStmt.setInt(3, -1);
@@ -450,29 +466,13 @@ public final class DataManager {
 		}
 		return messages;
 	}
-    /*
-	public static ArrayList<Message> getMessagesByChannelNameAndTimetamp(Connection conn, Map<String, ThreadUser> usersMap, String channelName, Timestamp startTime) {
-		ArrayList<Message> messages = new ArrayList<>();
-		try {
-			PreparedStatement prepStmt = conn.prepareStatement(AppConstants.SELECT_MESSAGES_BY_CHANNEL_STMT);
-			prepStmt.setString(1, channelName);
-			prepStmt.setTimestamp(2, startTime);
-			ResultSet rs = prepStmt.executeQuery();
-			while (rs.next()) { // iterate over all found messages
-				messages.add(new Message(rs.getInt(1), rs.getString(2), usersMap.get(rs.getString(3)), rs.getTimestamp(4), rs.getTimestamp(5), rs.getInt(6), rs.getString(7)));
-			}
-			rs.close();
-			prepStmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return messages;
-	}
-	*/
+
 	/**
-	 * Adds a new message to the database
+	 * Adds a new messagae to the database
 	 * @param conn the connection to the database
-	 * @param credentials the details of the new message
+	 * @param message the new message that is to be added
+	 * @param user the user who posted the message
+	 * @return returns the updated message (including id number)
 	 */
 	public static Message addMessage(Connection conn, Message message, ThreadUser user) {
 		try {
@@ -546,7 +546,7 @@ public final class DataManager {
 	 * Searches all public channel by a channel name and subscribed users' nicknames
 	 * @param conn the connection to the database
 	 * @param query the query that needs to be executed
-	 * @return
+	 * @return returns all the channels which name contains the given query or users' nicknames contain the query
 	 */
 	public static Collection<Channel> discoverChannels(Connection conn, ChannelDiscovery query) {
 		try {

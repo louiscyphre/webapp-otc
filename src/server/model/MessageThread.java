@@ -2,10 +2,15 @@ package server.model;
 
 import java.util.ArrayList;
 
+/**
+ * This class model that represents a message thread: a message and its comments
+ * @author Ilia and Michael
+ *
+ */
 public class MessageThread {
 	
-	private Message message;
-	private ArrayList<MessageThread> replies;
+	private Message message; // the message itself
+	private ArrayList<MessageThread> replies; // the replies to the message
 
 	public MessageThread(Message message) {
 		this.message = message;

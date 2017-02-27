@@ -15,6 +15,14 @@ public interface AppConstants {
 	public final String OPEN = "Open";
 	public final String SHUTDOWN = "Shutdown";
 	public final String FILE_FORMAT = ".json";
+	// string limitations
+	public final int MAX_LENGTH_USERNAME = 10;
+	public final int MAX_LENGTH_PASSWORD =  8;
+	public final int MAX_LENGTH_NICKNAME = 20;
+	public final int MAX_LENGTH_USER_DESCRIPTIONS = 50;
+	public final int MAX_LENGTH_CHANNEL_NAME = 30;
+	public final int MAX_LENGTH_CHANNEL_DESCRIPTIONS = 500;
+	public final int MAX_LENGTH_MESSAGE = 500;
 	// message properties
 	public final String MESSAGE_PROPERTY = "messageType";
 	public final String MESSAGE_CONTENT = "messageContent";
@@ -65,7 +73,7 @@ public interface AppConstants {
 			+ "channelId varchar(30),"
 			+ "userId varchar(10),"
 			+ "subscriptionTime timestamp,"
-			+ "lastReadMessageId integer,"
+			+ "numberOfReadMessages integer,"
 			+ "unreadMessages integer,"
 			+ "unreadMentionedMessages integer,"
 			+ "FOREIGN KEY(userId) REFERENCES " + USERS + "(username),"
@@ -76,7 +84,7 @@ public interface AppConstants {
 	public final String SELECT_SUBSCRIPTIONS_BY_CHANNEL_AND_USER_STMT = "SELECT * FROM " + SUBSCRIPTIONS + " WHERE channelId=? AND userId=?";
 	public final String SELECT_SUBSCRIPTIONS = "SELECT * FROM " + SUBSCRIPTIONS;
 	public final String REMOVE_SUBSCRIPTION_BY_CHANNEL_AND_USER_STMT = "DELETE FROM " + SUBSCRIPTIONS + " WHERE channelId=? AND userId=?";
-	public final String UPDATE_SUBSCRIPTION_STMT = "UPDATE " + SUBSCRIPTIONS + " SET lastReadMessageId=?, unreadMessages=?, unreadMentionedMessages=? WHERE channelId=? AND userId=?";
+	public final String UPDATE_SUBSCRIPTION_STMT = "UPDATE " + SUBSCRIPTIONS + " SET numberOfReadMessages=?, unreadMessages=?, unreadMentionedMessages=? WHERE channelId=? AND userId=?";
 	// messages table
 	public final String MESSAGES = "messages";
 	public final String MESSAGES_FILE = MESSAGES + FILE_FORMAT;
@@ -93,7 +101,7 @@ public interface AppConstants {
 			+ "FOREIGN KEY(channelId) REFERENCES " + CHANNELS + "(channelId))";
 	public final String INSERT_MESSAGE_STMT = "INSERT INTO " + MESSAGES
 			+ " (channelId, userId, messageTime, lastModified, repliedToId, content) VALUES(?,?,?,?,?,?)";
-	public final String SELECT_MESSAGES_BY_CHANNEL_STMT = "SELECT * FROM " + MESSAGES + " WHERE channelId=? AND lastModified>=? AND repliedToId=? ORDER BY lastModified, messageTime, id";
+	public final String SELECT_MESSAGES_BY_CHANNEL_AND_REPLY_TO_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE channelId=? AND lastModified>=? AND repliedToId=? ORDER BY lastModified, messageTime, id";
 	public final String SELECT_MESSAGE_BY_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE id=?";
 	public final String SELECT_MESSAGE_BY_REPLY_TO_ID_STMT = "SELECT * FROM " + MESSAGES + " WHERE repliedToId=?";
 	public final String SELECT_MESSAGES_STMT = "SELECT * FROM " + MESSAGES;

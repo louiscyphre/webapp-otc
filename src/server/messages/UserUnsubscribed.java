@@ -1,13 +1,17 @@
 package server.messages;
 
+/**
+ * This message is sent to all users in a channel informing them that a user has quit the channel
+ * @author Ilia and Michael
+ *
+ */
 public class UserUnsubscribed {
 	
-	private String messageType;
-	private String channelId;
-	private String username;
+	private String messageType = "userUnsubscribed"; // the type of message
+	private String channelId; // the name of the channel
+	private String username; // the user's username
 	
 	public UserUnsubscribed(String channel, String username) {
-		this.messageType = "userUnsubscribed";
 		this.channelId = channel;
 		this.username = username;
 	}

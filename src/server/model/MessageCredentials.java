@@ -1,8 +1,13 @@
 package server.model;
 
+/**
+ * Represents a model of a message sent to the server with a newly posted message
+ * @author Ilia and Michael
+ *
+ */
 public class MessageCredentials {
 	
-	private Message message;
+	private Message message; // the message itself
 
 	public MessageCredentials(Message message) {
 		this.message = message;
