@@ -9,13 +9,13 @@ package server.model;
 public class ChannelCredentials {
 	
 	private String owner;
-	private String name; 
+	private String channelId; 
 	private String description;
 	private	String username = null;
 	
 	public ChannelCredentials(String owner, String channelName, String description, String username) {
 		this.owner = owner;
-		this.name = channelName;
+		this.channelId = channelName;
 		this.description = description;
 		this.username = username;
 	}
@@ -32,14 +32,14 @@ public class ChannelCredentials {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return channelId;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.channelId = name;
 	}
 
 	/**
@@ -75,6 +75,6 @@ public class ChannelCredentials {
 	 */
 	@Override
 	public String toString() {
-		return "ChannelCredentials [Name=" + name + ", Description=" + description + ", Username=" + username + "]";
+		return "ChannelCredentials [Name=" + channelId + ", Description=" + description + ", Username=" + username + "]";
 	}
 }
