@@ -25,14 +25,14 @@
     <!-- login section, visible by default on opening the page -->
     <div data-ng-controller="loginCtrl" class="row" data-ng-hide="loginScreenHidden">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <div class="auth-fail alert alert-warning" role="alert" data-ng-hide="authFailureWarningHidden">Incorrect username or password.
-          <br/>Please try again or register.</div>
+        <div class="auth-fail alert alert-warning" role="alert" data-ng-hide="authFailureWarningHidden">{{warning}}
+          <br/>{{warningAddition}}</div>
         <h1 class="text-center login-title">Sign in to enter webchat</h1>
         <div class="account-wall">
           <img class="avatar" src="css/img/person.png" alt="avatar image">
           <form class="form-login" data-ng-submit="login()">
-            <input id="username" type="text" class="form-control" placeholder="username" required data-ng-model="user.username">
-            <input id="password" type="password" class="form-control" placeholder="password" required data-ng-model="user.password">
+            <input id="username" type="text" class="form-control" placeholder="username" data-ng-model="user.username">
+            <input id="password" type="password" class="form-control" placeholder="password" data-ng-model="user.password">
             <button class="btn btn-lg btn-primary btn-block sign-in-btn" type="submit"> Sign in</button>
             <button class="btn btn-lg btn-secondary btn-block " data-ng-click="doregister() "> Register</button>
           </form>
@@ -44,14 +44,14 @@
     <!-- register section, visible on clicking on "register" button -->
     <div data-ng-controller="registerCtrl" class="row" data-ng-hide="registerScreenHidden">
       <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <div class="reg-fail alert alert-warning" role="alert" data-ng-hide="userExistsWarningHidden">Username already exists.
-          <br/>Please choose different username.</div>
+        <div class="reg-fail alert alert-warning" role="alert" data-ng-hide="wrongRegisterWarningHidden">{{warning}}
+          <br/>{{warningAddition}}</div>
         <h1 class="text-center login-title ">Would you like to register?</h1>
         <div class="account-wall">
           <img class="avatar" src="css/img/person.png" alt="avatar image">
           <form class="form-login" data-ng-submit="register() ">
-            <input id="newusername" type="text" class="form-control" placeholder="username" required data-ng-model="user.username">
-            <input id="newpassword" type="password" class="form-control" placeholder="password" required data-ng-model="user.password">
+            <input id="newusername" type="text" class="form-control" placeholder="username" data-ng-model="user.username">
+            <input id="newpassword" type="password" class="form-control" placeholder="password" data-ng-model="user.password">
             <input class="form-control" placeholder="nickname" data-ng-model="user.nickname">
             <textarea class="form-control" rows="3" placeholder="description" data-ng-model="user.description"></textarea>
             <input class="form-control" placeholder="avatar url" data-ng-model="user.avatarUrl">

@@ -17,6 +17,7 @@
     return {
       send: function (pathToServlet, jsonToSend) {
         $http.post("/webapp/" + pathToServlet, JSON.stringify(jsonToSend)).success(function (response) {
+          console.log('Server response: ', JSON.stringify(response));
           messageBus.send(response.messageType, response);
 
         }).error(function (response) {

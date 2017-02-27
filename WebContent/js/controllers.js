@@ -12,15 +12,25 @@
         description: "",
         avatarUrl: ""
       };
+      $scope.warning = "";
+      $scope.warningAddition = "";
       // variables that controls hide and show of login form and auth error warning
       $scope.loginScreenHidden = false;
       $scope.authFailureWarningHidden = true;
 
       // called when user clicks "sign in" button on login screen
       $scope.login = function () {
+        if (!$rootScope.user.username || !$rootScope.user.password ||
+          $rootScope.user.username.length <= 0 || $rootScope.user.password <= 0) {
+          $scope.authFailureWarningHidden = false;
+          $scope.warning = "Username or password cannot be empty.";
+          $scope.warningAddition = "Please try again";
+          return;
+        }
+        $scope.authFailureWarningHidden = true;
         var credentials = {
-          username: $scope.user.username,
-          password: $scope.user.password
+          username: $rootScope.user.username,
+          password: $rootScope.user.password
         };
         servlets.send("login", credentials);
       };
@@ -34,8 +44,10 @@
 
       // if was auth failure, show warning
       $scope.$on('authFailure', function (event, data) {
-        if (data.error === "Username does not exist" || data.error === "Incorrect password") {
+        if (data.error === "Username does not exist" || data.error === "Incorrect Password") {
           $scope.authFailureWarningHidden = false;
+          $scope.warning = data.error;
+          $scope.warningAddition = "Please try again or register";
           return;
         }
       });
@@ -48,10 +60,19 @@
     }]).controller('registerCtrl', ['$rootScope', '$scope', '$http', 'messageBus', 'servlets',
                                     function ($rootScope, $scope, $http, messageBus, servlets) {
 
+        $scope.warning = ""; // warnings to show on error
+        $scope.warningAddition = "";
         $scope.registerScreenHidden = true; // registration form, shown on "register" button click
-        $scope.userExistsWarningHidden = true; // warning is shown if user already exists
+        $scope.wrongRegisterWarningHidden = true; // warning is shown if user already exists
         // when clicking submit on registration form, data sent to the server
         $scope.register = function () {
+          if (!$rootScope.user.username || !$rootScope.user.password ||
+            $rootScope.user.username.length <= 0 || $rootScope.user.password <= 0) {
+            $scope.wrongRegisterWarningHidden = false;
+            $scope.warning = "Username or password cannot be empty.";
+            $scope.warningAddition = "Please try again";
+            return;
+          }
           servlets.send("register", $rootScope.user);
         };
         // when user clicks on "register" button on login screen, show registration form
@@ -65,7 +86,9 @@
         // upon registration, if username already registered, show warning                              
         $scope.$on('authFailure', function (event, data) {
           if (data.error === "Username already exists" && !$scope.registerScreenHidden) {
-            $scope.userExistsWarningHidden = false;
+            $scope.wrongRegisterWarningHidden = false;
+            $scope.warning = data.error;
+            $scope.warningAddition = "Please choose different username";
             return;
           }
         });
@@ -139,22 +162,27 @@
         // and on successful new channel creation. if current channel's thread empty,
         // it triggers downloadMessages json sending to server.
         var getCurrentThread = function (channelName, channelsList) {
-          if (!findChannel(channelName, channelsList).object.channelThread.length) {
+          if (findChannel(channelName, channelsList).object.channelThread.length < 10) {
             downloadMessages(channelName);
           }
           return findChannel(channelName, channelsList).object.channelThread;
         };
 
-        // this function called each time on entering channel and current channel
-        // thread is empty, or when inside channel and chat area scrolled down fully
-        var downloadMessages = function (channelName) {
-          var downloadMessagesJson = {
-            messageType: "downloadMessages",
+        // This is helper function, that does common operations to four json requests                                
+        var sendJson = function (channelName, messageType) {
+          var messageJson = {
+            messageType: messageType,
             messageContent: {
               channelId: channelName
             }
           };
-          socket.send(downloadMessagesJson);
+          socket.send(messageJson);
+        };
+
+        // this function called each time on entering channel and current channel
+        // thread is empty, or when inside channel and chat area scrolled down fully
+        var downloadMessages = function (channelName) {
+          sendJson(channelName, "downloadMessages");
         };
 
         // this is special message sent to server, when starting to view
@@ -162,25 +190,18 @@
         // to send messages on specific channel, or only updates of unread
         // messages counters.
         var viewingChannel = function (channelName) {
-          var viewingChannelJson = {
-            messageType: "channelViewing",
-            messageContent: {
-              channelId: channelName
-            }
-          };
-          socket.send(viewingChannelJson);
+          sendJson(channelName, "channelViewing");
         };
 
         // new subscription to channel. called when trying to enter
         // to channel, that user not subscribed to it (on channel discovery).
         var subscribeToChannel = function (channelName) {
-          var subscribeJson = {
-            messageType: "subscribe",
-            messageContent: {
-              channelId: channelName,
-            }
-          };
-          socket.send(subscribeJson);
+          sendJson(channelName, "subscribe");
+        };
+
+        // this function called when a button "unsubscribe" clicked. 
+        $scope.unsubscribeChannel = function (channelName) {
+          sendJson(channelName, "unsubscribe");
         };
 
         // new channel creation. called on click on the green button "create channel".
@@ -232,7 +253,7 @@
             finalName = possibleChannelName2;
           }
           if (!finalName) {
-            var description = "private channel for " + $scope.user.nickname + " and " + dstNickname + ", created by " + $scope.user.nickname;
+            var description = "Private channel for " + $scope.user.nickname + " and " + dstNickname + ", created by " + $scope.user.nickname;
             $scope.createChannel(possibleChannelName1, description, dstUsername);
             return;
           }
@@ -255,17 +276,6 @@
             }
           };
           socket.send(queryJson);
-        };
-
-        // this function called when a button "unsubscribe" clicked. 
-        $scope.unsubscribeChannel = function (channelName) {
-          var unsubscribeJson = {
-            messageType: "unsubscribe",
-            messageContent: {
-              channelId: channelName
-            }
-          };
-          socket.send(unsubscribeJson);
         };
 
         // send message in current channel. in order to see sent messages, 
@@ -293,7 +303,6 @@
         // this function called on click "reply" in thead.
         $scope.setReply = function (repliedToId) {
           $scope.repliedToId = repliedToId;
-          console.log('chatRoomsCtrl: setReply(): repliedToId is:', $scope.repliedToId);
         };
 
         // original private channel name is of the form: username1+username2, but in interface we want to
@@ -367,7 +376,8 @@
           if (!channel) {
             channel = findChannel(response.channelId, $scope.privateChannels);
           }
-          channel.users.push(response.user.username);
+          channel.object.users.push(response.user);
+          channel.object.numberOfSubscribers = channel.object.numberOfSubscribers + 1;
           $scope.$digest();
         });
 
@@ -377,7 +387,8 @@
           if (!channel) {
             channel = findChannel(response.channelId, $scope.privateChannels);
           }
-          channel.users.pop(response.username);
+          channel.object.users.pop(response.username);
+          channel.object.numberOfSubscribers = channel.object.numberOfSubscribers - 1;
           $scope.$digest();
         });
 
