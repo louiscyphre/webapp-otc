@@ -31,10 +31,10 @@ import server.util.BuildSuccessMessages;
 
 
 /**
- * Servlet implementation class CustomersServlet1
+ * Servlet implementation class LoginServlet
  */
 @WebServlet(
-		description = "Servlet to provide details about customers", 
+		description = "Servlet log users into the chat", 
 		urlPatterns = { 
 				"/login"
 		})
@@ -70,7 +70,7 @@ public class LoginServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json");
 
-			//obtain CustomerDB data source from Tomcat's context
+			//obtain projectDB data source from Tomcat's context
 			Context context = new InitialContext();
 			BasicDataSource ds = (BasicDataSource)context.lookup(getServletContext().getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
 			Connection conn = ds.getConnection();
@@ -87,6 +87,14 @@ public class LoginServlet extends HttpServlet {
 			Gson gson = new Gson();
 			UserCredentials credentials = gson.fromJson(gsonData, UserCredentials.class);
 						
+			if (credentials.getUsername() == null || credentials.getUsername().isEmpty() || credentials.getUsername().trim().isEmpty()) {
+				writer.write(gson.toJson(new AuthFailure("Username must not be empty")));
+				return;
+			} else if (credentials.getPassword() == null || credentials.getPassword().isEmpty() || credentials.getPassword().trim().isEmpty()) {
+				writer.write(gson.toJson(new AuthFailure("Password must not be empty")));
+				return;
+			}
+			
 			User user = null;
 			if ((user = DataManager.getUserByCredentials(conn, credentials.getUsername(), credentials.getPassword())) != null) { // user exists
 				// prepare response to client

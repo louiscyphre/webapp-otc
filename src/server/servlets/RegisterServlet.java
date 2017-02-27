@@ -31,10 +31,10 @@ import server.util.BuildSuccessMessages;
 
 
 /**
- * Servlet implementation class CustomersServlet1
+ * Servlet implementation class RegisterServlet
  */
 @WebServlet(
-		description = "Servlet to provide details about customers", 
+		description = "Servlet to register users into the chat", 
 		urlPatterns = { 
 				"/register"
 		})
@@ -72,7 +72,7 @@ public class RegisterServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 		    response.setContentType("text/xml");
         	
-			//obtain CustomerDB data source from Tomcat's context
+			//obtain projectDB data source from Tomcat's context
 			Context context = new InitialContext();
 			BasicDataSource ds = (BasicDataSource)context.lookup(getServletContext().getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
 			Connection conn = ds.getConnection();
@@ -89,10 +89,16 @@ public class RegisterServlet extends HttpServlet {
 			Gson gson = new Gson();
 			User newUser = gson.fromJson(gsonData, User.class);
 			System.out.println("newuser: " + newUser.toString());
-			if (newUser.getUsername() != null && newUser.getUsername().length() > AppConstants.MAX_LENGTH_USERNAME) {
+			if (newUser.getUsername() == null || newUser.getUsername().isEmpty() || newUser.getUsername().trim().isEmpty()) {
+				writer.write(gson.toJson(new AuthFailure("Username must not be empty")));
+				return;
+			} else if (newUser.getUsername().length() > AppConstants.MAX_LENGTH_USERNAME) {
 				writer.write(gson.toJson(new AuthFailure("Username too long")));
 				return;
-			} else if (newUser.getPassword() != null && newUser.getPassword().length() > AppConstants.MAX_LENGTH_PASSWORD) {
+			} else if (newUser.getPassword() == null || newUser.getPassword().isEmpty() || newUser.getPassword().trim().isEmpty()) {
+				writer.write(gson.toJson(new AuthFailure("Password must not be empty")));
+				return;
+			} else if (newUser.getPassword().length() > AppConstants.MAX_LENGTH_PASSWORD) {
 				writer.write(gson.toJson(new AuthFailure("Password too long")));
 				return;
 			} else if (newUser.getNickname() != null && newUser.getNickname().length() > AppConstants.MAX_LENGTH_PASSWORD) {
@@ -126,7 +132,7 @@ public class RegisterServlet extends HttpServlet {
 			}
         	writer.close();
 			conn.close();
-		} catch (SQLException | NamingException e ) {
+		} catch (SQLException | NamingException e) {
 			getServletContext().log("Error while closing connection", e);
 			response.sendError(500);//internal server error
 		}

@@ -237,7 +237,7 @@ public class WebChatEndPoint {
 	 */
 	private Connection getDataBaseConnection() {
 		try {
-			Context context = new InitialContext(); // obtain CustomerDB data source from Tomcat's context
+			Context context = new InitialContext(); // obtain projectDB data source from Tomcat's context
 			BasicDataSource ds = (BasicDataSource)context.lookup(AppConstants.DB_CONTEXT + AppConstants.OPEN);
 			return ds.getConnection();
 		} catch (NamingException | SQLException e) {
