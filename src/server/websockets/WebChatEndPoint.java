@@ -292,7 +292,10 @@ public class WebChatEndPoint {
 		} else { // public channel
 			channelName = credentials.getName();
 		}
-		if (channelName.length() > AppConstants.MAX_LENGTH_CHANNEL_NAME) {
+		
+		if (channelName == null || channelName.isEmpty() || channelName.trim().isEmpty()) {
+			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel name must not be empty"))); // update the user that this is an illegal length for a channel's name
+		} else if (channelName.length() > AppConstants.MAX_LENGTH_CHANNEL_NAME) {
 			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel name is too long"))); // update the user that this is an illegal length for a channel's name
 		} else if (credentials.getDescription().length() > AppConstants.MAX_LENGTH_CHANNEL_DESCRIPTIONS) {
 			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel description is too long"))); // update the user that this is an illegal length for a channel's description
