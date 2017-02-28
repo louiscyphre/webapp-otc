@@ -523,6 +523,9 @@ public class WebChatEndPoint {
 			if (credentials.getMessage().getRepliedToId() >= 0) {
 				String originalUserNickname = DataManager.getNicknameByMessageId(conn, credentials.getMessage().getRepliedToId());
 				credentials.getMessage().setContent("@" + originalUserNickname + " " + credentials.getMessage().getContent());
+				if (credentials.getMessage().getContent().length() > AppConstants.MAX_LENGTH_MESSAGE) {
+					credentials.getMessage().setContent(credentials.getMessage().getContent().substring(0, AppConstants.MAX_LENGTH_MESSAGE));
+				}
 			}
 			
 			User user = chatUsers.get(session);

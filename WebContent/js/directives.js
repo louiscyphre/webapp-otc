@@ -33,7 +33,7 @@
         "    <table class=\"chat-reply\" data-ng-show=\"isReply\">" +
         "     <tr>" +
         "      <td>" +
-        "       <input type=\"text\" class=\"form-control chat-reply\" placeholder=\"Type your message here \"" +
+        "       <input type=\"text\" maxlength=\"500\" class=\"form-control chat-reply\" placeholder=\"Type your message here \"" +
         "        data-ng-model=\"lastReply\" data-ng-focus=\"setReply(thread.message.id)\" " +
         "        data-ng-enter=\"sendMessage(lastReply); isReply = false; lastReply = ''\" />" +
         "      </td>" +

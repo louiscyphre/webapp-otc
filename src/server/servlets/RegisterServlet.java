@@ -88,7 +88,7 @@ public class RegisterServlet extends HttpServlet {
 			// parse the data
 			Gson gson = new Gson();
 			User newUser = gson.fromJson(gsonData, User.class);
-			System.out.println("newuser: " + newUser.toString());
+
 			if (newUser.getUsername() == null || newUser.getUsername().isEmpty() || newUser.getUsername().trim().isEmpty()) {
 				writer.write(gson.toJson(new AuthFailure("Username must not be empty")));
 				return;
@@ -101,10 +101,10 @@ public class RegisterServlet extends HttpServlet {
 			} else if (newUser.getPassword().length() > AppConstants.MAX_LENGTH_PASSWORD) {
 				writer.write(gson.toJson(new AuthFailure("Password too long")));
 				return;
-			} else if (newUser.getNickname() != null && newUser.getNickname().length() > AppConstants.MAX_LENGTH_PASSWORD) {
+			} else if (newUser.getNickname() != null && newUser.getNickname().length() > AppConstants.MAX_LENGTH_NICKNAME) {
 				writer.write(gson.toJson(new AuthFailure("Nickname too long")));
 				return;
-			} else if (newUser.getDescription() != null && newUser.getDescription().length() > AppConstants.MAX_LENGTH_PASSWORD) {
+			} else if (newUser.getDescription() != null && newUser.getDescription().length() > AppConstants.MAX_LENGTH_USER_DESCRIPTIONS) {
 				writer.write(gson.toJson(new AuthFailure("Description too long")));
 				return;
 			}

@@ -73,8 +73,9 @@ public class DatabaseCreator implements ServletContextListener {
     		BasicDataSource ds = (BasicDataSource)context.lookup(cntx.getInitParameter(AppConstants.DB_DATASOURCE) + AppConstants.OPEN);
     		Connection conn = ds.getConnection();
     		
+    		/*
+    		// to start the project with an empty database, uncomment this part
 			try {
-    			System.out.println("deleting database");
     			Statement stmt = conn.createStatement();
     			stmt.execute("DROP TABLE " + AppConstants.MESSAGES);
     			stmt.execute("DROP TABLE " + AppConstants.SUBSCRIPTIONS);
@@ -82,9 +83,8 @@ public class DatabaseCreator implements ServletContextListener {
     			stmt.execute("DROP TABLE " + AppConstants.USERS);
     			conn.commit();
     			stmt.close();
-			} catch (SQLException e) {
-				
-			}
+			} catch (SQLException e) { }
+    		*/
     		
     		boolean created = false; // will tell if a table already exists in the database
     		try{
@@ -101,18 +101,20 @@ public class DatabaseCreator implements ServletContextListener {
     		//if no database exist in the past - further populate its records in the table
     		if (!created){
                 // Create users table with user data from json file
-                Collection<User> users = loadUsers(cntx.getResourceAsStream(File.separator + AppConstants.USERS_FILE));
-                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
-                for (User user : users) {
-                    pstmt2.setString(1, user.getUsername());
-                    pstmt2.setString(2, user.getPassword());
-                    pstmt2.setString(3, user.getNickname());
-                    pstmt2.setString(4, user.getDescription());
-                    pstmt2.setString(5, user.getAvatarUrl());
-                    pstmt2.executeUpdate();
-                }
-                conn.commit();
-                pstmt2.close();
+    			try {
+	                Collection<User> users = loadUsers(cntx.getResourceAsStream(File.separator + AppConstants.USERS_FILE));
+	                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_USER_STMT);
+	                for (User user : users) {
+	                    pstmt2.setString(1, user.getUsername());
+	                    pstmt2.setString(2, user.getPassword());
+	                    pstmt2.setString(3, user.getNickname());
+	                    pstmt2.setString(4, user.getDescription());
+	                    pstmt2.setString(5, user.getAvatarUrl());
+	                    pstmt2.executeUpdate();
+	                }
+	                conn.commit();
+	                pstmt2.close();
+    			} catch (IOException | NullPointerException e) { }
     		}
     		
     		created = false;
@@ -130,17 +132,19 @@ public class DatabaseCreator implements ServletContextListener {
     		//if no database exist in the past - further populate its records in the table
     		if (!created){
                 // Create channels table with channel data from json file
-                Collection<Channel> channels = loadChannels(cntx.getResourceAsStream(File.separator + AppConstants.CHANNELS_FILE));
-                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_CHANNEL_STMT);
-                for (Channel channel : channels) {
-                    pstmt2.setString (1, channel.getChannelName());
-                    pstmt2.setString (2, channel.getDescription());
-                    pstmt2.setInt    (3, channel.getNumberOfSubscribers());
-                    pstmt2.setBoolean(4, channel.isPublic());
-                    pstmt2.executeUpdate();
-                }
-                conn.commit();
-                pstmt2.close();
+    			try {
+	                Collection<Channel> channels = loadChannels(cntx.getResourceAsStream(File.separator + AppConstants.CHANNELS_FILE));
+	                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_CHANNEL_STMT);
+	                for (Channel channel : channels) {
+	                    pstmt2.setString (1, channel.getChannelName());
+	                    pstmt2.setString (2, channel.getDescription());
+	                    pstmt2.setInt    (3, channel.getNumberOfSubscribers());
+	                    pstmt2.setBoolean(4, channel.isPublic());
+	                    pstmt2.executeUpdate();
+	                }
+	                conn.commit();
+	                pstmt2.close();
+    			} catch (IOException | NullPointerException e) { }
     		}
     		
     		created = false;
@@ -158,19 +162,21 @@ public class DatabaseCreator implements ServletContextListener {
     		//if no database exist in the past - further populate its records in the table
     		if (!created){
                 // Create subscriptions table with subscription data from json file
-                Collection<Subscription> subscriptions = loadSubscriptions(cntx.getResourceAsStream(File.separator + AppConstants.SUBSCRIPTIONS_FILE));
-                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_SUBSCRIPTION_STMT);
-                for (Subscription subscription : subscriptions) {
-                    pstmt2.setString (1, subscription.getChannelName());
-                    pstmt2.setString (2, subscription.getUsername());
-                    pstmt2.setTimestamp(3, subscription.getSubscriptionTime());
-                    pstmt2.setInt(4, subscription.getNumberOfReadMessages());
-                    pstmt2.setInt(5, subscription.getUnreadMessages());
-                    pstmt2.setInt(6, subscription.getUnreadMentionedMessages());
-                    pstmt2.executeUpdate();
-                }
-                conn.commit();
-                pstmt2.close();
+    			try {
+	                Collection<Subscription> subscriptions = loadSubscriptions(cntx.getResourceAsStream(File.separator + AppConstants.SUBSCRIPTIONS_FILE));
+	                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_SUBSCRIPTION_STMT);
+	                for (Subscription subscription : subscriptions) {
+	                    pstmt2.setString (1, subscription.getChannelName());
+	                    pstmt2.setString (2, subscription.getUsername());
+	                    pstmt2.setTimestamp(3, subscription.getSubscriptionTime());
+	                    pstmt2.setInt(4, subscription.getNumberOfReadMessages());
+	                    pstmt2.setInt(5, subscription.getUnreadMessages());
+	                    pstmt2.setInt(6, subscription.getUnreadMentionedMessages());
+	                    pstmt2.executeUpdate();
+	                }
+	                conn.commit();
+	                pstmt2.close();
+    			} catch (IOException | NullPointerException e) { }
     		}
     		
     		created = false;
@@ -188,25 +194,27 @@ public class DatabaseCreator implements ServletContextListener {
     		//if no database exist in the past - further populate its records in the table
     		if (!created){
                 // Create messages table with message data from json file
-                Collection<MessageDB> messages = loadMessages(cntx.getResourceAsStream(File.separator + AppConstants.MESSAGES_FILE));
-                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT);
-                for (MessageDB message : messages) {
-                    pstmt2.setString   (1, message.getChannelId());
-                    pstmt2.setString   (2, message.getUserId());
-                    pstmt2.setTimestamp(3, message.getMessageTime());
-                    pstmt2.setTimestamp(4, message.getLastModified());
-                    pstmt2.setInt      (5, message.getRepliedToId());
-                    pstmt2.setString   (6, message.getContent());
-                    pstmt2.executeUpdate();
-                }
-                conn.commit();
-                pstmt2.close();
+    			try {
+	                Collection<MessageDB> messages = loadMessages(cntx.getResourceAsStream(File.separator + AppConstants.MESSAGES_FILE));
+	                PreparedStatement pstmt2 = conn.prepareStatement(AppConstants.INSERT_MESSAGE_STMT);
+	                for (MessageDB message : messages) {
+	                    pstmt2.setString   (1, message.getChannelId());
+	                    pstmt2.setString   (2, message.getUserId());
+	                    pstmt2.setTimestamp(3, message.getMessageTime());
+	                    pstmt2.setTimestamp(4, message.getLastModified());
+	                    pstmt2.setInt      (5, message.getRepliedToId());
+	                    pstmt2.setString   (6, message.getContent());
+	                    pstmt2.executeUpdate();
+	                }
+	                conn.commit();
+	                pstmt2.close();
+    			} catch (IOException | NullPointerException e) { }
     		}
     		
     		//close connection
     		conn.close();
 
-    	} catch (IOException | SQLException | NamingException e) {
+    	} catch (SQLException | NamingException e) {
     		//log error 
     		cntx.log("Error during database initialization",e);
     	}
@@ -238,20 +246,26 @@ public class DatabaseCreator implements ServletContextListener {
      * @throws IOException
      */
     private Collection<User> loadUsers(InputStream is) throws IOException {
+    	try {
+    		if (is != null) {
+    			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    			StringBuilder jsonFileContent = new StringBuilder();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder jsonFileContent = new StringBuilder();
+    			String nextLine = null;
+    			while ((nextLine = reader.readLine()) != null) {
+    				jsonFileContent.append(nextLine);
+    			}
 
-        String nextLine = null;
-        while ((nextLine = reader.readLine()) != null) {
-            jsonFileContent.append(nextLine);
-        }
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Collection<User>>() { }.getType();
-        Collection<User> users = gson.fromJson(jsonFileContent.toString(), type);
-        reader.close();
-        return users;
+    			Gson gson = new Gson();
+    			Type type = new TypeToken<Collection<User>>() { }.getType();
+    			Collection<User> users = gson.fromJson(jsonFileContent.toString(), type);
+    			reader.close();
+    			return users;
+    		}
+    		return null;
+		} catch (NullPointerException e) {
+			return null;
+		}
     }
  
     /**
@@ -263,20 +277,26 @@ public class DatabaseCreator implements ServletContextListener {
      * @throws IOException
      */
     private Collection<Channel> loadChannels(InputStream is) throws IOException {
+    	try {
+    		if (is != null) {
+    			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    			StringBuilder jsonFileContent = new StringBuilder();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder jsonFileContent = new StringBuilder();
+    			String nextLine = null;
+    			while ((nextLine = reader.readLine()) != null) {
+    				jsonFileContent.append(nextLine);
+    			}
 
-        String nextLine = null;
-        while ((nextLine = reader.readLine()) != null) {
-            jsonFileContent.append(nextLine);
-        }
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Collection<Channel>>() { }.getType();
-        Collection<Channel> channels = gson.fromJson(jsonFileContent.toString(), type);
-        reader.close();
-        return channels;
+    			Gson gson = new Gson();
+    			Type type = new TypeToken<Collection<Channel>>() { }.getType();
+    			Collection<Channel> channels = gson.fromJson(jsonFileContent.toString(), type);
+    			reader.close();
+    			return channels;
+    		}
+    		return null;
+    	} catch (NullPointerException e) {
+    		return null;
+    	}
     }
  
     /**
@@ -289,19 +309,26 @@ public class DatabaseCreator implements ServletContextListener {
      */
     private Collection<Subscription> loadSubscriptions(InputStream is) throws IOException {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder jsonFileContent = new StringBuilder();
-
-        String nextLine = null;
-        while ((nextLine = reader.readLine()) != null) {
-            jsonFileContent.append(nextLine);
-        }
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Collection<Subscription>>() { }.getType();
-        Collection<Subscription> subscriptions = gson.fromJson(jsonFileContent.toString(), type);
-        reader.close();
-        return subscriptions;
+    	try {
+    		if (is != null) {
+		        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		        StringBuilder jsonFileContent = new StringBuilder();
+		
+		        String nextLine = null;
+		        while ((nextLine = reader.readLine()) != null) {
+		            jsonFileContent.append(nextLine);
+		        }
+		
+		        Gson gson = new Gson();
+		        Type type = new TypeToken<Collection<Subscription>>() { }.getType();
+		        Collection<Subscription> subscriptions = gson.fromJson(jsonFileContent.toString(), type);
+		        reader.close();
+		        return subscriptions;
+    		}
+    		return null;
+    	} catch (NullPointerException e) {
+    		return null;
+    	}
     }
  
     /**
@@ -313,19 +340,25 @@ public class DatabaseCreator implements ServletContextListener {
      * @throws IOException
      */
     private Collection<MessageDB> loadMessages(InputStream is) throws IOException {
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder jsonFileContent = new StringBuilder();
-
-        String nextLine = null;
-        while ((nextLine = reader.readLine()) != null) {
-            jsonFileContent.append(nextLine);
-        }
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<Collection<MessageDB>>() { }.getType();
-        Collection<MessageDB> messages = gson.fromJson(jsonFileContent.toString(), type);
-        reader.close();
-        return messages;
+    	try {
+    		if (is != null) {
+	    		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	    		StringBuilder jsonFileContent = new StringBuilder();
+	
+	    		String nextLine = null;
+	    		while ((nextLine = reader.readLine()) != null) {
+	    			jsonFileContent.append(nextLine);
+	    		}
+	
+	    		Gson gson = new Gson();
+	    		Type type = new TypeToken<Collection<MessageDB>>() { }.getType();
+	    		Collection<MessageDB> messages = gson.fromJson(jsonFileContent.toString(), type);
+	    		reader.close();
+	    		return messages;
+    		}
+    		return null;
+    	} catch (NullPointerException e) {
+    		return null;
+    	}
     }
 }

@@ -6,7 +6,6 @@
   <meta charset="utf-8" />
   <title>Web chat</title>
 
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
   <!-- frameworks used in project -->
@@ -31,8 +30,8 @@
         <div class="account-wall">
           <img class="avatar" src="css/img/person.png" alt="avatar image">
           <form class="form-login" data-ng-submit="login()">
-            <input id="username" type="text" class="form-control" placeholder="username" data-ng-model="user.username">
-            <input id="password" type="password" class="form-control" placeholder="password" data-ng-model="user.password">
+            <input id="username" type="text" class="form-control" placeholder="username" maxlength="10" data-ng-model="user.username">
+            <input id="password" type="password" class="form-control" placeholder="password" maxlength="8" data-ng-model="user.password">
             <button class="btn btn-lg btn-primary btn-block sign-in-btn" type="submit"> Sign in</button>
             <button class="btn btn-lg btn-secondary btn-block " data-ng-click="doregister() "> Register</button>
           </form>
@@ -50,11 +49,11 @@
         <div class="account-wall">
           <img class="avatar" src="css/img/person.png" alt="avatar image">
           <form class="form-login" data-ng-submit="register() ">
-            <input id="newusername" type="text" class="form-control" placeholder="username" data-ng-model="user.username">
-            <input id="newpassword" type="password" class="form-control" placeholder="password" data-ng-model="user.password">
-            <input class="form-control" placeholder="nickname" data-ng-model="user.nickname">
-            <textarea class="form-control" rows="3" placeholder="description" data-ng-model="user.description"></textarea>
-            <input class="form-control" placeholder="avatar url" data-ng-model="user.avatarUrl">
+            <input id="newusername" type="text" class="form-control" placeholder="username" maxlength="10" data-ng-model="user.username">
+            <input id="newpassword" type="password" class="form-control" placeholder="password" maxlength="8" data-ng-model="user.password">
+            <input class="form-control" placeholder="nickname" maxlength="20" data-ng-model="user.nickname">
+            <textarea class="form-control" rows="3" maxlength="50" placeholder="description" data-ng-model="user.description"></textarea>
+            <input class="form-control" placeholder="avatar url" maxlength="500" data-ng-model="user.avatarUrl">
             <button class="btn btn-lg btn-primary btn-block" type="submit"> Submit</button>
           </form>
         </div>
@@ -129,8 +128,8 @@
     <div class="chat-text-area col-md-7">
       <div class="create-channel" data-ng-show="showCreateChannelForm">
         <form class="form-login">
-          <input type="text" class="form-control" placeholder="Channel name" data-ng-model="name">
-          <textarea class="form-control" rows="3" placeholder="Description" data-ng-model="description"></textarea>
+          <input type="text" class="form-control" maxlength="30" placeholder="Channel name" data-ng-model="name">
+          <textarea class="form-control" rows="3" maxlength="500" placeholder="Description" data-ng-model="description"></textarea>
           <div class="btn-group btn-group-justified">
             <div class="btn-group">
               <button class="btn btn-primary" data-ng-click="showCreateChannelForm=false"> Cancel</button>
