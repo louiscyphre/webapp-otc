@@ -168,6 +168,7 @@ public final class DataManager {
 	 * @return returns the channel with updated users' list
 	 */
 	public static Channel updateChannelUsers(Connection conn, Channel channel) {
+		channel.getUsers().clear();
 		Collection<Subscription> subscriptions = getSubscriptionsByChannelName(conn, channel.getChannelName());
 		for (Subscription subscription : subscriptions) {
 			if (subscriptions != null) {

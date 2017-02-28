@@ -318,17 +318,30 @@ public class WebChatEndPoint {
 				doNotify(session, gson.toJson(new ChannelSuccess(channel))); // send reply to the creator of the channel informing him of success
 			}
 		} else if (credentials.getUsername() != null) { // private channel existed in the past but at least one of the people quit it
+			System.out.println("private channel but existing");
 			Channel channel = DataManager.getChannelByName(conn, channelName); // get the channel object from the database
+			boolean firstJoined = false, secondJoind = false;
 			if (DataManager.getSubscriptionByChannelAndUsername(conn, channelName, chatUsers.get(session).getUsername()) == null) { // if the requesting user is not in the channe, subscribe him
 				DataManager.addSubscription(conn, new Subscription(credentials.getName(), chatUsers.get(session).getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the creator to the channel
-				doNotify(session, gson.toJson(new ChannelSuccess(channel))); // send reply to the creator of the channel informing him of success
+				DataManager.updateChannelUsers(conn, channel);
+				System.out.println("fist should have joined");
+				firstJoined = true;
 			}
 			User secondUser = DataManager.getUserByUsername(conn, credentials.getUsername()); // get the details of the second user
 			if (DataManager.getSubscriptionByChannelAndUsername(conn, channelName, secondUser.getUsername()) == null) { // if the second user is not in the channel, subscribe him
 				DataManager.addSubscription(conn, new Subscription(credentials.getName(), secondUser.getUsername()), new Timestamp(System.currentTimeMillis())); // subscribe the creator to the channel
+				DataManager.updateChannelUsers(conn, channel);
+				System.out.println("second should have joined");
+				secondJoind = true;
+			}
+			if (firstJoined) {
+				doNotify(session, gson.toJson(new ChannelSuccess(channel))); // send reply to the creator of the channel informing him of success
+			}
+			if (secondJoind) {
 				doNotify(secondUser, gson.toJson(BuildSuccessMessages.buidSubscribeSuccess(conn, channel))); // send message to the second user that he was added to a private channel
-			} 
+			}
 		} else { // channel exists
+			System.out.println("already exists");
 			doNotify(session, gson.toJson(new ChannelFailure(credentials.getName(), "Channel already exists"))); // inform the creator of the channel that an error occured: a channel with this name already exists
 		}
 	}
@@ -399,6 +412,14 @@ public class WebChatEndPoint {
 						channel,
 						gson.toJson(new UserUnsubscribed(channel.getChannelName(), credentials.getUsername())),
 						session); // notify all the users in the channel that a user has quit the channel
+				if (!channel.isPublic() && !channel.getUsers().isEmpty()) { // if private channel and second user is still subscribed
+					ThreadUser secondUser = channel.getUsers().get(0);
+					DataManager.removeSubscription(conn, new Subscription(credentials.getChannelName(), secondUser.getUsername()));
+					channel.setNumberOfSubscribers(channel.getNumberOfSubscribers() - 1);
+					DataManager.updateChannel(conn, channel);
+					DataManager.updateChannelUsers(conn, channel);
+					doNotify(secondUser, gson.toJson(new Unsubscribe(channel.getChannelName()))); // send message to the second user that he was added to a private channel
+				}
 			} else {
 				doNotify(session, gson.toJson(new Unsubscribe("Not subscribed to channel")));
 			}
@@ -493,18 +514,6 @@ public class WebChatEndPoint {
 				subscription.setUnreadMessages(Math.max(messages.size() - channelThread.size(), 0));
 				subscription.setNumberOfReadMessages(channelThread.size());
 			}
-			/*
-			int maxId = subscription.getLastReadMessageId();
-			for (MessageThread message : requiredMessages) { // iterate over the messages that will be sent
-				if (message.getMessage().getId() > maxId) {
-					maxId = message.getMessage().getId();
-					subscription.setUnreadMessages(subscription.getUnreadMessages() - 1);
-					if (message.getMessage().getContent().contains("@" + usersMap.get(chatUsers.get(session).getUsername()).getNickname())) {
-						subscription.setUnreadMentionedMessages(subscription.getUnreadMentionedMessages() - 1);
-					}
-					subscription.setLastReadMessageId(maxId);
-				}
-			}*/
 			DataManager.updateSubscription(conn, subscription);
 			doNotify(session, gson.toJson(new DownloadMessages(channel.getChannelName(), requiredMessages, subscription.getUnreadMessages(), subscription.getUnreadMentionedMessages())));
 		} else { // no messages in channel

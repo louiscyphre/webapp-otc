@@ -11,8 +11,8 @@ import java.util.Collection;
 public class Channel {
 	
 	private String channelId; // the channel's name
-	private Collection<MessageThread> channelThread = new ArrayList<>(); // list of messages in the channel
-	private Collection<ThreadUser> users = new ArrayList<>(); // list of users subscribed to the channel
+	private ArrayList<MessageThread> channelThread = new ArrayList<>(); // list of messages in the channel
+	private ArrayList<ThreadUser> users = new ArrayList<>(); // list of users subscribed to the channel
 	private String description; // description of the channel
 	private int numberOfSubscribers; // number of users currently in the channel
 	private boolean isPublic; // whether the channel is public or private
@@ -99,11 +99,11 @@ public class Channel {
 		channelThread.add(message);
 	}
 	
-	public Collection<MessageThread> getChannelThread() {
+	public ArrayList<MessageThread> getChannelThread() {
 		return channelThread;
 	}
 	
-	public Collection<ThreadUser> getUsers() {
+	public ArrayList<ThreadUser> getUsers() {
 		return users;
 	}
 
