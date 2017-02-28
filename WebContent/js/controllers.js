@@ -195,7 +195,7 @@
 
         // new subscription to channel. called when trying to enter
         // to channel, that user not subscribed to it (on channel discovery).
-        var subscribeToChannel = function (channelName) {
+        $scope.subscribeToChannel = function (channelName) {
           sendJson(channelName, "subscribe");
         };
 
@@ -225,16 +225,14 @@
         // this function is for entering public channels by clicking on subscribed channels list.
         // if one of discovered channels clicked, then it called and make new subscription.
         $scope.enterChannel = function (channelName, channelsList) {
-          if (!findChannel(channelName, channelsList) || (channelsList === $scope.publicChannels)) {
-            /// the only possible case is when on channel discovery and clicking on public channel
-            subscribeToChannel(channelName);
-          } else {
-            viewingChannel(channelName);
-            $scope.channelSelected = true;
-            $scope.repliedToId = -1;
-            $scope.currentChannel = findChannel(channelName, channelsList).object;
-            $scope.currentChannelThread = getCurrentThread(channelName, channelsList);
+          if (!findChannel(channelName, channelsList)) {
+            return;
           }
+          viewingChannel(channelName);
+          $scope.channelSelected = true;
+          $scope.repliedToId = -1;
+          $scope.currentChannel = findChannel(channelName, channelsList).object;
+          $scope.currentChannelThread = getCurrentThread(channelName, channelsList);
         };
 
         // this function called when clicking on private channel in 
@@ -345,9 +343,7 @@
             channelsList = $scope.privateChannels;
           }
           $scope.$digest();
-          $scope.channelSelected = true;
-          $scope.currentChannelThread = getCurrentThread(response.channel.channelId, channelsList);
-          $scope.currentChannel = findChannel(response.channel.channelId, channelsList).object;
+          $scope.enterChannel(response.channel.channelId);
         };
         // this event is happens on successful registration or login. then main interface is
         // shown to user, and lists of subscribed and private channels updated from response.
@@ -461,5 +457,5 @@
           $scope.$digest();
         });
 
-      }]);
+            }]);
 }(this.window));
