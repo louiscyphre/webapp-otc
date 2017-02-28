@@ -42,9 +42,9 @@ public interface AppConstants {
 	public final String USERS_FILE = USERS + FILE_FORMAT;
 	// newsql statements
 	public final String CREATE_USER_TABLE = "CREATE TABLE USERS("
-			+ "username varchar(10),"
-			+ "password varchar(32),"
-			+ "nickname varchar(20),"
+			+ "username varchar(10) NOT NULL,"
+			+ "password varchar(32) NOT NULL,"
+			+ "nickname varchar(20) NOT NULL,"
 			+ "description varchar(50),"
 			+ "avatarUrl varchar(500),"
 			+ "PRIMARY KEY(username))";
@@ -56,7 +56,7 @@ public interface AppConstants {
 	public final String CHANNELS = "channels";
 	public final String CHANNELS_FILE = CHANNELS + FILE_FORMAT;
 	public final String CREATE_CHANNELS_TABLE = "CREATE TABLE " + CHANNELS + "("
-			+ "channelId varchar(30),"
+			+ "channelId varchar(30) NOT NULL,"
 			+ "description varchar(500),"
 			+ "numberOfSubscribers integer,"
 			+ "isPublic boolean,"
@@ -70,8 +70,8 @@ public interface AppConstants {
 	public final String SUBSCRIPTIONS = "subscriptions";
 	public final String SUBSCRIPTIONS_FILE = SUBSCRIPTIONS + FILE_FORMAT;
 	public final String CREATE_SUBSCRIPTION_TABLE = "CREATE TABLE " + SUBSCRIPTIONS + "("
-			+ "channelId varchar(30),"
-			+ "userId varchar(10),"
+			+ "channelId varchar(30) NOT NULL,"
+			+ "userId varchar(10) NOT NULL,"
 			+ "subscriptionTime timestamp,"
 			+ "numberOfReadMessages integer,"
 			+ "unreadMessages integer,"
@@ -90,8 +90,8 @@ public interface AppConstants {
 	public final String MESSAGES_FILE = MESSAGES + FILE_FORMAT;
 	public final String CREATE_MESSAGES_TABLE = "CREATE TABLE " + MESSAGES + "("
 			+ "id integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-			+ "channelId varchar(30),"
-			+ "userId varchar(10),"
+			+ "channelId varchar(30) NOT NULL,"
+			+ "userId varchar(10) NOT NULL,"
 			+ "messageTime timestamp,"
 			+ "lastModified timestamp,"
 			+ "repliedToId integer,"
