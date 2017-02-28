@@ -88,7 +88,7 @@
         <!-- this section contains public channels list, when they discovered.  -->
         <div class="search-results" id="searched" data-click-outside="query=''" data-ng-hide="query === ''">
           <ul class="public-channels" data-ng-model="publicChannels" data-ng-show="publicChannels.length">
-            <li class="side-channel-row" data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="enterChannel(channel.channelId, publicChannels)">
+            <li class="side-channel-row" data-ng-repeat="channel in publicChannels | filter:searchChannel" data-ng-click="subscribeToChannel(channel.channelId)">
               <div class="table-row">{{channel.channelId}}<span class="badge"><img class="badge-channel" data-ng-src="css/img/glyphicons-group.png" alt="users" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /> {{channel.numberOfSubscribers}}</span></div>
               <div class="table-row">{{channel.description}}</div>
             </li>
@@ -150,7 +150,7 @@
       <div class="chat-text-area-footer" data-ng-show="channelSelected">
         <footer class="footer">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="type your message here " data-ng-model="lastMessage" data-ng-focus="setReply(-1)" data-ng-enter="sendMessage(lastMessage)" />
+            <input type="text" class="form-control" placeholder="type your message here " data-ng-model="lastMessage" maxlength="500" data-ng-focus="setReply(-1)" data-ng-enter="sendMessage(lastMessage)" />
             <div class="input-group-btn">
               <button class="btn btn-primary btn-chat-send" type="submit" data-ng-click="sendMessage(lastMessage)">Send</button>
             </div>

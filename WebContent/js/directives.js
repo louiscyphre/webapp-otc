@@ -45,7 +45,7 @@
         "      </td>" +
         "     </tr>" +
         "    </table>" +
-        "    <span class=\"block-right\" data-ng-hide=\"isReply\">" +
+        "    <span class=\"block-left\" data-ng-hide=\"isReply\">" +
         "     <a href=\"javascript: void(0)\" data-ng-click=\"isReply = true\">Reply</a>" + // tODO normally
         "    </span>" +
         "   </div>" +
