@@ -1,59 +1,46 @@
+/*
+ *     webapp-otc - an online collaboration tool .
+ *     Copyright (C) 2017 Ilia Butvinnik and Michael Goldman
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package server.websockets;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
-import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-
+import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import server.AppConstants;
 import server.DataManager;
-import server.messages.ChannelFailure;
-import server.messages.ChannelSuccess;
-import server.messages.Discovery;
-import server.messages.DownloadMessages;
-import server.messages.MessageReceived;
-import server.messages.SubscribeFailure;
-import server.messages.SubscribeSuccess;
-import server.messages.Unsubscribe;
-import server.messages.UpdateCountersMessage;
-import server.messages.UserSubscribed;
-import server.messages.UserUnsubscribed;
-import server.model.Channel;
-import server.model.ChannelCredentials;
-import server.model.ChannelDiscovery;
-import server.model.ChannelViewing;
-import server.model.Message;
-import server.model.MessageCredentials;
-import server.model.MessageDownload;
-import server.model.MessageThread;
-import server.model.Subscription;
-import server.model.ThreadUser;
-import server.model.User;
+import server.messages.*;
+import server.model.*;
 import server.util.BuildSuccessMessages;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.websocket.*;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Server-side WebSocket end-point that manages a chat over several channels between 
